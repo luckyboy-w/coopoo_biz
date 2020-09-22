@@ -102,7 +102,6 @@
                 {{ scope.row.createTime | _formatDate }}
               </template>
             </el-table-column>
-            <el-table-column prop="orderNo" label="订单编号" width="220px" />
             <el-table-column prop="recUname" label="买家姓名" width="120px" />
             <el-table-column prop="recPhone" label="买家手机号码" width="120px" />
             <el-table-column prop="recPhone" label="风险订单" width="120px">

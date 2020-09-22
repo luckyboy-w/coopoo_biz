@@ -45,11 +45,11 @@
 									type="text"
 									size="small"
 								>编辑</el-button>
-								<el-button
+<!--								<el-button
 									@click.native.prevent="deleteRow(scope.row)"
 									type="text"
 									size="small"
-								>删除</el-button>
+								>删除</el-button>-->
 							</template>
 						</el-table-column>
 					</el-table>
