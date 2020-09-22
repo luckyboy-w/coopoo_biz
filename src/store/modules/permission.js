@@ -52,18 +52,17 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes({ commit }, userInfo) {
     return new Promise(resolve => {
-      getRoutes().then((reponse) => {
+      getRoutes(userInfo.buUser.tenantId).then((reponse) => {
         let accessedRoutes = reponse.data
-        
-        if (roles.includes('admin')) {
+        if (userInfo.access.includes('admin')) {
           const componentMap = {}
           // accessedRoutes = asyncRoutes || []
           buildComponent(accessedRoutes)
           // accessedRoutes = []
         } else {
-          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+          accessedRoutes = filterAsyncRoutes(asyncRoutes, userInfo.access)
         }
         const asRouter = asyncRoutes
         commit('SET_ROUTES', accessedRoutes)
