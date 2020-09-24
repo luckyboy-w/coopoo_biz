@@ -26,7 +26,7 @@
 								:value="item.id"
 							/>
 						</el-select>
-					</el-form-item>				
+					</el-form-item>
 					<el-form-item label="属性选择" >
 
 						<div v-for="(v, i) in list" :key="i" class="mt-20">
@@ -38,7 +38,7 @@
 
 						<div class="mt-20" v-show="false">
 							<el-button type="primary" @click="handleClick">确认规格</el-button>
-						</div> 
+						</div>
 						<el-tag
 							v-show="false"
 							v-for="(item, index) in skuList"
@@ -391,7 +391,7 @@ export default {
 				});
 				return;
 			}
-			
+
 			for(let i = 0 ; i < this.skuList.length ; i++){
 				let skuObj = this.skuList[i]
 				skuObj.stock = this.dataForm.stockNum
@@ -463,9 +463,9 @@ export default {
 
 				scope.skuIdToText = {}
 				list.forEach(o => {
-	
+
 					let existsList = o['skuObj']
-	
+
 
 					for(let i = 0 ; i < o['skuObj'].length ; i++){
 						let skuObject = o['skuObj'][i]
@@ -508,7 +508,7 @@ export default {
 			this.skuArray = [];
 			this.skuList = [];
 			this.skuIdList = [];
-			
+
 			console.log("-------------------")
 			console.log(this.checkList)
 
@@ -533,12 +533,12 @@ export default {
 					this.getSkuData(skuArr, i + 1, list); // 递归循环
 				} else {
 					skuArr[i] = this.getSkuKey(list[i][j]);
-					
+
 					let titleText = [...skuArr].join(";");
 					console.log('-------------------------');
 					console.log(this.getSkuText(titleText));
-					
-					
+
+
 					let stockSingle = 0
 					//如果是全局库存
 					if(this.dataForm.stockType == 1){
@@ -590,7 +590,7 @@ export default {
 				scope.typeId2List = res.data
 
 				if (scope.editData.id) {
-					scope.$nextTick(function() {		
+					scope.$nextTick(function() {
 						scope.loadSkuCompose()
 					});
 				}
@@ -691,7 +691,7 @@ export default {
 			}
 
 			if(this.uploadGoodFrontImageList.length >= 1){
-				
+
 				this.$nextTick(function() {
 					document.getElementById('front-img').getElementsByClassName('el-upload--picture-card')[0].style.display = 'none'
 				});
@@ -725,11 +725,7 @@ export default {
 					this.uploadGoodFrontImageList.push(imageObj);
 				}
 			}
-
-			// if (this.uploadGoodImageList.length >= 5) {
-			// 	this.hideGoodImageUpload = true;
-			// }
-
+      this.uploadGoodImageList = this.uploadGoodImageList.reverse()
 			if (this.uploadGoodFrontImageList.length >= 1) {
 				document.getElementById('front-img').getElementsByClassName('el-upload--picture-card')[0].style.display = 'none'
 			}
@@ -738,7 +734,7 @@ export default {
 			if(errorMsg != ''){
 				return errorMsg
 			}
-			if(amount == '0.0' 
+			if(amount == '0.0'
 				|| amount == '0.00'
 				|| amount == '0.'){
 				return type+"的金额格式有误"
@@ -747,7 +743,7 @@ export default {
 			if (amount != null && amount != "" && amount != "0") {
 				var exp = /^(([1-9]\d*)|\d)(\.\d{1,2})?$/;
 				if (!exp.test(amount)) {
-					return type+'的金额格式有误';		
+					return type+'的金额格式有误';
 				}
 			} else {
 				return type+'金额不能为空或0';
@@ -773,7 +769,7 @@ export default {
 			// if(beginArg == "." || beginArg==","){
 			// 	return false;
 			// }
-				
+
 			// for(let i = 0;i<arg.length;i++){
 			// 	if(argChar.indexOf(arg.substring(i,i+1)) == -1)  return false;
 			// }
@@ -813,7 +809,7 @@ export default {
 				feeMsg =  this.isMoney(rowObj.salePrice,'零售价','')
 				feeMsg =  this.isMoney(rowObj.saleMemPrice,'会员价',feeMsg)
 				feeMsg =  this.isMoney(rowObj.supplyPrice,'供货价',feeMsg)
-				
+
 				if(feeMsg != ''){
 					this.$message({
 						message: feeMsg,
