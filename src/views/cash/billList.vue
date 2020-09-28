@@ -45,13 +45,22 @@
                             {{scope.row.createTime | _formateDate}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="billMoney" label="结算金额（元）" min-width="24%">
+                    <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
                     </el-table-column>
-                  <el-table-column prop="pkBillId" label="操作" min-width="24%">
-                    <template slot-scope="scope">
-                      <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link>
-                    </template>
-                  </el-table-column>
+                    <el-table-column prop="totalAmount" label="实付金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column prop="billMoney" label="结算金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column label="服务金额" min-width="24%">
+                      <template slot-scope="scope">
+                        {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="pkBillId" label="操作" min-width="24%">
+                      <template slot-scope="scope">
+                        <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link>
+                      </template>
+                    </el-table-column>
                 </el-table>
                 <el-pagination
                     v-show="noBillData.total != 0"
@@ -259,7 +268,6 @@ import { getToken } from '@/utils/auth'
                     if (!this.isCanBill) {
                       this.isCanBill = day == compareDay
                     }
-                    console.info(this.isCanBill)
                   }
                   scope.billDate  = '每月结算日是：'+evalData.join("，");
                 }
