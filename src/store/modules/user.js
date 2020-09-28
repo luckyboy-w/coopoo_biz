@@ -66,7 +66,6 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        console.info(response.data)
         const { access, name, avatar, introduction } = response.data
 
         // roles must be a non-empty array

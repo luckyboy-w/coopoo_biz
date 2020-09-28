@@ -22,11 +22,12 @@
                 </el-col>
                 <el-col :span="8" style="padding-left:10px">
                       <el-button type="primary" @click="loadList()">搜索</el-button>
-                      <el-button type="normal" @click="batchBill()" v-if="tabIndex == 0">批量结算</el-button>
+                      <el-button type="normal" @click="batchBill()" v-if="tabIndex == 0 && isCanBill">批量结算</el-button>
                       <el-button type="info" @click="exportData()">导出Excel</el-button>
                 </el-col>
             </el-row>
              <el-row style="line-height:40px;padding:10px 0px ">
+                <el-col v-if="!isCanBill" :span="24" style="color: red">今天不是结算日</el-col>
                 <el-col :span="24">{{billDate}}</el-col>
             </el-row>
             <el-tab-pane label="可结算" name="readyBill" style="height:600px">
@@ -46,6 +47,11 @@
                     </el-table-column>
                     <el-table-column prop="billMoney" label="结算金额（元）" min-width="24%">
                     </el-table-column>
+                  <el-table-column prop="pkBillId" label="操作" min-width="24%">
+                    <template slot-scope="scope">
+                      <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link>
+                    </template>
+                  </el-table-column>
                 </el-table>
                 <el-pagination
                     v-show="noBillData.total != 0"
@@ -57,7 +63,7 @@
                     @next-click="currentPage"
                 />
             </el-tab-pane>
-            <el-tab-pane label="未结算" name="noBill" style="height:600px">
+            <!--<el-tab-pane label="未结算" name="noBill" style="height:600px">
                 <el-table
                     ref="noBillData"
                     :data="noBillData.list"
@@ -89,7 +95,7 @@
                     @prev-click="currentPage"
                     @next-click="currentPage"
                 />
-            </el-tab-pane>
+            </el-tab-pane>-->
             <el-tab-pane label="结算中" name="settleFinsh" style="height:600px">
                 <el-table
                     ref="settleFinshData"
@@ -162,6 +168,7 @@ import { getToken } from '@/utils/auth'
       return {
         tabIndex:0,
         billDate:'',
+        isCanBill: false,
         //10:未结算;20:结算中;30:已结算
         searchParam:{
             billType:'10',
@@ -212,7 +219,7 @@ import { getToken } from '@/utils/auth'
                     param.push(key+'='+this.searchParam[key])
                 }
             }
-            
+
           //window.open(process.env.VUE_APP_BASE_API+'/bu/orderBill/export?_messageId='+getToken()+"&"+param.join("&"));
           window.open(process.env.VUE_APP_BASE_API+'/bu/orderBill/export?_messageId='+getToken());
       },
@@ -226,44 +233,57 @@ import { getToken } from '@/utils/auth'
       },
       singleBill(row){
         let scope = this
-        
+
 
         this.$confirm("是否进行结算操作?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "success"
         }).then(() => {
-            scope.billOrd(row.pkBillId)
+            scope.billOrd(row)
         });
       },
       loadBillCfgData(){
           let scope = this
-          getMethod("/bu/orderBill/findBillDate", {}).then(res => { 
+          getMethod("/bu/orderBill/findBillDate", {}).then(res => {
                 let evalData = eval("("+res.data+")");
                 if(evalData.length == 0){
-                    scope.billDate  = '暂时没有最新的结算日期'
+                    scope.billDate  = '暂时没有最新的结算日'
                 }else{
-                    scope.billDate  = '最近的结算日期是：'+evalData.join("，");
+                  let now = new Date();
+                  const day = String(now.getDate()).padStart(2,'0')
+
+                  for (let i = 0; i < evalData.length; i++) {
+                    let compareDay = evalData[i].split("-")[2]
+                    evalData[i] = compareDay
+                    if (!this.isCanBill) {
+                      this.isCanBill = day == compareDay
+                    }
+                    console.info(this.isCanBill)
+                  }
+                  scope.billDate  = '每月结算日是：'+evalData.join("，");
                 }
           });
       },
-      billOrd(billId){
+      billOrd(bill){
         let scope = this
+        console.info(bill)
         let param = {
-            pkBillId:billId
+            pkBillId:bill.pkBillId,
+            tenantId:bill.tenantId
         }
         postMethod("/bu/orderBill/billOrd", param).then(res => {
             // if(res.data == '-1'){
             //     this.$message.error("结算失败，今天不是结算日");
             // }else{
             //     scope.loadList()
-            // } 
+            // }
             this.$message({
                 message: "提交结算成功,请在结算中的页签查询结算进度.",
                 type: "success"
             });
             scope.loadList()
-            
+
         });
       },
       handleClick(tab, event) {
@@ -302,7 +322,7 @@ import { getToken } from '@/utils/auth'
                 // scope.settleEndData.dataList = res.data.list
                 // scope.settleEndData.total = res.data.total
             }
-            
+
         });
       }
     }

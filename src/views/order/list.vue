@@ -248,7 +248,6 @@
         border>
         <el-table-column prop="skuText" label="SKU属性" width="260px" />
         <el-table-column prop="stock" label="库存" width="150px" />
-        <el-table-column prop="supplyPrice" label="供货价" width="150px" />
         <el-table-column prop="salePrice" label="零售价" width="150px" />
         <el-table-column prop="saleMemPrice" label="会员价" width="150px" />
       </el-table>

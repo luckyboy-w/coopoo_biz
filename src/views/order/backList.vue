@@ -130,7 +130,6 @@
         border>
         <el-table-column prop="skuText" label="SKU属性" width="260px" />
         <el-table-column prop="stock" label="库存" width="150px" />
-        <el-table-column prop="supplyPrice" label="供货价" width="150px" />
         <el-table-column prop="salePrice" label="零售价" width="150px" />
         <el-table-column prop="saleMemPrice" label="会员价" width="150px" />
       </el-table>
@@ -151,7 +150,7 @@
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
           <el-col :span="24">
              <el-button type="success" @click="showOrdDtl=false">返回列表</el-button>
-          </el-col>    
+          </el-col>
       </el-row>
 
       <el-row :gutter="20" style="line-height:60px;font-size:14px;background-color:#FFFFF0">
@@ -214,17 +213,17 @@
 
       <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
         <el-row :gutter="20" style="line-height:40px;" class="main-title">
-            <el-col :span="24">付款信息</el-col>    
+            <el-col :span="24">付款信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-            <el-col :span="6">付款方式：{{ordDtl.payType | pay2Text}}</el-col>    
-            <el-col :span="6">订单金额：{{ordDtl.ordPrice}}</el-col>    
-            <el-col :span="6">应付金额：{{ordDtl.ordPayPrice}}</el-col>     
-            <el-col :span="6">实付金额：{{ordDtl.totalAmount}}</el-col>  
+            <el-col :span="6">付款方式：{{ordDtl.payType | pay2Text}}</el-col>
+            <el-col :span="6">订单金额：{{ordDtl.ordPrice}}</el-col>
+            <el-col :span="6">应付金额：{{ordDtl.ordPayPrice}}</el-col>
+            <el-col :span="6">实付金额：{{ordDtl.totalAmount}}</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-            <el-col :span="6">运费：{{ordDtl.expressPrice  == '0' ? '0.00' : ordDtl.expressPrice }}</el-col>    
-            <el-col :span="6">优惠金额：{{ordDtl.ordSubPrice == '0' ? '0.00' : ordDtl.ordSubPrice }}</el-col>    
+            <el-col :span="6">运费：{{ordDtl.expressPrice  == '0' ? '0.00' : ordDtl.expressPrice }}</el-col>
+            <el-col :span="6">优惠金额：{{ordDtl.ordSubPrice == '0' ? '0.00' : ordDtl.ordSubPrice }}</el-col>
             <el-col :span="6"></el-col>
             <el-col :span="6"></el-col>
         </el-row>
@@ -232,11 +231,11 @@
 
       <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
         <el-row :gutter="20" style="line-height:40px" class="main-title">
-            <el-col :span="24">收货人信息</el-col>    
+            <el-col :span="24">收货人信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-            <el-col :span="6">收货人：{{ordDtl.recUname }}</el-col>    
-            <el-col :span="6">收货地址：{{ordDtl.recArea}}</el-col>    
+            <el-col :span="6">收货人：{{ordDtl.recUname }}</el-col>
+            <el-col :span="6">收货地址：{{ordDtl.recArea}}</el-col>
             <el-col :span="6">收货人电话：{{ordDtl.recPhone }}</el-col>
             <el-col :span="6"></el-col>
         </el-row>
@@ -244,32 +243,32 @@
 
       <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
         <el-row :gutter="20" style="line-height:40px" class="main-title">
-            <el-col :span="24">支付及配送信息</el-col>    
+            <el-col :span="24">支付及配送信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-            <el-col :span="6">付款方式：{{ordDtl.payType | pay2Text}}</el-col>    
+            <el-col :span="6">付款方式：{{ordDtl.payType | pay2Text}}</el-col>
             <el-col :span="6">支付时间：{{ordDtl.payTime | _formatDate}}</el-col>
-            <el-col :span="6">运费：{{ordDtl.expressPrice }}</el-col>    
+            <el-col :span="6">运费：{{ordDtl.expressPrice }}</el-col>
             <el-col :span="6"></el-col>
         </el-row>
       </div>
-      
+
       <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 200px 0;">
         <el-row :gutter="20" style="line-height:40px" class="main-title">
-            <el-col :span="24">发票信息</el-col>    
+            <el-col :span="24">发票信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-            <el-col :span="6">发票类型：普通发票 </el-col>    
-            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ordDtl.tax.taxTitle == '1'?'公司':'个人'}}</el-col>  
-            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ordDtl.tax.compTaxNo}}</el-col>  
-            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">公司名称：{{ordDtl.tax.companyName}}</el-col>  
+            <el-col :span="6">发票类型：普通发票 </el-col>
+            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ordDtl.tax.taxTitle == '1'?'公司':'个人'}}</el-col>
+            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ordDtl.tax.compTaxNo}}</el-col>
+            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">公司名称：{{ordDtl.tax.companyName}}</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ordDtl.tax.email}}</el-col>  
+            <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ordDtl.tax.email}}</el-col>
             <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.phoneNo">手机号码：{{ordDtl.tax.phoneNo}}</el-col>
-            <el-col :span="6" ></el-col>  
-            <el-col :span="6" ></el-col>  
-        </el-row> 
+            <el-col :span="6" ></el-col>
+            <el-col :span="6" ></el-col>
+        </el-row>
       </div>
     </div>
   </div>
@@ -283,7 +282,7 @@ export default {
   components: { },
   filters: {
     taxType2Text(type){
-     
+
     },
     _formatDate(time) {
       if(time == undefined){
@@ -297,7 +296,7 @@ export default {
         return '阿里支付'
       } else {
         return '微信支付'
-      } 
+      }
       return '未支付'
     },
     statuts2Text(status) {
@@ -325,7 +324,7 @@ export default {
         return '普通订单'
       } else {
         return '礼品订单'
-      } 
+      }
     }
   },
   data() {

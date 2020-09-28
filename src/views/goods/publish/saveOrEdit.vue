@@ -65,11 +65,6 @@
 									<el-input v-model="scope.row.saleMemPrice"></el-input>
 								</template>
 							</el-table-column>
-							<el-table-column prop="menPrice" label="供货价" width="150px">
-								<template slot-scope="scope">
-									<el-input v-model="scope.row.supplyPrice"></el-input>
-								</template>
-							</el-table-column>
 							<el-table-column prop="skuImg" label="SKU展示图" width="150px">
 								<template slot-scope="scope">
 									<img :src="scope.row.skuImg" width="60px" height="60px" onerror="this.src='https://bluemobi-lanyu.oss-cn-shanghai.aliyuncs.com/static/black_bg.png' "/>
@@ -808,7 +803,6 @@ export default {
 				let rowObj = this.skuList[i]
 				feeMsg =  this.isMoney(rowObj.salePrice,'零售价','')
 				feeMsg =  this.isMoney(rowObj.saleMemPrice,'会员价',feeMsg)
-				feeMsg =  this.isMoney(rowObj.supplyPrice,'供货价',feeMsg)
 
 				if(feeMsg != ''){
 					this.$message({
@@ -830,17 +824,10 @@ export default {
 					errorMsg = '会员价不能为空'
 				}
 
-				if(rowObj.supplyPrice == '' ){
-					errorMsg = '供货价不能为空'
-				}
-
 				if(rowObj.saleMemPrice - rowObj.salePrice > 0){
 					errorMsg = '会员价不能大于等于零售价'
 				}
 
-				if( rowObj.supplyPrice - rowObj.saleMemPrice > 0){
-					errorMsg = '供货价不能大于会员价'
-				}
 			}
 
 			if(errorMsg.trim() != '' ){
