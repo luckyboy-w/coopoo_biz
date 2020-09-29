@@ -266,15 +266,12 @@ import { getToken } from '@/utils/auth'
         });
       },
       showBillDetail(row){
-        console.info(row.orderNo)
         this.dialogTableVisible = true
         let param = {
           orderNo: row.orderNo
         }
-        postMethod("/bc/order/getOrdDtl", param).then(res => {
+        postMethod("/bc/order/getOrdSkuDtl", param).then(res => {
           this.currentGoodsSkuInfoList = res.data
-          console.info(res)
-
         });
       },
       loadBillCfgData(){
