@@ -59,6 +59,7 @@
                     <el-table-column prop="pkBillId" label="操作" min-width="24%">
                       <template slot-scope="scope">
                         <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link>
+                        <el-link type="primary" @click="showBillDetail(scope.row)">查看</el-link>
                       </template>
                     </el-table-column>
                 </el-table>
@@ -164,6 +165,16 @@
                 />
             </el-tab-pane>
         </el-tabs>
+
+      <el-dialog title="详情" :visible.sync="dialogTableVisible">
+        <el-table :data="currentGoodsSkuInfoList">
+          <el-table-column prop="goodName" label="商品名称"></el-table-column>
+          <el-table-column prop="skuInfo" label="规格"></el-table-column>
+          <el-table-column prop="goodSinglePrice" label="商品单价"></el-table-column>
+          <el-table-column prop="goodNum" label="商品数量"></el-table-column>
+          <el-table-column prop="goodCode" label="产品编号"></el-table-column>
+        </el-table>
+      </el-dialog>
     </div>
 </template>
 <script>
@@ -175,9 +186,11 @@ import { getToken } from '@/utils/auth'
   export default {
     data() {
       return {
+        dialogTableVisible: false,
         tabIndex:0,
         billDate:'',
         isCanBill: false,
+        currentGoodsSkuInfoList: [],
         //10:未结算;20:结算中;30:已结算
         searchParam:{
             billType:'10',
@@ -252,6 +265,18 @@ import { getToken } from '@/utils/auth'
             scope.billOrd(row)
         });
       },
+      showBillDetail(row){
+        console.info(row.orderNo)
+        this.dialogTableVisible = true
+        let param = {
+          orderNo: row.orderNo
+        }
+        postMethod("/bc/order/getOrdDtl", param).then(res => {
+          this.currentGoodsSkuInfoList = res.data
+          console.info(res)
+
+        });
+      },
       loadBillCfgData(){
           let scope = this
           getMethod("/bu/orderBill/findBillDate", {}).then(res => {
@@ -275,7 +300,6 @@ import { getToken } from '@/utils/auth'
       },
       billOrd(bill){
         let scope = this
-        console.info(bill)
         let param = {
             pkBillId:bill.pkBillId,
             tenantId:bill.tenantId
