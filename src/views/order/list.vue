@@ -68,6 +68,15 @@
                 <el-option value="60" label="定制信息确认中"></el-option>
               </el-select>
             </td>
+            <td>是否需要开发票:</td>
+            <td>
+               <el-select v-model="searchParam.isRequireTaxBill" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="1" label="是"></el-option>
+                <el-option value="0" label="否"></el-option>
+
+              </el-select>
+            </td>
             <td >
 
             </td>
@@ -111,6 +120,11 @@
             <el-table-column prop="ordSubPrice" label="是否使用优惠券" width="150px">
                 <template slot-scope="scope">
                   {{scope.row.ordSubPrice == 0 ? '否':'是'}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="taxId" label="是否需要开发票" width="150px">
+                <template slot-scope="scope">
+                  {{scope.row.taxId != undefined && scope.row.taxId != '' ? '是':'否'}}
                 </template>
             </el-table-column>
             <el-table-column prop="status" label="订单状态" width="150px">
@@ -606,6 +620,7 @@ export default {
         recMobile:'',
         isBackend:'',
         orderType:'',
+        isRequireTaxBill:'',
         status:'',
         startTime:null,
         endTime:null,
@@ -697,10 +712,6 @@ export default {
       this.dealPrice = true
     },
     calcOrderAllPrice(){
-      console.log("-----------------------")
-      console.log(this.dealPriceFrm.ordPrice)
-      console.log(this.dealPriceFrm.goodNum)
-      console.log("-----------------------")
       this.ordAllPrice = this.dealPriceFrm.goodNum * this.dealPriceFrm.ordPrice
     },
     submitDealPrice(){
