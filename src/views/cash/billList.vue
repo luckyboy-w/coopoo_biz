@@ -73,39 +73,6 @@
                     @next-click="currentPage"
                 />
             </el-tab-pane>
-            <!--<el-tab-pane label="未结算" name="noBill" style="height:600px">
-                <el-table
-                    ref="noBillData"
-                    :data="noBillData.list"
-                    style="width: 100%; margin-bottom: 20px;"
-                    row-key="id">
-                    <el-table-column prop="billNo" label="流水号" min-width="24%">
-                    </el-table-column>
-                    <el-table-column prop="orderNo" label="订单号" min-width="24%">
-                    </el-table-column>
-                    <el-table-column prop="createTime" label="入账时间" min-width="24%">
-                        <template slot-scope="scope">
-                            {{scope.row.createTime | _formateDate}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="billMoney" label="结算金额（元）" min-width="24%">
-                    </el-table-column>
-                    <el-table-column prop="pkBillId" label="操作" min-width="24%">
-                        <template slot-scope="scope">
-                            <el-link type="primary" @click="singleBill(scope.row)">结算</el-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination
-                    v-show="noBillData.total != 0"
-                    :total="noBillData.total"
-                    background
-                    layout="prev, pager, next"
-                    @current-change="currentPage"
-                    @prev-click="currentPage"
-                    @next-click="currentPage"
-                />
-            </el-tab-pane>-->
             <el-tab-pane label="结算中" name="settleFinsh" style="height:600px">
                 <el-table
                     ref="settleFinshData"
@@ -246,12 +213,29 @@ import { getToken } from '@/utils/auth'
           window.open(process.env.VUE_APP_BASE_API+'/bu/orderBill/export?_messageId='+getToken());
       },
       batchBill(){
+        if (this.noBillData.total == 0) {
+          this.$message({
+            message: "没有需要结算的账单",
+            type: "error"
+          });
+          return
+        }
+
         let selData = this.$refs.noBillData.selection
         let id = [];
         selData.forEach(data=>{
             id.push(data.pkBillId)
         });
-        this.billOrd(id.join(","))
+
+        let param = {
+          tenantId: this.noBillData.list[0].tenantId
+        }
+
+        if (id.length > 0) {
+          param.pkBillId = id.join(",")
+        }
+
+        this.billOrd(param)
       },
       singleBill(row){
         let scope = this
@@ -262,7 +246,11 @@ import { getToken } from '@/utils/auth'
             cancelButtonText: "取消",
             type: "success"
         }).then(() => {
-            scope.billOrd(row)
+          let param = {
+            pkBillId: row.pkBillId,
+            tenantId: row.tenantId
+          }
+            scope.billOrd(param)
         });
       },
       showBillDetail(row){
@@ -295,12 +283,9 @@ import { getToken } from '@/utils/auth'
                 }
           });
       },
-      billOrd(bill){
+      billOrd(param){
         let scope = this
-        let param = {
-            pkBillId:bill.pkBillId,
-            tenantId:bill.tenantId
-        }
+
         postMethod("/bu/orderBill/billOrd", param).then(res => {
             // if(res.data == '-1'){
             //     this.$message.error("结算失败，今天不是结算日");
@@ -320,8 +305,6 @@ import { getToken } from '@/utils/auth'
         if(tab.index == 0 ){
             this.searchParam.billType = "10"
         }else if(tab.index == 1 ){
-            this.searchParam.billType = "10"
-        }else if(tab.index == 2 ){
             this.searchParam.billType = "20"
         }else {
             this.searchParam.billType = "30"
@@ -339,10 +322,7 @@ import { getToken } from '@/utils/auth'
             if(scope.tabIndex == 0){
                 scope.noBillData = res.data
                 //scope.noBillData = res.data.total
-            }else if(scope.tabIndex == 0){
-                scope.noBillData = res.data
-                //scope.noBillData = res.data.total
-            }else if(scope.tabIndex == 2){
+            }else if(scope.tabIndex == 1){
                 scope.settleFinshData = res.data
                 // scope.settleFinshData.dataList = res.data.list
                 // scope.settleFinshData.total = res.data.total
