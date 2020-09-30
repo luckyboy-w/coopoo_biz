@@ -84,12 +84,21 @@
                     </el-table-column>
                     <el-table-column prop="orderNo" label="订单号" min-width="24%">
                     </el-table-column>
+                    <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column prop="totalAmount" label="实付金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column prop="billMoney" label="结算金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column label="服务金额" min-width="24%">
+                      <template slot-scope="scope">
+                        {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
+                      </template>
+                    </el-table-column>
                     <el-table-column prop="applyTime" label="申请时间" min-width="24%">
                         <template slot-scope="scope">
                             {{scope.row.applyTime | _formateDate}}
                         </template>
-                    </el-table-column>
-                    <el-table-column prop="billMoney" label="结算金额（元）" min-width="24%">
                     </el-table-column>
                 </el-table>
                  <el-pagination
@@ -113,12 +122,21 @@
                     </el-table-column>
                     <el-table-column prop="orderNo" label="订单号" min-width="24%">
                     </el-table-column>
+                    <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column prop="totalAmount" label="实付金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column prop="billMoney" label="结算金额" min-width="24%">
+                    </el-table-column>
+                    <el-table-column label="服务金额" min-width="24%">
+                      <template slot-scope="scope">
+                        {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
+                      </template>
+                    </el-table-column>
                     <el-table-column prop="billTime" label="结算时间" min-width="24%">
                         <template slot-scope="scope">
                             {{scope.row.billTime | _formateDate}}
                         </template>
-                    </el-table-column>
-                    <el-table-column prop="billMoney" label="结算金额（元）" min-width="24%">
                     </el-table-column>
                 </el-table>
                  <el-pagination
