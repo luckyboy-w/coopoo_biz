@@ -197,11 +197,11 @@
         </el-dialog>
 
         <el-dialog title="发货信息":visible.sync="sendOrder" v-if="sendOrder">
-          <el-form ref="form" :model="sendOrderFrm" label-width="80px">
+          <el-form ref="form" :rules="rules" :model="sendOrderFrm" label-width="80px">
             <el-form-item label="订单编号">
               <el-input v-model="sendOrderFrm.orderNo" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="物流公司">
+            <el-form-item label="物流公司" prop="expressName">
               <el-select v-model="sendOrderFrm.expressName" placeholder="请选择">
                 <el-option
                   v-for="item in expressList"
@@ -211,7 +211,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="发货地址">
+            <el-form-item label="发货地址" prop="sendAddrId">
               <el-select v-model="sendOrderFrm.sendAddrId" placeholder="请选择" style="width:460px">
                 <el-option
                   v-for="item in addrList"
@@ -221,7 +221,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="物流单号">
+            <el-form-item label="物流单号" prop="expressNo">
               <el-input v-model="sendOrderFrm.expressNo"></el-input>
             </el-form-item>
             <el-form-item label="操作说明">
@@ -454,7 +454,6 @@ export default {
       return '未支付'
     },
     fmtPrice(row){
-      console.log(row)
       if(row.orderType != 4){
         return row.ordPrice
       }
@@ -632,6 +631,11 @@ export default {
       tableData: {
         list: []
       },
+      rules: {
+        expressName: [{ required: true, message: '请选择物流公司', trigger: 'change' }],
+        sendAddrId: [{required: true, message: '请选择发货地址', trigger: 'change' }],
+        expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
+      },
       dataList: []
     }
   },
@@ -648,8 +652,6 @@ export default {
       this.searchParam.status = this.orderStatus.status
     }
     if(this.$route.query.dt != undefined){
-      console.log('------------------')
-      console.log(this.$route.query.dt)
       this.searchParam.dataType = this.$route.query.dt
       if(this.searchParam.dataType == '2'){
         this.searchParam.riskOrder = 'all'
@@ -826,31 +828,21 @@ export default {
       })
     },
     submitSend(){
-        let scope = this
-        if(this.sendOrderFrm.expressNo == ''){
-             this.$message({
-              message: '运单号不能为空',
-              type: 'warring'
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          let scope = this
+          let addrId = this.sendOrderFrm.sendAddrId
+          this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
+          postMethod('/bc/order/sendOrder', this.sendOrderFrm).then(res => {
+            this.$message({
+              message: '发货成功',
+              type: 'success'
             })
-            return
-        }
-
-        if(this.sendOrderFrm.expressName == ''){
-             this.$message({
-              message: '物流公司不能为空',
-              type: 'warring'
-            })
-            return
-        }
-        let addrId = this.sendOrderFrm.sendAddrId
-        this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
-        postMethod('/bc/order/sendOrder', this.sendOrderFrm).then(res => {
-          scope.loadList()
-          this.$message({
-            message: '发货成功',
-            type: 'success'
+            this.sendOrder = false
+            scope.loadList()
           })
-        })
+        }
+      })
     },
     sendOrd(rowObj){
       this.sendOrder = true
