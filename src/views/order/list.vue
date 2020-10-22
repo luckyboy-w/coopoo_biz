@@ -153,7 +153,7 @@
                 <template slot-scope="scope">
                     <div v-if="scope.row.orderType == 1 ">
                       <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)" >发货</el-link>
-                      <el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>
+                      <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
                       <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
                       <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
                     </div>
