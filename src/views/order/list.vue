@@ -834,6 +834,10 @@ export default {
           let addrId = this.sendOrderFrm.sendAddrId
           this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
           postMethod('/bc/order/sendOrder', this.sendOrderFrm).then(res => {
+            if (res.data == -999) {
+              this.$message.error(res.message);
+              return
+            }
             this.$message({
               message: '发货成功',
               type: 'success'
