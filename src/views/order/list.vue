@@ -8,6 +8,10 @@
             <td>
               <el-input v-model="searchParam.orderNo" width="180px" />
             </td>
+            <td>快递单号:</td>
+            <td>
+              <el-input v-model="searchParam.expressNo" width="180px" />
+            </td>
             <td>风险订单:</td>
             <td>
               <el-select v-model="searchParam.riskOrder" placeholder="请选择">
@@ -107,6 +111,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="orderNo" label="订单编号" width="220px" />
+            <el-table-column prop="expressNo" label="快递单号" width="220px" />
             <el-table-column prop="createTime" label="下单时间" width="150px">
               <template slot-scope="scope">
                 {{ scope.row.createTime | _formatDate }}
