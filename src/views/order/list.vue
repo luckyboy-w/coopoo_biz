@@ -68,7 +68,8 @@
                 <el-option value="10" label="待发货"></el-option>
                 <el-option value="20" label="待收货"></el-option>
                 <el-option value="30" label="待支付"></el-option>
-                <el-option value="50" label="已完成"></el-option>
+                <el-option value="40" label="已退货"></el-option>
+                <el-option value="41" label="退货中"></el-option>
                 <el-option value="60" label="定制信息确认中"></el-option>
               </el-select>
             </td>
@@ -546,6 +547,8 @@ export default {
         statusText = '待支付'
       } else if (status == '40') {
         statusText = '已退货'
+      } else if (status == '41') {
+        statusText = '退货中'
       } else if (status == '60') {
         statusText = '定制信息确认中'
       }else if (status == '50' || status == '51' || status == '52') {
@@ -841,7 +844,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        postMethod('/bc/order/dealOrd', param).then(res => {
+        postMethod('/bc/order/refundOrd', param).then(res => {
           this.loadList()
           this.$message('操作成功')
         })
