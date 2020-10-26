@@ -217,6 +217,16 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="退货地址" prop="sendAddrId">
+              <el-select v-model="sendOrderFrm.sendAddrId" placeholder="请选择" style="width:460px">
+                <el-option
+                  v-for="item in addrList"
+                  :key="item.addrId"
+                  :label="item.addrDtl"
+                  :value="item.addrId">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="物流单号" prop="expressNo">
               <el-input v-model="sendOrderFrm.expressNo"></el-input>
             </el-form-item>
@@ -643,6 +653,7 @@ export default {
       },
       rules: {
         expressName: [{ required: true, message: '请选择物流公司', trigger: 'change' }],
+        sendAddrId: [{required: true, message: '请选择退货地址', trigger: 'change' }],
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
       },
       dataList: []
@@ -690,7 +701,7 @@ export default {
       return obj.addrDtl;
     },
     initAddrList(){
-      getMethod('/bc/sendAddr/findList', {'enable': 1}).then(res => {
+      getMethod('/bc/sendAddr/findList', {'enable': 1, "type": 2}).then(res => {
         this.addrList = res.data
       })
     },
@@ -855,6 +866,8 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let scope = this
+          let addrId = this.sendOrderFrm.sendAddrId
+          this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
           postMethod('/bc/order/sendOrder', this.sendOrderFrm).then(res => {
             if (res.data == -999) {
               this.$message.error(res.message);

@@ -4,6 +4,12 @@
 			<el-form-item label="地址名称">
 				<el-input v-model="dataForm.addrName"></el-input>
 			</el-form-item>
+      <el-form-item label="地址类型">
+        <el-select v-model="dataForm.type">
+          <el-option value="1" label="发货地址"></el-option>
+          <el-option value="2" label="退货地址"></el-option>
+        </el-select>
+			</el-form-item>
 			<el-form-item label="地址序号">
 				<el-input v-model="dataForm.addrSeq"></el-input>
 			</el-form-item>

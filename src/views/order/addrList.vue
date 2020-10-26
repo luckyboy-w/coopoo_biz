@@ -24,6 +24,11 @@
 
 						<el-table-column type="selection" width="55"></el-table-column>
 						<el-table-column prop="addrName" label="地址名称" width="100px"></el-table-column>
+            <el-table-column prop="enable" label="地址类型" width="80px">
+              <template slot-scope="scope">
+                {{scope.row.type == '1'?'发货地址':'退货地址'}}
+              </template>
+            </el-table-column>
 						<el-table-column prop="addrSeq" label="地址序号" width="100px"></el-table-column>
 						<el-table-column prop="person" label="联系人" width="100px"></el-table-column>
 						<el-table-column prop="mobilePhone" label="联系人手机号" width="120px"></el-table-column>
