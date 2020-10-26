@@ -589,7 +589,21 @@ export default {
           dtlList:[]
         }]
       },
-      expressList:[{id:'sf',text:'顺丰'}],
+      expressList:[
+        {id:'SF',text:'顺丰速运'},
+        {id:'YZBK',text:'邮政国内标快'},
+        {id:'YZPY',text:'邮政快递包裹'},
+        {id:'STO',text:'申通快递'},
+        {id:'DBL',text:'德邦快递'},
+        {id:'JD',text:'京东快递'},
+        {id:'HHTT',text:'天天快递'},
+        {id:'JTSD',text:'极兔速递'},
+        {id:'SNWL',text:'苏宁物流'},
+        {id:'ZTO',text:'中通快递'},
+        {id:'YD',text:'韵达速递'},
+        {id:'HTKY',text:'百世快递'},
+        {id:'YTO',text:'圆通速递'}
+      ],
       sendOrder:false,
       pushStockBatch: false,
       pushStock: false,

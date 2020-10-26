@@ -88,7 +88,7 @@ service.interceptors.response.use(
           type: 'error',
           duration: 5 * 1000
         })
-        location.href = '/biz'
+        location.href = '/'
         /*this.$router.push('/login')*/
       }
 
