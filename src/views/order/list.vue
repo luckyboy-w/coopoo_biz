@@ -888,6 +888,10 @@ export default {
     },
     sendOrd(rowObj){
       this.sendOrder = true
+      if (this.addrList.length > 0) {
+        this.sendOrderFrm.sendAddrId = this.addrList[0].addrId
+      }
+
       this.sendOrderFrm.orderNo = rowObj.orderNo
     },
     cancelStock() {

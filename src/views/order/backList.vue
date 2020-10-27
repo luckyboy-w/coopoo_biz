@@ -312,6 +312,8 @@ export default {
       } else if (status == '30') {
         statusText = '待支付'
       } else if (status == '40') {
+        statusText = '已退货'
+      } else if (status == '41') {
         statusText = '退货中'
       } else if (status == '50' || status == '51' || status == '52') {
         statusText = '交易完成'
