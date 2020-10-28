@@ -160,7 +160,7 @@
                     <div v-if="scope.row.orderType == 1 ">
                       <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)" >发货</el-link>
                       <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
-                      <el-link type="primary" v-if="scope.row.status == 40" @click="refundOrd(scope.row)" >退货完成</el-link>
+                      <el-link type="primary" v-if="scope.row.status == 41" @click="refundOrd(scope.row)" >退货完成</el-link>
                       <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
                       <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
                     </div>
@@ -493,6 +493,8 @@ export default {
           statusText = '待支付'
         } else if (status == '40') {
           statusText = '已退货'
+        } else if (status == '41') {
+          statusText = '退货中'
         } else if (status == '60') {
           statusText = '定制信息确认中'
         }else if (status == '50' || status == '51' || status == '52') {
@@ -509,6 +511,8 @@ export default {
           statusText = '待支付'
         } else if (status == '40') {
           statusText = '已退货'
+        } else if (status == '41') {
+          statusText = '退货中'
         } else if (status == '60') {
           statusText = '定制信息确认中'
         }else if (status == '50' || status == '51' || status == '52') {
@@ -525,6 +529,8 @@ export default {
           statusText = '待支付'
         } else if (status == '40') {
           statusText = '已退货'
+        } else if (status == '41') {
+          statusText = '退货中'
         } else if (status == '60') {
           statusText = '定制信息确认中'
         }else if (status == '50' || status == '51' || status == '52') {
