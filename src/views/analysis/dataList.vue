@@ -74,7 +74,7 @@
     </el-row>
 
     <el-row :span="24" style="padding-top:25px">
-        
+
               <el-col :span="6">
                 <div style="padding: 0px 10px;">
                   <div class="analysis-title">商品销量TOP10</div>
@@ -82,7 +82,7 @@
                     <el-table
                             ref="settleEndData"
                             :data="bestSale"
-                            
+
                             style="width: 100%; margin-bottom: 20px;"
                             row-key="id">
                           <el-table-column prop="goodName" label="商品名称" min-width="70%">
@@ -235,7 +235,7 @@
                   stack: '总量',
                   data: this.lineDate.payList
               }
-            
+
           ]
         };
         this.initData()
@@ -243,13 +243,13 @@
     methods: {
       initTopData(){
         let scope = this;
-        
+
         getMethod("/bc/analysis/findTenantList", {}).then(res => {
 
             let resData = res.data
 
             resData.forEach((rowObj) =>{
-              
+
               if(rowObj.dataType == 'allSale'){
                 scope.allPrice = rowObj.num
                 scope.allPrice = scope.allPrice.toFixed(2)
@@ -261,12 +261,11 @@
                 scope.favNum = rowObj.num
               }
             });
-            console.log(scope.ordDtl)
-        }); 
+        });
       },
       initData(){
         let scope = this;
-      
+
         getMethod("/bc/analysis/findAnalysisList", {}).then(res => {
 
             let resData = res.data
@@ -296,7 +295,7 @@
               scope.lineDate.ordListL.push(ordList[i].dataCnt)
               scope.lineDate.payList.push(payList[i].dataCnt)
             }
-           
+
         });
       }
     },

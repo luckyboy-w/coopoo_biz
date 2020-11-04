@@ -101,7 +101,7 @@
           </router-link>
         </el-col>
         <el-col :span="6" class="card-panel-col">
-          <router-link 
+          <router-link
           :to="{
                 path: '/bc-order/list',
                 query: {
@@ -122,7 +122,7 @@
           </router-link>
         </el-col>
         <el-col :span="6" class="card-panel-col">
-           <router-link 
+           <router-link
           :to="{
                 path: '/bc-order/list',
                 query: {
@@ -148,7 +148,7 @@
     </el-row>
 
     <el-row :span="24" style="padding-top:25px">
-        
+
               <el-col :span="6">
                 <div style="padding: 0px 10px;">
                   <div class="analysis-title">商品销量TOP10</div>
@@ -156,7 +156,7 @@
                     <el-table
                             ref="settleEndData"
                             :data="bestSale"
-                            
+
                             style="width: 100%; margin-bottom: 20px;"
                             row-key="id">
                           <el-table-column prop="goodName" label="商品名称" min-width="70%">
@@ -272,7 +272,7 @@
     methods: {
       initData(){
         let scope = this;
-        
+
         getMethod("/bc/analysis/findOrdLine", {}).then(res => {
 
             let resData = res.data
@@ -285,9 +285,8 @@
               }else{
                 scope.ordDtl[rowData.dataType] = parseInt(rowData.siteData)
               }
-              
+
             }
-            console.log(scope.ordDtl)
         });
 
         getMethod("/bc/analysis/findAnalysisList", {}).then(res => {
@@ -341,7 +340,7 @@
     border-color: rgba(0, 0, 0, .05);
 
     // &:hover {
-     
+
     // }
 
     .icon-people {

@@ -2,10 +2,10 @@
   <div>
     <table style="padding:20px 20px;0px 20px">
       <tr>
-        <td>  
-          <el-button @click="addRole()" type="primary" v-if="!isEdit">新增角色</el-button> 
-          <el-button @click="saveMenuRole()" type="primary" v-if="isEdit">{{saveOrEditText}}</el-button> 
-          <el-button @click="backToList()" plain icon="el-icon-back" v-if="isEdit">返回列表</el-button> 
+        <td>
+          <el-button @click="addRole()" type="primary" v-if="!isEdit">新增角色</el-button>
+          <el-button @click="saveMenuRole()" type="primary" v-if="isEdit">{{saveOrEditText}}</el-button>
+          <el-button @click="backToList()" plain icon="el-icon-back" v-if="isEdit">返回列表</el-button>
           <!-- <el-button @click="delPermission()">刪除角色</el-button>  -->
         </td>
         <td>
@@ -50,9 +50,9 @@
             <el-input v-model="roleName"></el-input>
           </el-form-item>
            <el-form-item label="备注信息">
-              <el-input 
+              <el-input
                 type="textarea"
-                :rows="2" 
+                :rows="2"
                 v-model="roleDesc">
               </el-input>
           </el-form-item>
@@ -140,7 +140,7 @@ export default {
       let param = {
         id: row.pkRoleId
       }
-      
+
       getMethod('/bc/menu/getMenuByRole', param).then(res => {
           scope.roleMenuData = res.data
           this.roleName = row.roleName
@@ -149,7 +149,7 @@ export default {
       })
     },
     editRole(row){
-      
+
     },
     loadRole() {
       const scope = this
@@ -188,7 +188,6 @@ export default {
             }
           }
           parentNode.isSelect = unSelectCount? '1':'0';
-          console.log('parentNode.isSelect:'+parentNode.isSelect)
         }
 
       }else{
