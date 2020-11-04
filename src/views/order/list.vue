@@ -878,7 +878,7 @@ export default {
           let addrId = this.sendOrderFrm.sendAddrId
           this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
           postMethod('/bc/order/sendOrder', this.sendOrderFrm).then(res => {
-            if (res.data == -999) {
+            if (res.code != 200) {
               this.$message.error(res.message);
               return
             }
