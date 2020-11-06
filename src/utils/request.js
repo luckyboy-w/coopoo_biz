@@ -101,7 +101,7 @@ service.interceptors.response.use(
         return Promise.reject(new Error(res.code || 'Error'))
       }
 
-      if(res.message == "pwd.err"){
+      if(res.message == "pwd.fail"){
         Message({
           message: '密码错误，请重新输入',
           type: 'error',
