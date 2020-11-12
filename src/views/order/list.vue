@@ -208,8 +208,8 @@
             <el-form-item label="订单编号">
               <el-input v-model="sendOrderFrm.orderNo" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="物流公司" prop="expressName">
-              <el-select v-model="sendOrderFrm.expressName" placeholder="请选择">
+            <el-form-item label="物流公司" prop="expressId">
+              <el-select v-model="sendOrderFrm.expressId" placeholder="请选择">
                 <el-option
                   v-for="item in expressList"
                   :key="item.id"
@@ -600,6 +600,7 @@ export default {
       },
       sendOrderFrm:{
         orderNo:'',
+        expressId:'',
         expressName:'',
         sendAddress:'',
         expressNo:'',
@@ -661,7 +662,7 @@ export default {
         list: []
       },
       rules: {
-        expressName: [{ required: true, message: '请选择物流公司', trigger: 'change' }],
+        expressId: [{ required: true, message: '请选择物流公司', trigger: 'change' }],
         sendAddrId: [{required: true, message: '请选择退货地址', trigger: 'change' }],
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
       },
@@ -877,6 +878,8 @@ export default {
           let scope = this
           let addrId = this.sendOrderFrm.sendAddrId
           this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
+          let express = this.expressList.find(item => item.id == this.sendOrderFrm.expressId)
+          this.sendOrderFrm.expressName = express.text
           postMethod('/bc/order/sendOrder', this.sendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message);
