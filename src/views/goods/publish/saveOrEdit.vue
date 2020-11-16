@@ -415,18 +415,6 @@ export default {
 		},
 		initLoad(){
 			let scope = this
-			// let param = {
-			// 	dataType:'BU_SERVICE,GOOD_STYLE'
-			// }
-			// getMethod("/bu/good/findDimenson", param).then(res => {
-			// 	// res.data.forEach( o=>{
-			// 	// 	if(o['dataType'] == 'GOOD_STYLE')	{
-			// 	// 		scope.styleList.push(o)
-			// 	// 	}else if(o['dataType'] == 'BU_SERVICE'){
-			// 	// 		scope.buServiceList.push(o)
-			// 	// 	}
-			// 	// })
-			// });
 		},
 		changeListDetailContent(val) {
 			this.detail.listDetail = val;
