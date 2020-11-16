@@ -69,9 +69,9 @@ const actions = {
         const { access, name, avatar, introduction } = response.data
 
         // roles must be a non-empty array
-        if (!access || access.length <= 0) {
+/*        if (!access || access.length <= 0) {
           reject('getInfo: access must be a non-null array!')
-        }
+        }*/
 
         const menus = []
 
