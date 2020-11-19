@@ -12,36 +12,19 @@
             <td>
               <el-input v-model="searchParam.expressNo" width="180px" />
             </td>
-            <td>风险订单:</td>
-            <td>
-              <el-select v-model="searchParam.riskOrder" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="all" label="超期未付款"></el-option>
-                <el-option value="moy" label="单个订单高金额"></el-option>
-                <el-option value="num" label="单个订单商品高数量"></el-option>
-              </el-select>
-            </td>
             <td>买家姓名：</td>
             <td>
                <el-input v-model="searchParam.recUname" width="180px" />
             </td>
             <td>买家电话：</td>
             <td>
-               <el-input v-model="searchParam.recMobile" width="180px" />
+               <el-input v-model="searchParam.recPhone" width="180px" />
             </td>
             <td >
               <el-button icon="el-icon-search" @click="search()">搜索</el-button>
             </td>
           </tr>
           <tr>
-            <td>订单类型:</td>
-            <td>
-               <el-select v-model="searchParam.orderType" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="1" label="普通订单"></el-option>
-                <el-option value="2" label="礼品订单"></el-option>
-              </el-select>
-            </td>
             <td>下单时间</td>
             <td  >
                <el-date-picker
@@ -120,14 +103,6 @@
             </el-table-column>
             <el-table-column prop="recUname" label="买家姓名" width="120px" />
             <el-table-column prop="recPhone" label="买家手机号码" width="120px" />
-            <el-table-column prop="recPhone" label="风险订单" width="120px">
-                否
-            </el-table-column>
-            <el-table-column prop="ordSubPrice" label="是否使用优惠券" width="150px">
-                <template slot-scope="scope">
-                  {{scope.row.ordSubPrice == 0 ? '否':'是'}}
-                </template>
-            </el-table-column>
             <el-table-column prop="taxId" label="是否需要开发票" width="150px">
                 <template slot-scope="scope">
                   {{scope.row.taxId != undefined && scope.row.taxId != '' ? '是':'否'}}
