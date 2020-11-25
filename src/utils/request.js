@@ -82,7 +82,7 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })*/
 
-      if(res.code == 1000){
+      if(res.code == 1000 || res.code == 1100){
         Message({
           message: '登录超时，请重新登录',
           type: 'error',
