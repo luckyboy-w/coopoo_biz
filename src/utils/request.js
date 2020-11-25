@@ -82,13 +82,21 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })*/
 
-      if(res.code == 1000 || res.code == 1100){
+      if(res.code == 1000){
         Message({
           message: '登录超时，请重新登录',
           type: 'error',
           duration: 5 * 1000
         })
         location.href = process.env.NODE_ENV === 'production' ? '/' : '/biz'
+      }
+
+      if(res.code == 1100){
+        Message({
+          message: res.msg,
+          type: 'error',
+          duration: 2 * 1000
+        })
       }
 
       if(errCode[res.code] != undefined){
