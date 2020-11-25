@@ -88,8 +88,7 @@ service.interceptors.response.use(
           type: 'error',
           duration: 5 * 1000
         })
-        location.href = '/'
-        /*this.$router.push('/login')*/
+        location.href = process.env.NODE_ENV === 'production' ? '/' : '/biz'
       }
 
       if(errCode[res.code] != undefined){
