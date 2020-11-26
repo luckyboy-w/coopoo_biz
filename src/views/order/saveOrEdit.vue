@@ -19,36 +19,22 @@
 			<el-form-item label="联系人手机号">
 				<el-input v-model="dataForm.mobilePhone"></el-input>
 			</el-form-item>
-			<el-form-item label="发货公司">
-				<el-input v-model="dataForm.sendCom" disabled=""></el-input>
-			</el-form-item>
-			<el-form-item label="发货地区号">
+			<el-form-item label="地区号">
 				<el-input v-model="dataForm.areaNo"></el-input>
 			</el-form-item>
-			<el-form-item label="发货地址">
+			<el-form-item label="地址">
 				<el-input v-model="dataForm.addrDtl"></el-input>
 			</el-form-item>
-			<el-form-item label="省份" v-if="false">
-				<el-select v-model="dataForm.province">
-					<el-option
-						v-for="item in provinceList"
-						:key="item.provinceid"
-						:value-key="item.province"
-						:label="item.province"
-						:value="item.provinceid"
-					></el-option>
-				</el-select>
-
-				<el-select v-model="dataForm.city">
-					<el-option
-						v-for="item in cityList"
-						:key="item.cityid"
-						:value-key="item.city"
-						:label="item.city"
-						:value="item.cityid"
-					></el-option>
-				</el-select>
-
+			<el-form-item label="省份" style="width: 1000px">
+          <el-select v-model="selectProvince" size="small" value-key="provinceid" @change="selectProvinceFun" placeholder="请选择省份">
+              <el-option v-for="(item) in city" :value="item" :key="item.provinceid" :label="item.province"></el-option>
+          </el-select>
+          <el-select v-model="selectCity" size="small" value-key="cityid" @change="selectCityFun" placeholder="请选择城市">
+              <el-option v-for="(item) in cityList" :value="item" :key="item.cityid" :label="item.city"></el-option>
+          </el-select>
+        <el-select v-model="selectArea" size="small" value-key="areaid" @change="selectAreaFun" placeholder="请选择区县">
+              <el-option v-for="(item) in areaList" :value="item" :key="item.areaid" :label="item.area"></el-option>
+          </el-select>
 			</el-form-item>
 			<el-form-item label="是否启用">
 				<el-switch v-model="dataForm.enable" inactive-value="0" active-value="1"></el-switch>
@@ -62,18 +48,16 @@
 </template>
 
 <script>
-import { getMethod, postMethod, getUploadUrl } from "@/api/request";
+import { getMethod, postMethod } from "@/api/request";
 import { isInteger } from "@/utils/validate";
 
 export default {
 	computed: {},
 	mounted() {
-		this.loadcityList();
-		this.loadprovinceList();
+		this.loadProvinceList();
 		this.$nextTick(function() {
 			if (this.editData.addrId) {
 				this.dataForm = this.editData;
-				this.initDefaultImage();
 			}
 		});
 	},
@@ -86,9 +70,13 @@ export default {
 	},
 	data() {
 		return {
-			cityList: [],
-			provinceList: [],
-
+			city: [],
+      cityList: [],
+      areaList: [],
+      selectProvince: {},
+      selectCity: {},
+      selectArea: {},
+      selectedOptions: [],
 			fileSortImage: 0,
 			imageUrl: "",
 			fileList: [],
@@ -97,52 +85,54 @@ export default {
 				addrSeq: "",
 				person: "",
 				mobilePhone: "",
-				sendCom: "顺丰",
 				areaNo: "",
-				cityid: "",
-				city: "",
-				province: "",
+        provinceid: "",
+        provincetext: "",
+        cityid: "",
+				citytext: "",
+        areaId: "",
+				areaText: "",
 				enable: true,
 				id: ""
 			}
 		};
 	},
 	methods: {
-		loadcityList() {
-			let scope = this;
-			let param = {
-				parentId: "-1"
-			};
-			// getMethod("/backend//areas/findCity", param).then(res => {
-			// 	scope.cityList = res.data;
-			// });
-		},
-		loadprovinceList() {
-			let scope = this;
-			let param = {
-				parentId: "-1"
-			};
-			// getMethod("/backend//areas/findProvince", param).then(res => {
-			// 	scope.provinceList = res.data;
-			// });
-		},
-		initDefaultImage() {
-			this.fileList = this.dataForm.files;
-			for (let i = 0; i < this.dataForm.files.length; i++) {
-				let imageObj = this.dataForm.files[i];
-			}
-		},
+    loadProvinceList() {
+      let scope = this;
+      getMethod("/bc/province/findProvince").then(res => {
+      	scope.city = res.data;
+      });
+    },
+    selectProvinceFun(event) {
+      if (event) {
+        this.cityList = event.cityList
+      } else {
+        this.cityList = []
+      }
+      this.dataForm.provinceid = event.provinceid
+      this.dataForm.provincetext = event.province
+    },
+    selectCityFun(event) {
+      console.info(event)
+      if (event) {
+        this.areaList = event.areasList
+      } else {
+        this.areaList = []
+      }
+      this.dataForm.cityid = event.cityid
+      this.dataForm.citytext = event.city
+    },
+    selectAreaFun (event) {
+      this.dataForm.areaId = event.areaid
+      this.dataForm.areaText = event.area
+      console.info(event)
+    },
 		saveObject() {
 			let scope = this;
 			if (this.validate()) {
 				delete this.dataForm.createTime;
 				delete this.dataForm.createBy;
-
-				let fileList = [];
-
-				this.dataForm.fileJsonStr = JSON.stringify(fileList);
-				this.dataForm.files = [];
-
 				postMethod("/bc/sendAddr/update", this.dataForm).then(
 					res => {
 						scope.typeList = res.data;

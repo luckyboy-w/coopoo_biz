@@ -124,7 +124,7 @@
                 {{ scope.row | fmtPrice}}
               </template>
             </el-table-column>
-            <el-table-column prop="ordPayPrice" label="支付价格" width="150px">
+            <el-table-column prop="ordPayPrice" label="实付金额" width="150px">
               <template slot-scope="scope">
                 {{ scope.row | fmtPayPrice}}
               </template>
