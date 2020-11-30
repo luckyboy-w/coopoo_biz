@@ -275,9 +275,9 @@ export default {
 			addFrontCls:'el-icon-plus',
 			stockCls:'',
 			showSku: false,
-			styleList:["儒雅中式","雅色田园","北欧极简","轻奢时尚"],
+			styleList:["新品上架","七星睡眠"],
 			goodStyleList:[],
-			buServiceList:["7天无理由退货","先行赔付","超时赔偿","正品保证","全场包邮","无忧退换货"],
+			buServiceList:["会员制","全定制","大牌品质","工厂价格","包邮到家","满意付款","无忧退货"],
 			serviceRuleList:[],
 			typeIdList: [],
 			typeId2List: [],
@@ -487,14 +487,14 @@ export default {
 			});
 		},
 		handleClick() {
+      console.log(1111111111111)
 			// 先清空数据，保证连续点击按钮，数据不会重复
 			this.skuArray = [];
 			this.skuList = [];
 			this.skuIdList = [];
-
+      // this.checkList=[]
 			console.log("-------------------")
-			console.log(this.checkList)
-
+			console.log(this.checkList,'33333333')
 			// 将选中的规格组合成一个大数组 [[1, 2], [a, b]...]
 			this.checkList.forEach(element => {
 				element.list.length > 0 ? this.skuArray.push(element.list) : "";
@@ -505,10 +505,11 @@ export default {
 			} else {
 				this.$message.error("请先勾选规格");
 			}
+      
 		},
 		// 递归获取每条SKU数据
 		getSkuData(skuArr = [], i, list) {
-
+    console.log(list,'11112222222222222222222')
 			for (let j = 0; j < list[i].length; j++) {
 				if (i < list.length - 1) {
 					skuArr[i] = list[i][j];
