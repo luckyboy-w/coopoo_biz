@@ -147,7 +147,7 @@
                     </div>
                     <div v-if="scope.row.orderType == 4 ">
                       <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)" >发货</el-link>
-                      <el-link type="primary" v-if="scope.row.status == 20" @click="dealOrd(scope.row)" >确认收货</el-link>
+                      <!--<el-link type="primary" v-if="scope.row.status == 20" @click="dealOrd(scope.row)" >确认收货</el-link>-->
                       <el-link type="primary" v-if="scope.row.status == 60" @click="collectCus(scope.row)" >发起定价收款</el-link>
                       <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
                       <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
