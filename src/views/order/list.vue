@@ -368,6 +368,17 @@
         </el-row>
       </div>
 
+	  <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
+	    <el-row :gutter="20" style="line-height:40px" class="main-title">
+	        <el-col :span="24">物流信息</el-col>
+	    </el-row>
+	    <el-row :gutter="20" style="line-height:40px;font-size:12px">
+	        <el-col :span="6">物流公司：{{ordDtl.expressName}}</el-col>
+	        <el-col :span="6">快递单号：{{ordDtl.expressNo}}</el-col>
+	        <el-col :span="6"></el-col>
+	    </el-row>
+	  </div>
+
       <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;">
         <el-row :gutter="20" style="line-height:40px" class="main-title">
             <el-col :span="24">发票信息</el-col>
