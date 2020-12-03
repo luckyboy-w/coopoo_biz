@@ -13,7 +13,7 @@
     data () {
       return {
           orderStatus:{
-            status: "20"
+            status: "30"
           },
           dataSource:'ready-list'
       };

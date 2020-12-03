@@ -403,11 +403,13 @@ export default {
 			});
 		},
 		offLine(row,isSale){
+      console.log(row.isSale,'9898989')
+      console.log(isSale,'3333333')
 			let scope = this;
 			let param = {
 				id: row.id,
 				verifyStatus: '40',//下架退回到待审核
-				isSale: isSale
+				isSale: row.isSale
 			}
 			postMethod("/bu/good/updateStatus", param).then(res => {
 				scope.loadList();

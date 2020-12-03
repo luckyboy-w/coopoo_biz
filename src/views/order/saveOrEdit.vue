@@ -5,10 +5,11 @@
         <el-input v-model="dataForm.addrName" />
       </el-form-item>
       <el-form-item label="地址类型">
-        <el-select v-model="dataForm.type">
-          <el-option value="1" label="发货地址" />
-          <el-option value="2" label="退货地址" />
-        </el-select>
+        <el-input value="退货地址" disabled/>
+        <!-- <el-select v-model="dataForm.type"> -->
+          <!-- <el-option value="1" label="发货地址" /> -->
+         <!-- <el-option value="2" label="退货地址" />
+        </el-select> -->
       </el-form-item>
       <el-form-item label="地址序号">
         <el-input v-model="dataForm.addrSeq" />
@@ -71,6 +72,7 @@ export default {
       imageUrl: '',
       fileList: [],
       dataForm: {
+        type:'2',
         addrName: '',
         addrSeq: '',
         person: '',

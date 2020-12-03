@@ -88,6 +88,14 @@ service.interceptors.response.use(
 		    duration: 3000
 		  })
 		}
+    if(res.message == '登录超时，请重新登录'){
+      Message({
+        message: '登录超时，请重新登录',
+        type: 'error',
+        duration: 5 * 1000
+      });
+      location.href = process.env.NODE_ENV === 'production' ? '/' : '/backend';
+    }
       if(res.code == 1000){
         Message({
           message: '登录超时，请重新登录',
