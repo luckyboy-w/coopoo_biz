@@ -88,7 +88,7 @@ service.interceptors.response.use(
 		    duration: 3000
 		  })
 		}
-    if(res.message == '登录超时，请重新登录'){
+    if(res.msg == '登录超时，请重新登录'){
       Message({
         message: '登录超时，请重新登录',
         type: 'error',

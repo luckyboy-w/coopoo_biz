@@ -85,8 +85,8 @@
               </el-table-column>
             </el-table>
           </el-form-item>
-          <el-form-item label="库存类型">
-            <el-radio v-model="dataForm.stockType" label="1" @change="stockChange">全局</el-radio>
+          <el-form-item label="库存类型" v-show="false">
+            <!-- <el-radio v-model="dataForm.stockType" label="1" @change="stockChange">全局</el-radio> -->
             <el-radio v-model="dataForm.stockType" label="2" @change="stockChange">局部</el-radio>
           </el-form-item>
           <el-form-item v-if="dataForm.stockType==1" label="库存数量">
@@ -324,7 +324,7 @@ export default {
         skuPriceList: [],
         goodStyle: '',
         serviceRule: '',
-        stockType: '1',
+        stockType: '2',
         goodImage: '',
         goodFrontImage: '',
         skuJsonStr: '',
