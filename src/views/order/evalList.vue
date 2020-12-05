@@ -77,7 +77,7 @@
 			</div>
 			<div class="list-panel"></div>
 		</div>
-		<el-dialog title="发货信息" visible="sendEval" v-if="sendEval">
+		<el-dialog title="发货信息" visible="sendEval" v-if="sendEval" :before-close="handleClose">
           <el-form ref="form" :model="replyFrm" label-width="80px">
             <el-form-item label="回复内容">
               <el-input
@@ -89,7 +89,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="sendReply()">回复</el-button>
-              <el-button @click="sendEval=false">取消</el-button>
+              <el-button @click="cancel">取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -111,7 +111,7 @@ export default {
 		}
 	},
 	// mounted() {
-		
+
 	// 	this.initLoad();
 	// 	this.loadcityList();
 	// 	this.loadprovinceList();
@@ -175,16 +175,22 @@ export default {
 		this.loadprovinceList();
 	},
 	methods: {
+     handleClose(done) {
+       this.replyFrm.replyMsg=''
+       this.sendEval = false
+          },
 		sendReply(){
 			let scope = this
 			this.rowData.replyMsg = this.replyFrm.replyMsg
 			this.rowData.pkEvalId = this.rowData.id
 			postMethod("/bc/order/replyEval", this.rowData).then(res => {
 				this.loadList()
+        this.replyFrm.replyMsg=''
 				scope.sendEval = false
 			});
 		},
 		replyMsg(row){
+      console.log(row,'这是回复')
 			this.sendEval = true
 			this.rowData = row
 		},
@@ -200,6 +206,10 @@ export default {
 			// 	scope.provinceList = res.data.list;
 			// });
 		},
+    cancel(){
+      this.replyFrm.replyMsg=''
+      this.sendEval = false
+      },
 		deleteRow(rowIndex, data) {
 			let param = {
 				id: data.list[rowIndex].id

@@ -26,10 +26,10 @@
                       <el-button type="info" @click="exportData()">导出Excel</el-button>
                 </el-col>
             </el-row>
-             <el-row style="line-height:40px;padding:10px 0px ">
+             <!-- <el-row style="line-height:40px;padding:10px 0px ">
                 <el-col v-if="!isCanBill" :span="24" style="color: red">今天不是结算日</el-col>
                 <el-col :span="24">{{billDate}}</el-col>
-            </el-row>
+            </el-row> -->
             <el-tab-pane label="可结算" name="readyBill" style="height:600px">
                 <el-table
                     ref="noBillData"
@@ -214,7 +214,7 @@ import { getToken } from '@/utils/auth'
     mounted() {
         this.searchParam.billType = "10"
         this.loadList();
-        this.loadBillCfgData();;
+        // this.loadBillCfgData();;
     },
     methods: {
       exportData(){
@@ -280,27 +280,27 @@ import { getToken } from '@/utils/auth'
           this.currentGoodsSkuInfoList = res.data
         });
       },
-      loadBillCfgData(){
-          let scope = this
-          getMethod("/bu/orderBill/findBillDate", {}).then(res => {
-                let evalData = eval("("+res.data+")");
-                if(evalData.length == 0){
-                    scope.billDate  = '暂时没有最新的结算日'
-                }else{
-                  let now = new Date();
-                  const day = String(now.getDate()).padStart(2,'0')
+      // loadBillCfgData(){
+      //     let scope = this
+      //     getMethod("/bu/orderBill/findBillDate", {}).then(res => {
+      //           let evalData = eval("("+res.data+")");
+      //           if(evalData.length == 0){
+      //               scope.billDate  = '暂时没有最新的结算日'
+      //           }else{
+      //             let now = new Date();
+      //             const day = String(now.getDate()).padStart(2,'0')
 
-                  for (let i = 0; i < evalData.length; i++) {
-                    let compareDay = evalData[i].split("-")[2]
-                    evalData[i] = compareDay
-                    if (!this.isCanBill) {
-                      this.isCanBill = day == compareDay
-                    }
-                  }
-                  scope.billDate  = '每月结算日是：'+evalData.join("，");
-                }
-          });
-      },
+      //             for (let i = 0; i < evalData.length; i++) {
+      //               let compareDay = evalData[i].split("-")[2]
+      //               evalData[i] = compareDay
+      //               if (!this.isCanBill) {
+      //                 this.isCanBill = day == compareDay
+      //               }
+      //             }
+      //             scope.billDate  = '每月结算日是：'+evalData.join("，");
+      //           }
+      //     });
+      // },
       billOrd(param){
         let scope = this
 

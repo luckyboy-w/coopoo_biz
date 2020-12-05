@@ -84,6 +84,7 @@ export default {
         citytext: '',
         areaId: '',
         areaText: '',
+        addrDtl:'',
         enable: true,
         id: ''
       }
@@ -113,6 +114,8 @@ export default {
     selectProvinceFun(event) {
       this.selectCity = ''
       this.selectArea = ''
+      this.dataForm.citytext = ''
+      this.dataForm.areaText = ''
       if (event) {
         this.cityList = event.cityList
       } else {
@@ -124,6 +127,7 @@ export default {
     selectCityFun(event) {
       console.info(event)
       this.selectArea = ''
+      this.dataForm.areaText = ''
       if (event) {
         this.areaList = event.areasList
       } else {
@@ -156,9 +160,13 @@ export default {
     },
     validate() {
       const notNvl = {
-        'addrName': '发货地址不能为空',
+        'addrName': '地址名称不能为空',
         'person': '联系人不能为空',
-        'mobilePhone': '联系人手机号不能为空'
+        'mobilePhone': '联系人手机号不能为空',
+        'addrDtl': '地址不能为空',
+        'citytext': '省份信息不能为空',
+        'provincetext': '省份信息不能为空',
+        'areaText': '省份信息不能为空'
       }
 
       for (const key in notNvl) {
