@@ -12,10 +12,10 @@
             <td>
               <el-input v-model="searchParam.name" width="180px" />
             </td>
-            <td>买家电话：</td>
+           <!-- <td>买家电话：</td>
             <td>
               <el-input v-model="searchParam.mobile" width="180px" />
-            </td>
+            </td> -->
             <td>商品名称：</td>
             <td>
               <el-input v-model="searchParam.goodName" width="180px" />
