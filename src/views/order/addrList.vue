@@ -6,7 +6,7 @@
 					<tr>
 						<td>
 							<el-button plain type="primary" @click="addOrEdit('add')" icon="el-icon-document-add">新建</el-button>
-							<el-button plain type="primary" @click="remove('add')" icon="el-icon-document-add">删除</el-button>
+							<el-button v-if="false" plain type="primary" @click="remove('add')" icon="el-icon-document-add">删除</el-button>
 						</td>
 					</tr>
 				</table>
@@ -51,6 +51,7 @@
 									size="small"
 								>编辑</el-button>
 								<el-button
+                v-if="false"
 									@click.native.prevent="remove(scope.row.addrId)"
 									type="text"
 									size="small"

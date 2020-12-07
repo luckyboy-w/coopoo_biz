@@ -13,6 +13,7 @@ let requestBodyUrl = []
 requestBodyUrl.push("/bc/order/bizOrderList")
 requestBodyUrl.push("/bu/orderBill/findListPost")
 requestBodyUrl.push("/bu/good/modityGoodStock")
+requestBodyUrl.push("/bc/order/confirmReturnOrder")
 
 
 // create an axios instance

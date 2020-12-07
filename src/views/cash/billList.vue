@@ -58,7 +58,7 @@
                     </el-table-column>
                     <el-table-column prop="pkBillId" label="操作" min-width="24%">
                       <template slot-scope="scope">
-                        <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link>
+                        <!-- <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link> -->
                         <el-link type="primary" @click="showBillDetail(scope.row)">查看</el-link>
                       </template>
                     </el-table-column>
