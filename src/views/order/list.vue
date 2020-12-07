@@ -135,7 +135,6 @@
                     <div v-if="scope.row.orderType == 1 ">
                       <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)" >发货</el-link>
                       <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
-                      <el-link type="primary" v-if="scope.row.status == 41" @click="refundOrd(scope.row)" >退货完成</el-link>
                       <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
                       <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
                     </div>
@@ -823,21 +822,6 @@ export default {
         type: 'warning'
       }).then(() => {
         postMethod('/bc/order/dealOrd', param).then(res => {
-          this.loadList()
-          this.$message('操作成功')
-        })
-      })
-    },
-    refundOrd(row){
-      const param = {
-        orderId: row.orderId
-      }
-        this.$confirm('是否确认退货?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        postMethod('/bc/order/refundOrd', param).then(res => {
           this.loadList()
           this.$message('操作成功')
         })
