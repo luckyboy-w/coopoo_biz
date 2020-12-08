@@ -409,7 +409,7 @@ export default {
 			let param = {
 				id: row.id,
 				verifyStatus: '40',//下架退回到待审核
-				isSale: row.isSale
+				isSale: isSale
 			}
 			postMethod("/bu/good/updateStatus", param).then(res => {
 				scope.loadList();
