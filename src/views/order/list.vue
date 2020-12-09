@@ -651,6 +651,7 @@ export default {
         sendAddrId: [{required: true, message: '请选择退货地址', trigger: 'change' }],
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
       },
+      orderId_: '',
       dataList: []
     }
   },
@@ -678,8 +679,16 @@ export default {
     this.initLoad()
     this.initAddrList()
     this.loadtypeIdList()
+    if (this.$route.query.orderNo) {
+      console.log(this.$route.query.orderNo,'898989')
+      this.orderId_ = this.$route.query.orderNo
+      console.log(this.orderId_)
+      this.getOrdDtl_()
+    }
+
   },
-  created() {},
+  created() {
+  },
   methods: {
     showOrdDtlClos(){
       this.showOrdDtl = false
@@ -749,6 +758,69 @@ export default {
             type: 'success'
           })
         })
+    },
+    getOrdDtl_(){
+      console.log('99999999999999')
+      let scope = this
+      let param = {
+       orderId: this.orderId_
+      }
+      postMethod('/bc/order/getOrdDtl', param).then(res => {
+        console.log(res.data)
+        scope.showOrdDtl = true
+        scope.ordDtl = res.data
+        scope.ptStep = false
+        scope.dzStep = false
+        scope.lpStep = false
+
+        if(scope.ordDtl.orderType == 1){
+
+          scope.ptStep = true
+          if(scope.ordDtl.status == "10"){
+            scope.ordStep = 1
+          }else if(scope.ordDtl.status == "20"){
+            scope.ordStep = 2
+          }else if(scope.ordDtl.status == "30"){
+            scope.ordStep = 3
+          }else {
+            scope.ordStep = 4
+          }
+
+          if(scope.ordDtl.status >= 40 && scope.ordDtl.status < 50){
+            scope.isCancelTitle = '退货中'
+          }else if(scope.ordDtl.status == 0){
+            scope.isCancelTitle = '已取消'
+          }
+
+        }else if(scope.ordDtl.orderType == 2){
+          scope.lpStep = true
+
+          if(scope.ordDtl.status == "10"){
+            scope.ordStep = 1
+          }else if(scope.ordDtl.status == "20"){
+            scope.ordStep = 2
+          }else if(scope.ordDtl.status == "30"){
+            scope.ordStep = 3
+          }else {
+            scope.ordStep = 4
+          }
+
+        }else if(scope.ordDtl.orderType == 4){
+          scope.dzStep = true
+
+          if(scope.ordDtl.status == "10"){
+            scope.ordStep = 2
+          }else if(scope.ordDtl.status == "20"){
+            scope.ordStep = 3
+          }else if(scope.ordDtl.status == "30"){
+            scope.ordStep = 4
+          }else if(scope.ordDtl.status == "60"){
+            scope.ordStep = 1
+          }else {
+            scope.ordStep = 5
+          }
+        }
+      })
     },
     getOrdDtl(row){
       let scope = this

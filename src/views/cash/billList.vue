@@ -37,7 +37,7 @@
                     style="width: 100%; margin-bottom: 20px;"
                     row-key="id">
                     <el-table-column type="selection" width="55"></el-table-column>
-                    <el-table-column prop="billNo" label="流水号" min-width="24%"></el-table-column>
+                    <!-- <el-table-column prop="billNo" label="流水号" min-width="24%"></el-table-column> -->
                     <el-table-column prop="orderNo" label="订单号" min-width="24%">
                     </el-table-column>
                     <el-table-column prop="createTime" label="入账时间" min-width="24%">
@@ -59,7 +59,7 @@
                     <el-table-column prop="pkBillId" label="操作" min-width="24%">
                       <template slot-scope="scope">
                         <!-- <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link> -->
-                        <el-link type="primary" @click="showBillDetail(scope.row)">查看</el-link>
+                        <el-link type="primary" @click="showBillDetail_(scope.row)">订单明细</el-link>
                       </template>
                     </el-table-column>
                 </el-table>
@@ -80,9 +80,12 @@
                     style="width: 100%; margin-bottom: 20px;"
                     row-key="id">
                      <el-table-column type="index" width="50" label="序号"></el-table-column>
-                    <el-table-column prop="billNo" label="流水号" min-width="24%">
+                    <el-table-column prop="test" label="结算单号" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="orderNo" label="订单号" min-width="24%">
+                    <el-table-column prop="applyTime" label="申请时间" min-width="24%">
+                        <template slot-scope="scope">
+                            {{scope.row.applyTime | _formateDate}}
+                        </template>
                     </el-table-column>
                     <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
                     </el-table-column>
@@ -95,11 +98,11 @@
                         {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
                       </template>
                     </el-table-column>
-                    <el-table-column prop="applyTime" label="申请时间" min-width="24%">
-                        <template slot-scope="scope">
-                            {{scope.row.applyTime | _formateDate}}
-                        </template>
-                    </el-table-column>
+                 <el-table-column prop="pkBillId" label="操作" min-width="24%">
+                   <template slot-scope="scope">
+                     <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>
+                   </template>
+                 </el-table-column>
                 </el-table>
                  <el-pagination
                     v-show="settleFinshData.total != 0"
@@ -118,9 +121,12 @@
                     style="width: 100%; margin-bottom: 20px;"
                     row-key="id">
                     <el-table-column type="index" width="50" label="序号"></el-table-column>
-                   <el-table-column prop="billNo" label="流水号" min-width="24%">
+                    <el-table-column prop="test" label="结算单号" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="orderNo" label="订单号" min-width="24%">
+                    <el-table-column prop="billTime" label="入账时间" min-width="24%">
+                        <template slot-scope="scope">
+                            {{scope.row.billTime | _formateDate}}
+                        </template>
                     </el-table-column>
                     <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
                     </el-table-column>
@@ -133,10 +139,10 @@
                         {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
                       </template>
                     </el-table-column>
-                    <el-table-column prop="billTime" label="结算时间" min-width="24%">
-                        <template slot-scope="scope">
-                            {{scope.row.billTime | _formateDate}}
-                        </template>
+                    <el-table-column prop="pkBillId" label="操作" min-width="24%">
+                      <template slot-scope="scope">
+                        <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>
+                      </template>
                     </el-table-column>
                 </el-table>
                  <el-pagination
@@ -153,11 +159,20 @@
 
       <el-dialog title="详情" :visible.sync="dialogTableVisible">
         <el-table :data="currentGoodsSkuInfoList">
-          <el-table-column prop="goodName" label="商品名称"></el-table-column>
-          <el-table-column prop="skuInfo" label="规格"></el-table-column>
-          <el-table-column prop="goodSinglePrice" label="商品单价"></el-table-column>
-          <el-table-column prop="goodNum" label="商品数量"></el-table-column>
-          <el-table-column prop="goodCode" label="产品编号"></el-table-column>
+          <el-table-column prop="goodName" label="订单号"></el-table-column>
+         <el-table-column
+           prop="test"
+           label="入账时间"
+           min-width="20%"
+         >
+           <template slot-scope="scope">
+             {{ scope.row.test | _formateDate }}
+           </template>
+         </el-table-column>
+          <el-table-column prop="test" label="订单金额"></el-table-column>
+          <el-table-column prop="test" label="支付金额"></el-table-column>
+          <el-table-column prop="test" label="结算金额"></el-table-column>
+          <el-table-column prop="test" label="服务金额"></el-table-column>
         </el-table>
       </el-dialog>
     </div>
@@ -178,11 +193,8 @@ import { getToken } from '@/utils/auth'
         currentGoodsSkuInfoList: [],
         //10:未结算;20:结算中;30:已结算
         searchParam:{
-            billType:'10',
             billNo:"",
             orderNo:"",
-            startTime:null,
-            endTime:null,
             pageSize:10,
             pageNum:1
         },
@@ -212,8 +224,8 @@ import { getToken } from '@/utils/auth'
         }
     },
     mounted() {
-        this.searchParam.billType = "10"
         this.loadList();
+        this.loadList_();
         // this.loadBillCfgData();;
     },
     methods: {
@@ -271,6 +283,13 @@ import { getToken } from '@/utils/auth'
             scope.billOrd(param)
         });
       },
+      showBillDetail_(row){
+        console.log(row,'带过去的值')
+          this.$router.push({
+            path: '/bc-order/list',
+            query: row,
+          })
+        },
       showBillDetail(row){
         this.dialogTableVisible = true
         let param = {
@@ -321,37 +340,49 @@ import { getToken } from '@/utils/auth'
       handleClick(tab, event) {
         this.tabIndex = tab.index
         if(tab.index == 0 ){
-            this.searchParam.billType = "10"
+            this.searchParam.billType = ""
         }else if(tab.index == 1 ){
-            this.searchParam.billType = "20"
-        }else {
-            this.searchParam.billType = "30"
+            this.searchParam.billType = "1"
+        }else if(tab.index == 2 ){
+            this.searchParam.billType = "2"
         }
         this.loadList();
+         this.loadList_();
       },
       currentPage(pageNum) {
         this.searchParam.pageNum = pageNum;
         this.loadList();
+        this.loadList_();
+
       },
       loadList(){
         let scope = this
         let param = this.searchParam
-        postMethod("/bu/orderBill/findListPost", param).then(res => {
+        getMethod("/bu/orderBill/findBillDtl", param).then(res => {
             if(scope.tabIndex == 0){
                 scope.noBillData = res.data
-                //scope.noBillData = res.data.total
-            }else if(scope.tabIndex == 1){
-                scope.settleFinshData = res.data
-                // scope.settleFinshData.dataList = res.data.list
-                // scope.settleFinshData.total = res.data.total
-            }else{
-                scope.settleEndData = res.data
-                // scope.settleEndData.dataList = res.data.list
-                // scope.settleEndData.total = res.data.total
             }
 
         });
-      }
+      },
+        loadList_(){
+         let scope = this
+         if(scope.tabIndex == 1){
+           this.searchParam.billType='1'
+            let param = this.searchParam
+           postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
+                   scope.settleFinshData = res.data
+           });
+          }else if(scope.tabIndex == 2){
+            this.searchParam.billType='2'
+             let param = this.searchParam
+            postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
+                    scope.settleEndData = res.data
+            });
+          }
+
+
+        }
     }
   };
 </script>
