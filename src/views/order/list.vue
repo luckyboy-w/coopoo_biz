@@ -652,6 +652,7 @@ export default {
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
       },
       orderId_: '',
+      orderNo_: '',
       dataList: []
     }
   },
@@ -681,7 +682,7 @@ export default {
     this.loadtypeIdList()
     if (this.$route.query.orderNo) {
       console.log(this.$route.query.orderNo,'898989')
-      this.orderId_ = this.$route.query.orderNo
+      this.orderNo_ = this.$route.query.orderNo
       console.log(this.orderId_)
       this.getOrdDtl_()
     }
@@ -760,11 +761,11 @@ export default {
         })
     },
     getOrdDtl_(){
-      console.log('99999999999999')
       let scope = this
       let param = {
-       orderId: this.orderId_
+        orderNo: this.orderNo_
       }
+
       postMethod('/bc/order/getOrdDtl', param).then(res => {
         console.log(res.data)
         scope.showOrdDtl = true
