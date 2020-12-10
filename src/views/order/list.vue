@@ -89,6 +89,19 @@
                     <el-table-column prop="goodName" label="商品名称" width="400px" ></el-table-column>
                     <el-table-column prop="goodSinglePrice" label="商品单价" width="150px" ></el-table-column>
                     <el-table-column prop="goodNum" label="商品数量" width="150px" ></el-table-column>
+                    <el-table-column prop="dtlStatus" label="商品状态" width="150px" >
+                      <template slot-scope="scope">
+                       <!-- <span v-if="scope.row.dtlStatus == '0'">正常</span>
+                        <span v-if="scope.row.dtlStatus == '10'">正常</span>
+                        <span v-if="scope.row.dtlStatus == '20'">正常</span>
+                        <span v-if="scope.row.dtlStatus == '30'">正常</span>
+                        <span v-if="scope.row.dtlStatus == '40'">正常</span>
+                        <span v-if="scope.row.dtlStatus == '50'">正常</span> -->
+                        <span v-if="scope.row.dtlStatus != '60'&&'70'">正常</span>
+                        <span v-if="scope.row.dtlStatus == '60'">退货中</span>
+                        <span v-if="scope.row.dtlStatus == '70'">退货已完成</span>
+                      </template>
+                    </el-table-column>
                     <el-table-column prop="skuInfo" label="规格" width="150px" ></el-table-column>
                     <el-table-column prop="goodCode" label="商品货号" width="150px" ></el-table-column>
                 </el-table>
