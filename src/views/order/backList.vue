@@ -92,7 +92,7 @@
 
 
 
-    <div v-if="showOrdDtl" style="height:600px;padding:40px;width:100%">
+    <div v-if="showOrdDtl" style="height:600px;padding:40px;width:50%">
 
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
         <el-col :span="24">
@@ -105,16 +105,16 @@
           <el-col :span="24">退货信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:50px;font-size:16px">
-          <el-col :span="20">商品名称：{{ this.detailData.goodName }}</el-col>
-          <el-col :span="20">SKU属性：{{ this.detailData.skuInfo }}</el-col>
-          <el-col :span="20">退货数量：{{ this.detailData.goodNum }}</el-col>
+          <el-col :span="20">商品名称：{{ this.detailData.goodName }}<el-divider></el-divider></el-col>
+          <el-col :span="20">SKU属性：{{ this.detailData.skuInfo }}<el-divider></el-divider></el-col>
+          <el-col :span="20">退货数量：{{ this.detailData.goodNum }}<el-divider></el-divider></el-col>
           <el-col :span="20">商品单价：{{ this.detailData.goodSinglePrice }}</el-col>
-          <el-col :span="20">总价：{{ this.detailData.goodSinglePrice * this.detailData.goodNum | fmtFee}}</el-col>
-          <el-col :span="20">买家姓名：{{ this.detailData.name }}</el-col>
-          <el-col :span="20">买家手机号：{{ this.detailData.mobile }}</el-col>
-          <el-col :span="20">退货理由：{{ this.detailData.reason }}</el-col>
-          <el-col :span="20">退货说明：{{ this.detailData.remark }}</el-col>
-          <el-col :span="20">快递单号：{{ this.detailData.expressNo }}</el-col>
+          <el-col :span="20">总价：{{ this.detailData.goodSinglePrice * this.detailData.goodNum | fmtFee}}<el-divider></el-divider></el-col>
+          <el-col :span="20">买家姓名：{{ this.detailData.name }}<el-divider></el-divider></el-col>
+          <el-col :span="20">买家手机号：{{ this.detailData.mobile }}<el-divider></el-divider></el-col>
+          <el-col :span="20">退货理由：{{ this.detailData.reason }}<el-divider></el-divider></el-col>
+          <el-col :span="20">退货说明：{{ this.detailData.remark }}<el-divider></el-divider></el-col>
+          <el-col :span="20">快递单号：{{ this.detailData.expressNo }}<el-divider></el-divider></el-col>
         </el-row>
       </div>
 
