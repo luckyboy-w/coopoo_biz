@@ -626,7 +626,7 @@ export default {
       this.loading = false
     },
     beforeGoodImageUpload(file) {
-      this.loading = true
+      // this.loading = true
       const fileTypeVerify =
 				file.type === 'image/jpeg' ||
 				file.type === 'image/png' ||
@@ -680,7 +680,7 @@ export default {
       }
     },
     beforeGoodFrontImageUpload(file) {
-      this.loading = true
+      // this.loading = true
       const fileTypeVerify =
 				file.type === 'image/jpeg' ||
 				file.type === 'image/png' ||
