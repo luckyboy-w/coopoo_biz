@@ -217,7 +217,7 @@
                         {{scope.row.createTime | _formateDate}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
+                <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
                 </el-table-column>
                 <el-table-column prop="totalAmount" label="支付金额" min-width="24%">
                 </el-table-column>
@@ -391,7 +391,6 @@ import { getToken } from '@/utils/auth'
         console.log(row,'456789')
         this.dataDtl = true
         this.back_ = false
-
         if(this.activeName=='settleFinsh'){
           this.only='1'
         }else if(this.activeName=='settleEnd'){
@@ -402,7 +401,7 @@ import { getToken } from '@/utils/auth'
         this.searchParam.billNo=row.settleNo
         let param =this.searchParam
         console.log(param,'ppppp')
-        postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
+        getMethod("/bu/orderBill/findBillSettledDtl", param).then(res => {
           this.billCashData = res.data
         });
       },
@@ -416,6 +415,7 @@ import { getToken } from '@/utils/auth'
         this.back_ = true
         this.dataDtl = false
         this.loadList_();
+        this.searchParam.billNo=''
       },
       // loadBillCfgData(){
       //     let scope = this
