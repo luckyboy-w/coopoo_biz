@@ -1,36 +1,33 @@
 <template>
     <div style="padding-top:20px;width:100%">
         <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" >
-            <el-row style="line-height:40px;padding:10px 0px ">
-                <el-col :span="1">流水号</el-col>
-                <el-col :span="2"><el-input v-model="searchParam.billNo" placeholder=""></el-input></el-col>
-                <el-col :span="1" style="padding-left:10px">订单号</el-col>
-                <el-col :span="2"><el-input v-model="searchParam.orderNo" placeholder=""></el-input></el-col>
-                <el-col :span="2" style="padding-left:10px">入账时间</el-col>
-                <el-col :span="8">
-                    <el-date-picker
-                        v-model="searchParam.startTime"
-                        type="date"
-                        placeholder="开始日期">
-                    </el-date-picker>
-                    至
-                    <el-date-picker
-                        v-model="searchParam.endTime"
-                        type="date"
-                        placeholder="结束日期">
-                    </el-date-picker>
-                </el-col>
-                <el-col :span="8" style="padding-left:10px">
-                      <el-button type="primary" @click="loadList()">搜索</el-button>
-                      <el-button type="normal" @click="batchBill()" v-if="tabIndex == 0 && isCanBill">批量结算</el-button>
-                      <el-button type="info" @click="exportData()">导出Excel</el-button>
-                </el-col>
-            </el-row>
              <!-- <el-row style="line-height:40px;padding:10px 0px ">
                 <el-col v-if="!isCanBill" :span="24" style="color: red">今天不是结算日</el-col>
                 <el-col :span="24">{{billDate}}</el-col>
             </el-row> -->
             <el-tab-pane label="可结算" name="readyBill" style="height:600px">
+              <el-row style="line-height:40px;padding:10px 0px ">
+                  <el-col :span="1" style="padding-left:10px">订单号</el-col>
+                  <el-col :span="2"><el-input v-model="searchParam.orderNo" placeholder=""></el-input></el-col>
+                  <el-col :span="1" style="padding-left:10px">入账时间</el-col>
+                  <el-col :span="6">
+                      <el-date-picker
+                          v-model="searchParam.startTime"
+                          type="date"
+                          placeholder="开始日期">
+                      </el-date-picker>
+                      至
+                      <el-date-picker
+                          v-model="searchParam.endTime"
+                          type="date"
+                          placeholder="结束日期">
+                      </el-date-picker>
+                  </el-col>
+                  <el-col :span="8" style="padding-left:10px">
+                        <el-button type="primary" @click="search()">搜索</el-button>
+                        <!-- <el-button type="info" @click="exportData()">导出Excel</el-button> -->
+                  </el-col>
+              </el-row>
                 <el-table
                     ref="noBillData"
                     :data="noBillData.list"
@@ -51,10 +48,7 @@
                     </el-table-column>
                     <el-table-column prop="billMoney" label="结算金额" min-width="24%">
                     </el-table-column>
-                    <el-table-column label="服务金额" min-width="24%">
-                      <template slot-scope="scope">
-                        {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
-                      </template>
+                    <el-table-column prop="platformFee" label="服务金额" min-width="24%">
                     </el-table-column>
                     <el-table-column prop="pkBillId" label="操作" min-width="24%">
                       <template slot-scope="scope">
@@ -74,29 +68,48 @@
                 />
             </el-tab-pane>
             <el-tab-pane label="结算中" name="settleFinsh" style="height:600px">
+              <el-row style="line-height:40px;padding:10px 0px ">
+                  <el-col :span="1" style="padding-left:10px">订单号</el-col>
+                  <el-col :span="2"><el-input v-model="searchParam.billNo" placeholder=""></el-input></el-col>
+                  <el-col :span="1.5" style="padding-left:10px">申请结账时间</el-col>
+                  <el-col :span="6">
+                      <el-date-picker
+                          v-model="searchParam.startTime"
+                          type="date"
+                          placeholder="开始日期">
+                      </el-date-picker>
+                      至
+                      <el-date-picker
+                          v-model="searchParam.endTime"
+                          type="date"
+                          placeholder="结束日期">
+                      </el-date-picker>
+                  </el-col>
+                  <el-col :span="8" style="padding-left:10px">
+                        <el-button type="primary" @click="searchOne()">搜索</el-button>
+                        <!-- <el-button type="info" @click="exportData()">导出Excel</el-button> -->
+                  </el-col>
+              </el-row>
                 <el-table
                     ref="settleFinshData"
                     :data="settleFinshData.list"
                     style="width: 100%; margin-bottom: 20px;"
                     row-key="id">
                      <el-table-column type="index" width="50" label="序号"></el-table-column>
-                    <el-table-column prop="test" label="结算单号" min-width="24%">
+                    <el-table-column prop="settleNo" label="结算单号" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="applyTime" label="申请时间" min-width="24%">
+                    <el-table-column prop="applyDate" label="申请时间" min-width="24%">
                         <template slot-scope="scope">
-                            {{scope.row.applyTime | _formateDate}}
+                            {{scope.row.applyDate | _formateDate}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
+                    <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="totalAmount" label="实付金额" min-width="24%">
+                    <el-table-column prop="orderPayAmount" label="实付金额" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="billMoney" label="结算金额" min-width="24%">
+                    <el-table-column prop="settleAmount" label="结算金额" min-width="24%">
                     </el-table-column>
-                    <el-table-column label="服务金额" min-width="24%">
-                      <template slot-scope="scope">
-                        {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
-                      </template>
+                    <el-table-column prop="platformFee" label="服务金额" min-width="24%">
                     </el-table-column>
                  <el-table-column prop="pkBillId" label="操作" min-width="24%">
                    <template slot-scope="scope">
@@ -115,6 +128,28 @@
                 />
             </el-tab-pane>
             <el-tab-pane label="已结算" name="settleEnd" style="height:600px">
+              <el-row style="line-height:40px;padding:10px 0px ">
+                  <el-col :span="1" style="padding-left:10px">订单号</el-col>
+                  <el-col :span="2"><el-input v-model="searchParam.billNo" placeholder=""></el-input></el-col>
+                  <el-col :span="1.5" style="padding-left:10px">结束完成时间</el-col>
+                  <el-col :span="6">
+                      <el-date-picker
+                          v-model="searchParam.startTime"
+                          type="date"
+                          placeholder="开始日期">
+                      </el-date-picker>
+                      至
+                      <el-date-picker
+                          v-model="searchParam.endTime"
+                          type="date"
+                          placeholder="结束日期">
+                      </el-date-picker>
+                  </el-col>
+                  <el-col :span="8" style="padding-left:10px">
+                        <el-button type="primary" @click="searchTwo()">搜索</el-button>
+                        <!-- <el-button type="info" @click="exportData()">导出Excel</el-button> -->
+                  </el-col>
+              </el-row>
                 <el-table
                     ref="settleEndData"
                     :data="settleEndData.list"
@@ -134,10 +169,7 @@
                     </el-table-column>
                     <el-table-column prop="billMoney" label="结算金额" min-width="24%">
                     </el-table-column>
-                    <el-table-column label="服务金额" min-width="24%">
-                      <template slot-scope="scope">
-                        {{ (scope.row.orderPrice - scope.row.billMoney).toFixed(2)  }}
-                      </template>
+                    <el-table-column prop="platformFee" label="服务金额" min-width="24%">
                     </el-table-column>
                     <el-table-column prop="pkBillId" label="操作" min-width="24%">
                       <template slot-scope="scope">
@@ -155,26 +187,58 @@
                     @next-click="currentPage"
                 />
             </el-tab-pane>
+
+            <el-tab-pane label="明细" name="dataDtl" v-if="dataDtl" style="height:600px">
+            <el-row style="line-height:40px;padding:10px 0px ">
+              <el-col
+                :span="24"
+                style="padding-left:10px"
+              >
+                <el-button
+                  v-if="!back_"
+                  type="primary"
+                  icon="el-icon-back"
+                  @click="backTo()"
+                >
+                  返回列表
+                </el-button>
+              </el-col>
+            </el-row>
+
+            <el-table
+                :data="billCashData.list"
+                style="width: 100%; margin-bottom: 20px;"
+                row-key="id">
+                <el-table-column type="index" width="50" label="序号"></el-table-column>
+                <el-table-column prop="orderNo" label="订单号" min-width="24%">
+                </el-table-column>
+                <el-table-column prop="createTime" label="入账时间" min-width="24%">
+                    <template slot-scope="scope">
+                        {{scope.row.createTime | _formateDate}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
+                </el-table-column>
+                <el-table-column prop="totalAmount" label="支付金额" min-width="24%">
+                </el-table-column>
+                <el-table-column prop="billMoney" label="结算金额" min-width="24%">
+                </el-table-column>
+                <el-table-column prop="platformFee" label="服务金额" min-width="24%">
+                </el-table-column>
+            </el-table>
+                 <el-pagination
+                    v-show="billCashData.total != 0"
+                    :total="billCashData.total"
+                    background
+                    layout="prev, pager, next"
+                    @current-change="currentPage"
+                    @prev-click="currentPage"
+                    @next-click="currentPage"
+                />
+            </el-tab-pane>
+
         </el-tabs>
 
-      <el-dialog title="详情" :visible.sync="dialogTableVisible">
-        <el-table :data="currentGoodsSkuInfoList">
-          <el-table-column prop="goodName" label="订单号"></el-table-column>
-         <el-table-column
-           prop="test"
-           label="入账时间"
-           min-width="20%"
-         >
-           <template slot-scope="scope">
-             {{ scope.row.test | _formateDate }}
-           </template>
-         </el-table-column>
-          <el-table-column prop="test" label="订单金额"></el-table-column>
-          <el-table-column prop="test" label="支付金额"></el-table-column>
-          <el-table-column prop="test" label="结算金额"></el-table-column>
-          <el-table-column prop="test" label="服务金额"></el-table-column>
-        </el-table>
-      </el-dialog>
     </div>
 </template>
 <script>
@@ -186,6 +250,9 @@ import { getToken } from '@/utils/auth'
   export default {
     data() {
       return {
+        only:'',
+        back_: true,
+        dataDtl:false,
         dialogTableVisible: false,
         tabIndex:0,
         billDate:'',
@@ -218,10 +285,14 @@ import { getToken } from '@/utils/auth'
       };
     },
     filters:{
-        _formateDate(time){
-            let date = new Date(time);
-            return formatDate(date,'yyyy-MM-dd hh:mm:ss')
-        }
+        _formateDate(time) {
+          if (time == '' ||
+            time == undefined) {
+            return '';
+          }
+          let date = new Date(time);
+          return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+        },
     },
     mounted() {
         this.loadList();
@@ -229,6 +300,32 @@ import { getToken } from '@/utils/auth'
         // this.loadBillCfgData();;
     },
     methods: {
+      search() {
+        let that = this
+        let param = this.searchParam
+        getMethod("/bu/orderBill/findBillDtl", param).then(res => {
+          that.noBillData = res.data // 返回的数据
+
+        })
+      },
+      searchOne() {
+        let that = this
+        this.searchParam.billType='1'
+        let param = this.searchParam
+        postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
+          that.settleFinshData = res.data[0] // 返回的数据
+
+        })
+      },
+      searchTwo() {
+        let that = this
+        this.searchParam.billType='2'
+        let param = this.searchParam
+        postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
+          that.settleEndData = res.data[0] // 返回的数据
+
+        })
+      },
       exportData(){
           let jsonParam = JSON.stringify(this.searchParam)
 
@@ -291,13 +388,34 @@ import { getToken } from '@/utils/auth'
           })
         },
       showBillDetail(row){
-        this.dialogTableVisible = true
-        let param = {
-          orderNo: row.orderNo
+        console.log(row,'456789')
+        this.dataDtl = true
+        this.back_ = false
+
+        if(this.activeName=='settleFinsh'){
+          this.only='1'
+        }else if(this.activeName=='settleEnd'){
+          this.only='2'
         }
-        postMethod("/bc/order/getOrdSkuDtl", param).then(res => {
-          this.currentGoodsSkuInfoList = res.data
+        console.log(this.only,'5656565')
+        this.activeName = 'dataDtl'
+        this.searchParam.billNo=row.settleNo
+        let param =this.searchParam
+        console.log(param,'ppppp')
+        postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
+          this.billCashData = res.data
         });
+      },
+      backTo() {
+        if(this.only=='1'){
+          this.activeName='settleFinsh'
+        }else if(this.only=='2'){
+          this.activeName='settleEnd'
+        }
+        console.log(this.activeName,'99999')
+        this.back_ = true
+        this.dataDtl = false
+        this.loadList_();
       },
       // loadBillCfgData(){
       //     let scope = this
@@ -341,10 +459,16 @@ import { getToken } from '@/utils/auth'
         this.tabIndex = tab.index
         if(tab.index == 0 ){
             this.searchParam.billType = ""
+            this.back_ = true
+            this.dataDtl = false
         }else if(tab.index == 1 ){
             this.searchParam.billType = "1"
+            this.back_ = true
+            this.dataDtl = false
         }else if(tab.index == 2 ){
             this.searchParam.billType = "2"
+            this.back_ = true
+            this.dataDtl = false
         }
         this.loadList();
          this.loadList_();
@@ -359,6 +483,7 @@ import { getToken } from '@/utils/auth'
         let scope = this
         let param = this.searchParam
         getMethod("/bu/orderBill/findBillDtl", param).then(res => {
+          console.log(res.data,'88888')
             if(scope.tabIndex == 0){
                 scope.noBillData = res.data
             }
@@ -371,13 +496,15 @@ import { getToken } from '@/utils/auth'
            this.searchParam.billType='1'
             let param = this.searchParam
            postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
-                   scope.settleFinshData = res.data
+             console.log(res.data[0],'999999999')
+                   scope.settleFinshData = res.data[0]
            });
           }else if(scope.tabIndex == 2){
             this.searchParam.billType='2'
              let param = this.searchParam
             postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
-                    scope.settleEndData = res.data
+              console.log(res ,'3333333')
+                    scope.settleEndData = res
             });
           }
 
