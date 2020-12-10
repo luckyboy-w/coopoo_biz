@@ -156,18 +156,18 @@
                     style="width: 100%; margin-bottom: 20px;"
                     row-key="id">
                     <el-table-column type="index" width="50" label="序号"></el-table-column>
-                    <el-table-column prop="test" label="结算单号" min-width="24%">
+                    <el-table-column prop="settleNo" label="结算单号" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="billTime" label="入账时间" min-width="24%">
+                    <el-table-column prop="settleDate" label="入账时间" min-width="24%">
                         <template slot-scope="scope">
-                            {{scope.row.billTime | _formateDate}}
+                            {{scope.row.settleDate | _formateDate}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
+                    <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="totalAmount" label="实付金额" min-width="24%">
+                    <el-table-column prop="orderPayAmount" label="实付金额" min-width="24%">
                     </el-table-column>
-                    <el-table-column prop="billMoney" label="结算金额" min-width="24%">
+                    <el-table-column prop="settleAmount" label="结算金额" min-width="24%">
                     </el-table-column>
                     <el-table-column prop="platformFee" label="服务金额" min-width="24%">
                     </el-table-column>
@@ -313,7 +313,7 @@ import { getToken } from '@/utils/auth'
         this.searchParam.billType='1'
         let param = this.searchParam
         postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
-          that.settleFinshData = res.data[0] // 返回的数据
+          that.settleFinshData = res.data // 返回的数据
 
         })
       },
@@ -322,7 +322,7 @@ import { getToken } from '@/utils/auth'
         this.searchParam.billType='2'
         let param = this.searchParam
         postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
-          that.settleEndData = res.data[0] // 返回的数据
+          that.settleEndData = res.data// 返回的数据
 
         })
       },
@@ -496,15 +496,15 @@ import { getToken } from '@/utils/auth'
            this.searchParam.billType='1'
             let param = this.searchParam
            postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
-             console.log(res.data[0],'999999999')
-                   scope.settleFinshData = res.data[0]
+             console.log(res.data,'999999999')
+                   scope.settleFinshData = res.data
            });
           }else if(scope.tabIndex == 2){
             this.searchParam.billType='2'
              let param = this.searchParam
             postMethod("/bu/orderBill/findPlatApplyBill", param).then(res => {
               console.log(res ,'3333333')
-                    scope.settleEndData = res
+                    scope.settleEndData = res.data
             });
           }
 
