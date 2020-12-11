@@ -14,13 +14,13 @@
             </h3>
 
           </div> -->
-          <lang-select style="margin-left: 280px;" class="set-language" />
+          <!-- <lang-select style="margin-left: 280px;" class="set-language" /> -->
           <el-form-item prop="username">
            <!-- <span class="svg-container">
               <svg-icon icon-class="user" />
             </span> -->
             <el-input
-            style="margin-top: 15px;"
+            style="margin-top: 25px;"
               ref="username"
               v-model="loginForm.username"
               :placeholder="$t('login.username')"
@@ -97,8 +97,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -225,7 +225,7 @@ $cursor: #fff;
 		/* z-index: -100; */
 		zoom: 1;
 		background-color: #fff;
-		background: url(../../icons/index.png) no-repeat;
+		background: url(https://bucket.coopoo.cn/images/supplier.png) no-repeat;
 		background-size: cover;
 		-webkit-background-size: cover;
 		-o-background-size: cover;
@@ -285,7 +285,7 @@ $cursor: #fff;
 	}
 
 /* reset element-ui css */
- 
+
 </style>
 
 <style lang="scss" scoped>
