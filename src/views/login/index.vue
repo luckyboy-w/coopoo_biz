@@ -48,10 +48,10 @@
                 @keyup.native="checkCapslock"
                 @blur="capsTooltip = false"
                 @keyup.enter.native="handleLogin"
-              />
-              <span class="show-pwd" @click="showPwd">
-                <svg-icon style="position: absolute;margin-top: 20px;right: 50px;" :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
+              /><div style="position: absolute;margin-top: -40px;right: 50px;"><span @click="showPwd">
+                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+              </span></div>
+
             </el-form-item>
           </el-tooltip>
 
