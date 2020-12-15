@@ -147,6 +147,8 @@
                 <template slot-scope="scope">
                     <div v-if="scope.row.orderType == 1 ">
                       <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)" >发货</el-link>
+                      <el-link type="primary" v-if="scope.row.status == 20" @click="updataOrd(scope.row)" >修改快递</el-link>
+                      <el-link type="primary" v-if="scope.row.isRiskOrder == '1'" @click="dealOrd(scope.row)" >确认收货</el-link>
                       <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
                       <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
                       <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
@@ -233,6 +235,32 @@
           </el-form>
         </el-dialog>
 
+        <el-dialog title="物流信息":visible.sync="updataOrder" v-if="updataOrder">
+          <el-form ref="form" :rules="rules" :model="sendOrderFrm" label-width="80px">
+            <el-form-item label="订单编号">
+              <el-input v-model="sendOrderFrm.orderNo" :disabled="true"></el-input>
+            </el-form-item>
+            <el-form-item label="物流公司" prop="expressId">
+              <el-select v-model="sendOrderFrm.expressId" placeholder="请选择">
+                <el-option
+                  v-for="item in expressList"
+                  :key="item.id"
+                  :label="item.text"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="物流单号" prop="expressNo">
+              <el-input v-model="sendOrderFrm.expressNo"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="submitupdt()">确认修改</el-button>
+              <el-button @click="updataOrder=false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
 
         <div class="ly-data-pagination">
           <el-pagination
@@ -628,6 +656,7 @@ export default {
         {id:'HTKY',text:'百世快递'},
         {id:'YTO',text:'圆通速递'}
       ],
+      updataOrder:false,
       sendOrder:false,
       pushStockBatch: false,
       pushStock: false,
@@ -909,7 +938,11 @@ export default {
       }).then(() => {
         postMethod('/bc/order/dealOrd', param).then(res => {
           this.loadList()
-          this.$message('操作成功')
+          this.$message(
+          {
+            message: '操作成功',
+            type: 'success'
+          })
         })
       })
     },
@@ -951,8 +984,39 @@ export default {
         }
       })
     },
+    submitupdt(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          let scope = this
+          let addrId = this.sendOrderFrm.sendAddrId
+          this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
+          let express = this.expressList.find(item => item.id == this.sendOrderFrm.expressId)
+          this.sendOrderFrm.expressName = express.text
+          postMethod('/bc/order/orderLogisticCode', this.sendOrderFrm).then(res => {
+            if (res.code != 200) {
+              this.$message.error(res.message);
+              return
+            }
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            })
+            this.updataOrder = false
+            scope.loadList()
+          })
+        }
+      })
+    },
     sendOrd(rowObj){
       this.sendOrder = true
+      if (this.addrList.length > 0) {
+        this.sendOrderFrm.sendAddrId = this.addrList[0].addrId
+      }
+
+      this.sendOrderFrm.orderNo = rowObj.orderNo
+    },
+    updataOrd(rowObj){
+      this.updataOrder = true
       if (this.addrList.length > 0) {
         this.sendOrderFrm.sendAddrId = this.addrList[0].addrId
       }
@@ -1069,6 +1133,7 @@ export default {
       postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
         scope.tableData = res.data
         scope.sendOrder = false
+        scope.updataOrder = false
         scope.showPagination = scope.tableData.total == 0
       })
     }
