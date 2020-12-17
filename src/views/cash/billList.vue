@@ -495,14 +495,23 @@ import { getToken } from '@/utils/auth'
             this.searchParam.billType = ""
             this.back_ = true
             this.dataDtl = false
+            this.searchParam.orderNo=''
+           this.searchParam.startTime=''
+            this.searchParam.endTime=''
         }else if(tab.index == 1 ){
             this.searchParam.billType = "1"
             this.back_ = true
             this.dataDtl = false
+            this.searchParam.orderNo=''
+            this.searchParam.startTime=''
+             this.searchParam.endTime=''
         }else if(tab.index == 2 ){
             this.searchParam.billType = "2"
             this.back_ = true
             this.dataDtl = false
+            this.searchParam.orderNo=''
+            this.searchParam.startTime=''
+             this.searchParam.endTime=''
         }
         this.loadList();
          this.loadList_();

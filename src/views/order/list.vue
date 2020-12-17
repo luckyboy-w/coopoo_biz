@@ -29,6 +29,7 @@
             <td  >
                <el-date-picker
                   style="width:203px"
+                  value-format="yyyy-MM-dd"
                   v-model="searchParam.startTime"
                   type="date"
                   placeholder="开始时间">
@@ -38,6 +39,7 @@
             <td>
               <el-date-picker
                   style="width:195px"
+                  value-format="yyyy-MM-dd"
                   v-model="searchParam.endTime"
                   type="date"
                   placeholder="结束时间">
@@ -1130,6 +1132,7 @@ export default {
         expressNo:'',
         opContent:''
       },
+      console.log(this.searchParam,'6666666666')
       postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
         scope.tableData = res.data
         scope.sendOrder = false
