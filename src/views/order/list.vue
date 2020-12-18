@@ -467,6 +467,7 @@
 <script>
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
+import { getToken } from '@/utils/auth.js'
 
 export default {
   components: { },
@@ -665,6 +666,7 @@ export default {
       sendOrder:false,
       pushStockBatch: false,
       pushStock: false,
+      toToken:'',
       typeIdList: [],
       typeId2List: [],
       typeIdList: [],
@@ -703,7 +705,9 @@ export default {
       dataList: []
     }
   },
-  computed: {},
+  computed: {
+
+  },
   props:{
     orderStatus:{
       type:Object,
@@ -712,6 +716,8 @@ export default {
     }
   },
   mounted() {
+    // this.toToken=getToken()
+    // console.log(this.toToken,'6666666')
     if(null != this.orderStatus){
       this.searchParam.status = this.orderStatus.status
     }
@@ -739,13 +745,27 @@ export default {
   },
   methods: {
     exportData(){
-      let exportParam = [];
-      console.log(this.searchParam,'999999')
-      for(let key in this.searchParam){
-          exportParam.push(key+"="+this.searchParam[key]);
+      let param={
+        orderNo:this.searchParam.orderNo,
+        recUname:this.searchParam.recUname,
+        recMobile:this.searchParam.recMobile,
+        isBackend:this.searchParam.isBackend,
+        orderType:this.searchParam.orderType,
+        isRequireTaxBill:this.searchParam.isRequireTaxBill,
+        status:this.searchParam.status,
+        startTime:this.searchParam.startTime,
+        endTime:this.searchParam.endTime,
+        riskOrder: this.searchParam.riskOrder,
+        dataType:this.searchParam.dataType
       }
+      let exportParam = [];
+      console.log(param,'999999')
+      for(let key in param){
+          exportParam.push(key+"="+param[key]);
+      }
+      console.log(exportParam['pageSize'],'传的值')
       //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
-      window.open( process.env.VUE_APP_BASE_API+'/bc/order/export?'+exportParam.join("&"))
+      window.open( process.env.VUE_APP_BASE_API+'/bc/order/export?token='+getToken()+"&"+exportParam.join("&"))
     },
     showOrdDtlClos(){
       this.showOrdDtl = false
