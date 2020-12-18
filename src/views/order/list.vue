@@ -745,12 +745,23 @@ export default {
   },
   methods: {
     exportData(){
+       let param={
+              orderNo:this.searchParam.orderNo,
+              recUname:this.searchParam.recUname,
+              recMobile:this.searchParam.recMobile,
+              isBackend:this.searchParam.isBackend,
+              orderType:this.searchParam.orderType,
+              isRequireTaxBill:this.searchParam.isRequireTaxBill,
+              status:this.searchParam.status,
+              startTime:this.searchParam.startTime,
+              endTime:this.searchParam.endTime,
+              riskOrder: this.searchParam.riskOrder,
+              dataType:this.searchParam.dataType
+            }
       let exportParam = [];
-      this.$delete(this.searchParam,'pageSize')
-      this.$delete(this.searchParam,'pageNum')
-      console.log(this.searchParam,'999999')
-      for(let key in this.searchParam){
-          exportParam.push(key+"="+this.searchParam[key]);
+      console.log(this.param,'999999')
+      for(let key in this.param){
+          exportParam.push(key+"="+this.param[key]);
       }
       console.log(exportParam,'传的参')
       //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
