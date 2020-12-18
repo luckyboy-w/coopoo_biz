@@ -745,25 +745,14 @@ export default {
   },
   methods: {
     exportData(){
-      let param={
-        orderNo:this.searchParam.orderNo,
-        recUname:this.searchParam.recUname,
-        recMobile:this.searchParam.recMobile,
-        isBackend:this.searchParam.isBackend,
-        orderType:this.searchParam.orderType,
-        isRequireTaxBill:this.searchParam.isRequireTaxBill,
-        status:this.searchParam.status,
-        startTime:this.searchParam.startTime,
-        endTime:this.searchParam.endTime,
-        riskOrder: this.searchParam.riskOrder,
-        dataType:this.searchParam.dataType
-      }
       let exportParam = [];
-      console.log(param,'999999')
-      for(let key in param){
-          exportParam.push(key+"="+param[key]);
+      this.$delete(this.searchParam,'pageSize')
+      this.$delete(this.searchParam,'pageNum')
+      console.log(this.searchParam,'999999')
+      for(let key in this.searchParam){
+          exportParam.push(key+"="+this.searchParam[key]);
       }
-      console.log(exportParam['pageSize'],'传的值')
+      console.log(exportParam,'传的参')
       //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
       window.open( process.env.VUE_APP_BASE_API+'/bc/order/export?token='+getToken()+"&"+exportParam.join("&"))
     },
@@ -1119,6 +1108,8 @@ export default {
       this.loadList()
     },
     search() {
+      this.searchParam.pageSize = 10
+      this.searchParam.pageNum = 0
       this.loadList()
     },
     addOrEdit(oper, rowIndex, data) {
