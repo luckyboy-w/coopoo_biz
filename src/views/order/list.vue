@@ -23,6 +23,9 @@
             <td >
               <el-button icon="el-icon-search" @click="search()">搜索</el-button>
             </td>
+            <td >
+              <el-button icon="el-icon-download" @click="exportData()">导出</el-button>
+            </td>
           </tr>
           <tr>
             <td>下单时间</td>
@@ -680,8 +683,8 @@ export default {
         orderType:'',
         isRequireTaxBill:'',
         status:'',
-        startTime:null,
-        endTime:null,
+        startTime:'',
+        endTime:'',
         riskOrder: '',
         dataType:'',
         pageSize: 10,
@@ -735,6 +738,15 @@ export default {
   created() {
   },
   methods: {
+    exportData(){
+      let exportParam = [];
+      console.log(this.searchParam,'999999')
+      for(let key in this.searchParam){
+          exportParam.push(key+"="+this.searchParam[key]);
+      }
+      //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
+      window.open( process.env.VUE_APP_BASE_API+'/bc/order/export?'+exportParam.join("&"))
+    },
     showOrdDtlClos(){
       this.showOrdDtl = false
       this.ptStep  = false
