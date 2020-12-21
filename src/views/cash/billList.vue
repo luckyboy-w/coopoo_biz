@@ -219,6 +219,7 @@
     data() {
       return {
         only: '',
+        billMem:'',
         back_: true,
         dataDtl: false,
         dialogTableVisible: false,
@@ -342,7 +343,8 @@
       //结算明细导出
       exportDataDtl() {
         let param={
-          billNo: this.searchParam.billNo
+          billNo: this.searchParam.billNo,
+          billMem:this.billMem
              }
         let exportParam = [];
         for (let key in param) {
@@ -404,8 +406,10 @@
         this.back_ = false
         if (this.activeName == 'settleFinsh') {
           this.only = '1'
+          this.billMem="结算中明细"
         } else if (this.activeName == 'settleEnd') {
           this.only = '2'
+          this.billMem="已结算明细"
         }
         this.activeName = 'dataDtl'
         this.searchParam.billNo = row.settleNo
