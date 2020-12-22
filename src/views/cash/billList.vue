@@ -229,6 +229,7 @@
         currentGoodsSkuInfoList: [],
         //10:未结算;20:结算中;30:已结算
         searchParam: {
+          orderNo:'',
         startTime:"",
         endTime:'',
           pageSize: 10,
@@ -406,10 +407,10 @@
         this.back_ = false
         if (this.activeName == 'settleFinsh') {
           this.only = '1'
-          this.billMem="结算中明细"
+          this.billMem="结算中"
         } else if (this.activeName == 'settleEnd') {
           this.only = '2'
-          this.billMem="已结算明细"
+          this.billMem="已结算"
         }
         this.activeName = 'dataDtl'
         this.searchParam.billNo = row.settleNo
