@@ -148,9 +148,6 @@ export default {
           this.isEdit = true
       })
     },
-    editRole(row){
-
-    },
     loadRole() {
       const scope = this
 
@@ -281,7 +278,8 @@ export default {
       const param = {
         mids: selectMenu.join(','),
         rid: this.rid,
-        roleName:this.roleName
+        roleName:this.roleName,
+        roleDesc: this.roleDesc
       }
       postMethod('/bc/menu/saveRoleMenu', param).then(res => {
           this.$message({
