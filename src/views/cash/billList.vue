@@ -172,17 +172,32 @@
             </el-button>
           </el-col>
           <el-col :span="24" style="padding-left:10px">
-           <el-button type="download" @click="exportDataDtl()">导出Excel</el-button>
+            <el-col :span="1.5">
+              入账时间
+            </el-col>
+            <el-col :span="8">
+              <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期" />
+              至
+              <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期" />
+            </el-col>
+            <el-button @click="searchDtl()" type="primary">
+              搜索
+            </el-button>
+            <el-button type="download" @click="exportDataDtl()">导出Excel</el-button>
           </el-col>
         </el-row>
-
         <el-table :data="billCashData.list" style="width: 100%; margin-bottom: 20px;" row-key="id">
           <el-table-column type="index" width="50" label="序号"></el-table-column>
           <el-table-column prop="orderNo" label="订单号" min-width="24%">
           </el-table-column>
-          <el-table-column prop="createTime" label="入账时间" min-width="24%">
+          <el-table-column v-if="this.searchParam.billType==1" prop="createTime" label="入账时间" min-width="24%">
             <template slot-scope="scope">
               {{scope.row.createTime | _formateDate}}
+            </template>
+          </el-table-column>
+          <el-table-column v-if="this.searchParam.billType==2" prop="billTime" label="结算时间" min-width="24%">
+            <template slot-scope="scope">
+              {{scope.row.billTime | _formateDate}}
             </template>
           </el-table-column>
           <el-table-column prop="orderPrice" label="订单金额" min-width="24%">
@@ -219,7 +234,7 @@
     data() {
       return {
         only: '',
-        billMem:'',
+        billMem: '',
         back_: true,
         dataDtl: false,
         dialogTableVisible: false,
@@ -229,9 +244,9 @@
         currentGoodsSkuInfoList: [],
         //10:未结算;20:结算中;30:已结算
         searchParam: {
-          orderNo:'',
-        startTime:"",
-        endTime:'',
+          orderNo: '',
+          startTime: "",
+          endTime: '',
           pageSize: 10,
           pageNum: 1
         },
@@ -270,10 +285,18 @@
       // this.loadBillCfgData();;
     },
     methods: {
+      searchDtl() {
+        let that = this
+        let param = this.searchParam
+       getMethod("/bu/orderBill/findBillSettledDtl", param).then(res => {
+         console.log(res, '数据')
+         this.billCashData = res.data
+         this.billCashData.billNo = this.searchParam.billNo
+       });
+      },
       search() {
         let that = this
         let param = this.searchParam
-        console.log(param, '999999')
         getMethod("/bu/orderBill/findBillDtl", param).then(res => {
           that.noBillData = res.data // 返回的数据
 
@@ -299,61 +322,67 @@
       },
       //可结算导出
       exportDtl() {
-        let param={
+        let param = {
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
           orderNo: this.searchParam.orderNo
-             }
+        }
         let exportParam = [];
         for (let key in param) {
           exportParam.push(key + "=" + param[key]);
         }
-        console.log(exportParam,'传的参')
-        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportWaitingBillDtl?token='+ getToken() +'&'+ exportParam.join("&"));
+        console.log(exportParam, '传的参')
+        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportWaitingBillDtl?token=' + getToken() + '&' +
+          exportParam.join("&"));
       },
       //结算中导出
       exportData() {
-        let param={
-          billType:this.searchParam.billType,
+        let param = {
+          billType: this.searchParam.billType,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
           orderNo: this.searchParam.orderNo
-             }
+        }
         let exportParam = [];
         for (let key in param) {
           exportParam.push(key + "=" + param[key]);
         }
-        console.log(exportParam,'传的参')
-        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBill?token='+ getToken() +'&'+ exportParam.join("&"));
+        console.log(exportParam, '传的参')
+        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBill?token=' + getToken() + '&' + exportParam.join(
+          "&"));
       },
       //已结算导出
       exportData_() {
-        let param={
-          billType:this.searchParam.billType,
+        let param = {
+          billType: this.searchParam.billType,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
           orderNo: this.searchParam.orderNo
-             }
+        }
         let exportParam = [];
         for (let key in param) {
           exportParam.push(key + "=" + param[key]);
         }
-        console.log(exportParam,'传的参')
-        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBill?token='+ getToken() +'&'+ exportParam.join("&"));
+        console.log(exportParam, '传的参')
+        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBill?token=' + getToken() + '&' + exportParam.join(
+          "&"));
       },
       //结算明细导出
       exportDataDtl() {
-        let param={
+        let param = {
+          startTime:this.searchParam.startTime,
+          endTime:this.searchParam.endTime,
           billNo: this.searchParam.billNo,
-          billMem:this.billMem,
-          billType:this.searchParam.billType,
-             }
+          billMem: this.billMem,
+          billType: this.searchParam.billType,
+        }
         let exportParam = [];
         for (let key in param) {
           exportParam.push(key + "=" + param[key]);
         }
-        console.log(exportParam,'传的参')
-        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBillDtl?token='+getToken()+"&"+exportParam.join("&"));
+        console.log(exportParam, '传的参')
+        window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBillDtl?token=' + getToken() + "&" +
+          exportParam.join("&"));
       },
       batchBill() {
         if (this.noBillData.total == 0) {
@@ -408,18 +437,18 @@
         this.back_ = false
         if (this.activeName == 'settleFinsh') {
           this.only = '1'
-          this.billMem="结算中"
+          this.billMem = "结算中"
         } else if (this.activeName == 'settleEnd') {
           this.only = '2'
-          this.billMem="已结算"
+          this.billMem = "已结算"
         }
         this.activeName = 'dataDtl'
         this.searchParam.billNo = row.settleNo
         let param = this.searchParam
         getMethod("/bu/orderBill/findBillSettledDtl", param).then(res => {
-          console.log(res,'数据')
+          console.log(res, '数据')
           this.billCashData = res.data
-          this.billCashData.billNo=this.searchParam.billNo
+          this.billCashData.billNo = this.searchParam.billNo
         });
       },
       backTo() {
