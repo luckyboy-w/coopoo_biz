@@ -14,15 +14,16 @@
           <td style="padding-left:20px">入账时间:</td>
           <td>
             <el-date-picker v-model="searchParam.startTime" type="date" value-format="yyyy-MM-dd" placeholder="开始日期">
-            </el-date-picker>
-            至
-            <el-date-picker v-model="searchParam.endTime" type="date" value-format="yyyy-MM-dd" placeholder="结束日期">
-            </el-date-picker>
-          </td>
+            </el-date-picker></td>
+          <td style="text-align: center;">至</td>
+            <td><el-date-picker v-model="searchParam.endTime" type="date" value-format="yyyy-MM-dd" placeholder="结束日期">
+            </el-date-picker></td>
+
+
           <td>
             <el-button type="primary" style="margin-left:20px" @click="search()">搜索</el-button>
-            <el-button type="download" @click="exportDtl()">导出Excel</el-button>
           </td>
+          <td> <el-button type="download" style="margin-left:20px" @click="exportDtl()">导出Excel</el-button></td>
         </tr>
         <!--   <el-row style="line-height:40px;padding:10px 0px ">
                   <el-col :span="1.5" style="padding-left:10px">订单号</el-col>
@@ -83,14 +84,16 @@
           <td>
             <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期">
             </el-date-picker>
-            至
-            <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
-            </el-date-picker>
+
           </td>
+          <td>至</td>
+          <td>
+            <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
+            </el-date-picker></td>
           <td>
             <el-button type="primary" style="margin-left:20px" @click="searchOne()">搜索</el-button>
-            <el-button type="download" @click="exportData()">导出Excel</el-button>
           </td>
+          <td style="padding-left:20px">            <el-button type="download" @click="exportData()">导出Excel</el-button></td>
         </tr>
         <el-table ref="settleFinshData" :data="settleFinshData.list" style="width: 100%; margin-bottom: 20px;" row-key="id">
           <el-table-column type="index" width="50" label="序号"></el-table-column>
@@ -128,14 +131,16 @@
           <td>
             <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期">
             </el-date-picker>
-            至
-            <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
-            </el-date-picker>
+
+
           </td>
+          <td>至</td>
+          <td> <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
+            </el-date-picker></td>
           <td>
             <el-button type="primary" style="margin-left:20px" @click="searchTwo()">搜索</el-button>
-            <el-button type="download" @click="exportData_()">导出Excel</el-button>
           </td>
+          <td style="padding-left:20px">            <el-button type="download" @click="exportData_()">导出Excel</el-button></td>
         </tr>
         <el-table ref="settleEndData" :data="settleEndData.list" style="width: 100%; margin-bottom: 20px;" row-key="id">
           <el-table-column type="index" width="50" label="序号"></el-table-column>
@@ -165,29 +170,26 @@
       </el-tab-pane>
 
       <el-tab-pane label="明细" name="dataDtl" v-if="dataDtl" style="height:600px">
+
         <el-row style="line-height:40px;padding:10px 0px ">
           <el-col :span="24" style="padding-left:10px">
             <el-button v-if="!back_" type="primary" icon="el-icon-back" @click="backTo()">
               返回列表
             </el-button>
           </el-col>
-          <el-col :span="24" style="padding-left:10px">
-            <el-col v-if="this.searchParam.billType==1" :span="1.5">
-              入账时间
-            </el-col>
-            <el-col v-if="this.searchParam.billType==2" :span="1.5">
-              结算时间
-            </el-col>
-            <el-col :span="8">
-              <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期" />
-              至
-              <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期" />
-            </el-col>
-            <el-button @click="searchDtl()" type="primary">
-              搜索
-            </el-button>
-            <el-button type="download" @click="exportDataDtl()">导出Excel</el-button>
-          </el-col>
+         <table>
+           <tr>
+             <td v-if="this.searchParam.billType==1">入账时间</td>
+             <td v-if="this.searchParam.billType==2">结算时间</td>
+             <td> <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期" /></td>
+             <td>              至</td>
+             <td>              <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期" /></td>
+             <td style="padding-left: 20px;"><el-button @click="searchDtl()" type="primary">
+               搜索
+             </el-button></td>
+             <td style="padding-left: 20px;">            <el-button type="download" @click="exportDataDtl()">导出Excel</el-button></td>
+           </tr>
+         </table>
         </el-row>
         <el-table :data="billCashData.list" style="width: 100%; margin-bottom: 20px;" row-key="id">
           <el-table-column type="index" width="50" label="序号"></el-table-column>
