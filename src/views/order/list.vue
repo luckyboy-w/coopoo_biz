@@ -745,6 +745,12 @@ export default {
   },
   methods: {
     exportData(){
+      if(this.searchParam.startTime==null){
+        this.searchParam.startTime=''
+        }
+        if(this.searchParam.endTime==null){
+          this.searchParam.endTime=''
+          }
        let param={
               orderNo:this.searchParam.orderNo,
               recUname:this.searchParam.recUname,
@@ -759,9 +765,9 @@ export default {
               dataType:this.searchParam.dataType
             }
       let exportParam = [];
-      console.log(this.param,'999999')
-      for(let key in this.param){
-          exportParam.push(key+"="+this.param[key]);
+      console.log(param,'999999')
+      for(let key in param){
+          exportParam.push(key+"="+param[key]);
       }
       console.log(exportParam,'传的参')
       //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))

@@ -172,8 +172,11 @@
             </el-button>
           </el-col>
           <el-col :span="24" style="padding-left:10px">
-            <el-col :span="1.5">
+            <el-col v-if="this.searchParam.billType==1" :span="1.5">
               入账时间
+            </el-col>
+            <el-col v-if="this.searchParam.billType==2" :span="1.5">
+              结算时间
             </el-col>
             <el-col :span="8">
               <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期" />
@@ -322,6 +325,12 @@
       },
       //可结算导出
       exportDtl() {
+        if(this.searchParam.startTime==null){
+          this.searchParam.startTime=''
+          }
+          if(this.searchParam.endTime==null){
+            this.searchParam.endTime=''
+            }
         let param = {
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
@@ -337,6 +346,12 @@
       },
       //结算中导出
       exportData() {
+        if(this.searchParam.startTime==null){
+          this.searchParam.startTime=''
+          }
+          if(this.searchParam.endTime==null){
+            this.searchParam.endTime=''
+            }
         let param = {
           billType: this.searchParam.billType,
           startTime: this.searchParam.startTime,
@@ -353,6 +368,12 @@
       },
       //已结算导出
       exportData_() {
+        if(this.searchParam.startTime==null){
+          this.searchParam.startTime=''
+          }
+          if(this.searchParam.endTime==null){
+            this.searchParam.endTime=''
+            }
         let param = {
           billType: this.searchParam.billType,
           startTime: this.searchParam.startTime,
@@ -369,6 +390,12 @@
       },
       //结算明细导出
       exportDataDtl() {
+        if(this.searchParam.startTime==null){
+          this.searchParam.startTime=''
+          }
+          if(this.searchParam.endTime==null){
+            this.searchParam.endTime=''
+            }
         let param = {
           startTime:this.searchParam.startTime,
           endTime:this.searchParam.endTime,
@@ -461,6 +488,8 @@
         this.dataDtl = false
         this.loadList_();
         this.searchParam.billNo = ''
+        this.searchParam.startTime = ''
+        this.searchParam.endTime = ''
       },
       // loadBillCfgData(){
       //     let scope = this
