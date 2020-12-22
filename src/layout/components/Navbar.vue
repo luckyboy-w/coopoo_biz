@@ -87,10 +87,14 @@ export default {
             oldPwd: "",
             password: "",
             reppwd: "",
+			obj:'',
           }
       };
     },
   computed: {
+	  obj() {
+	    return this.resetFrm.password.length
+	   },
     ...mapGetters([
       'sidebar',
       'avatar',
@@ -105,6 +109,8 @@ export default {
       this.showReset = true;
     },
     submitReset() {
+		
+		console.log(this.obj,'密码')
       let scope = this;
       if (this.resetFrm.password == "" || this.resetFrm.oldPwd == "") {
         this.$message({
@@ -113,6 +119,13 @@ export default {
         });
         return
       }
+	  if (this.obj<6) {
+	    this.$message({
+	      message: "密码不能小于6位数",
+	      type: "warning",
+	    });
+	    return
+	  }
 
       if (this.resetFrm.password != this.resetFrm.reppwd) {
         this.$message({
