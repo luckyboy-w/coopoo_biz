@@ -345,7 +345,8 @@
       exportDataDtl() {
         let param={
           billNo: this.searchParam.billNo,
-          billMem:this.billMem
+          billMem:this.billMem,
+          billType:this.searchParam.billType,
              }
         let exportParam = [];
         for (let key in param) {
