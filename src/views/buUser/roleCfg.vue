@@ -45,7 +45,7 @@
       </tr>
       <tr v-if="isEdit">
         <td colspan="2">
-         <el-form ref="addFrm" :model="addFrm" label-width="80px">
+         <el-form   label-width="80px">
           <el-form-item label="角色名称">
             <el-input v-model="roleName"></el-input>
           </el-form-item>
@@ -57,7 +57,7 @@
               </el-input>
           </el-form-item>
         </el-form>
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form label-width="80px">
             <el-form-item label="访问权限">
               <el-table
                 :data="roleMenuData"
@@ -249,8 +249,11 @@ export default {
             type: 'success',
             message: '保存成功!'
           })
-          scope.isEdit = false
+          this.loadRole()
+          this.loadMenu()
+          this.isEdit = false
       })
+      console.log(this.isEdit,'789787')
     },
     editRole(){
       const selectMenu = []
@@ -286,6 +289,10 @@ export default {
             type: 'success',
             message: '保存成功!'
           })
+          this.loadRole()
+          this.loadMenu()
+          this.isEdit = false
+          
       })
     },
     addRole() {
