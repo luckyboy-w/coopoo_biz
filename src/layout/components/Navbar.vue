@@ -4,7 +4,7 @@
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
-    <el-dialog :visible="showReset" v-if="showReset" title="密码重置" width="600px">
+    <el-dialog :visible="showReset"  v-if="showReset" @close="close()" title="密码重置" width="600px">
     <el-form ref="dataForm" :model="resetFrm" label-width="100px" style="width:500px">
         <el-form-item label="旧密码">
           <el-input v-model="resetFrm.oldPwd" placeholder="请输入密码" show-password clearable />
@@ -37,7 +37,7 @@
           <el-col :span="10" style="font-size:14px">最后一次登录时间：{{loginDate}}</el-col>
         </el-row>
 
-        
+
       </div>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -105,11 +105,15 @@ export default {
     this.getUser()
   },
   methods: {
+    close(){
+      this.showReset = false;
+      console.log('44444')
+    },
     showResetPwd() {
       this.showReset = true;
     },
     submitReset() {
-		
+
 		console.log(this.obj,'密码')
       let scope = this;
       if (this.resetFrm.password == "" || this.resetFrm.oldPwd == "") {
@@ -152,7 +156,7 @@ export default {
           });
            this.showReset = false;
         }
-        
+
       });
     },
     getUser() {
