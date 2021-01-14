@@ -71,7 +71,8 @@
               </el-select>
             </td>
             <td>
-              <el-button v-if="searchParam.status == 10" @click="showBatchSendOrder()" type="primary">在线批量发货</el-button>
+              <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货</el-button>
+              <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货</el-button>
             </td>
           </tr>
         </table>
@@ -519,7 +520,7 @@
       </el-tabs>
     </el-dialog>
 
-    <el-dialog title="批量发货" :visible.sync="showOnlineOrderList" v-if="showOnlineOrderList" @close='closeSendOrderDialog'>
+    <el-dialog title="在线批量发货" :visible.sync="showOnlineOrderList" v-if="showOnlineOrderList">
       <el-form ref="batchOnlineForm" label-width="80px">
         <div v-for="item in onlineOrderList" :key="item.orderId">
           <el-divider content-position="left">订单编号: {{item.orderNo}}</el-divider>
@@ -542,7 +543,35 @@
         </div>
 
         <el-form-item>
-          <el-button type="primary" @click="submitBatchSendOrder()">立即发货</el-button>
+          <el-button type="primary" @click="submitOnlineBatchSendOrder()">立即发货</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog title="线下批量发货" :visible.sync="showOfflineOrderList" v-if="showOfflineOrderList">
+      <el-form ref="batchOnlineForm" label-width="80px">
+        <div v-for="item in offlineOrderList" :key="item.orderId">
+          <el-divider content-position="left">订单编号: {{item.orderNo}}</el-divider>
+          <el-row :gutter="20" style="line-height:40px;" class="main-title">
+            <el-col :span="12">
+              收件人: {{item.recUname}}
+            </el-col>
+            <el-col :span="12">
+              买家手机号: {{item.recPhone}}
+            </el-col>
+          </el-row>
+
+          <el-row :gutter="20" style="line-height:60px;">
+            <el-col :span="12">
+              <el-form-item label="物流单号" prop="quantity">
+                <el-input v-model="item.expressNo"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
+
+        <el-form-item>
+          <el-button type="primary" @click="submitOfflineBatchSendOrder()">立即发货</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -701,6 +730,8 @@ export default {
     return {
       showOnlineOrderList: false,
       onlineOrderList: [],
+      showOfflineOrderList: false,
+      offlineOrderList: [],
       activeName: 'online',
       ordAllPrice:'',
       showOrdDtl:false,
@@ -1114,7 +1145,7 @@ export default {
     onlineSubmitSend() {
       this.$refs['onlineForm'].validate((valid) => {
         if (valid) {
-          postMethod('/bc/order/onlineSendOrder', this.onlineSendOrderFrm).then(res => {
+          postMethod('/bc/order/batchOnlineSendOrder', this.onlineSendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message);
               return
@@ -1144,7 +1175,7 @@ export default {
           this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
           let express = this.expressList.find(item => item.id == this.sendOrderFrm.expressId)
           this.sendOrderFrm.expressName = express.text
-          postMethod('/bc/order/sendOrder', this.sendOrderFrm).then(res => {
+          postMethod('/bc/order/offlineSendOrder', this.sendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message);
               return
@@ -1302,8 +1333,8 @@ export default {
       this.searchParam.pageNum = pageNum
       this.loadList()
     },
-    showBatchSendOrder() {
-      this.onlineOrderList = this.$refs.mainTable.selection;
+    showOnlineBatchSendOrder() {
+      this.onlineOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection));
 
       if (this.onlineOrderList.length <= 0) {
         this.$message({
@@ -1325,7 +1356,7 @@ export default {
 
       this.showOnlineOrderList = true
     },
-    submitBatchSendOrder() {
+    submitOnlineBatchSendOrder() {
       for (let i = 0; i < this.onlineOrderList.length; i++) {
         const quantity = this.onlineOrderList[i].quantity
         if (quantity == undefined || quantity <= 0 || quantity > 300) {
@@ -1347,6 +1378,55 @@ export default {
           type: 'success'
         })
         this.loadList()
+        this.showOnlineOrderList = false
+      })
+    },
+    showOfflineBatchSendOrder() {
+      this.offlineOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection));
+
+      if (this.offlineOrderList.length <= 0) {
+        this.$message({
+          message: '请选择订单！',
+          type: 'warning'
+        })
+        return
+      }
+
+      for (let i = 0; i < this.offlineOrderList.length; i++) {
+        if (this.offlineOrderList[i].status != 10) {
+          this.$message({
+            message: `${this.offlineOrderList[i].orderNo} 不是待发货`,
+            type: 'warning'
+          })
+          return
+        }
+      }
+
+      this.showOfflineOrderList = true
+    },
+    submitOfflineBatchSendOrder() {
+      for (let i = 0; i < this.offlineOrderList.length; i++) {
+        const expressNo = this.offlineOrderList[i].expressNo
+        if (expressNo == undefined || expressNo == '') {
+          this.$message({
+            message: `${this.offlineOrderList[i].orderNo} 订单号输入错误`,
+            type: 'warning'
+          })
+          return
+        }
+      }
+      postMethod('/bc/order/batchOfflineSendOrder', this.offlineOrderList).then(res => {
+        if (res.data.length > 0) {
+          this.$alert(res.data, '批量发送订单出现错误', {
+            dangerouslyUseHTMLString: true
+          });
+        }
+        this.$message({
+          message: '发送成功',
+          type: 'success'
+        })
+        this.loadList()
+        this.showOfflineOrderList = false
       })
     },
     initLoad() {
