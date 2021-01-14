@@ -71,7 +71,7 @@
               </el-select>
             </td>
             <td >
-
+              <el-button v-if="searchParam.status == 10" @click="batchSendOrder()" type="primary">在线批量发货</el-button>
             </td>
           </tr>
         </table>
@@ -108,10 +108,11 @@
                       </template>
                     </el-table-column>
                     <el-table-column prop="skuInfo" label="规格" width="150px" ></el-table-column>
-                    <el-table-column prop="goodCode" label="商品货号" width="150px" ></el-table-column>
+                    <el-table-column prop="goodCode" label="商品货号" width="150px"></el-table-column>
                 </el-table>
               </template>
             </el-table-column>
+            <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="orderNo" label="订单编号" width="220px" />
             <el-table-column prop="expressNo" label="快递单号" width="220px" />
             <el-table-column prop="createTime" label="下单时间" width="150px">
@@ -193,49 +194,6 @@
             <el-form-item>
               <el-button type="primary" @click="submitDealPrice()">提交定价</el-button>
               <el-button @click="dealPrice=false">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
-
-        <el-dialog title="发货信息":visible.sync="sendOrder" v-if="sendOrder">
-          <el-form ref="form" :rules="rules" :model="sendOrderFrm" label-width="80px">
-            <el-form-item label="订单编号">
-              <el-input v-model="sendOrderFrm.orderNo" :disabled="true"></el-input>
-            </el-form-item>
-            <el-form-item label="物流公司" prop="expressId">
-              <el-select v-model="sendOrderFrm.expressId" placeholder="请选择">
-                <el-option
-                  v-for="item in expressList"
-                  :key="item.id"
-                  :label="item.text"
-                  :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="退货地址" prop="sendAddrId">
-              <el-select v-model="sendOrderFrm.sendAddrId" placeholder="请选择" style="width:460px">
-                <el-option
-                  v-for="item in addrList"
-                  :key="item.addrId"
-                  :label="item.addrDtl"
-                  :value="item.addrId">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="物流单号" prop="expressNo">
-              <el-input v-model="sendOrderFrm.expressNo"></el-input>
-            </el-form-item>
-            <el-form-item label="操作说明">
-              <el-input
-                type="textarea"
-                :rows="4"
-                placeholder="请输入内容"
-                v-model="sendOrderFrm.opContent">
-            </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitSend()">立即发货</el-button>
-              <el-button @click="sendOrder=false">取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -461,6 +419,100 @@
       </div>
 
     </div>
+
+    <el-dialog title="发货"  :visible.sync="sendOrder" v-if="sendOrder">
+      <el-tabs v-model="activeName" type="border-card">
+        <el-tab-pane label="在线发货" name="online" style="height:600px">
+          <el-form ref="onlineForm" :rules="onlineRules" :model="onlineSendOrderFrm" label-width="80px">
+            <el-row :gutter="20" style="line-height:40px;" class="main-title">
+              <el-col :span="12">
+                订单编号: {{onlineOrderDtl.orderNo}}
+              </el-col>
+            </el-row>
+            <el-row :gutter="20" style="line-height:40px;" class="main-title">
+              <el-col :span="12">
+                收件人: {{onlineOrderDtl.recUname}}
+              </el-col>
+              <el-col :span="12">
+                收件人手机号码: {{onlineOrderDtl.recPhone}}
+              </el-col>
+            </el-row>
+            <el-row :gutter="20" style="line-height:40px;" class="main-title">
+              <el-col :span="12">
+                省市区: {{onlineOrderDtl.recArea}}
+              </el-col>
+              <el-col :span="12">
+                地址详情: {{onlineOrderDtl.recAddress}}
+              </el-col>
+            </el-row>
+
+            <el-row :gutter="20" style="line-height:60px;" class="main-title">
+              <el-col :span="12">
+                <el-form-item label="包裹数量" prop="quantity">
+                  <el-input v-model.number="onlineSendOrderFrm.quantity"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row :gutter="20" style="line-height:60px;" class="main-title">
+              <el-form-item label="备注">
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  placeholder="请输入内容"
+                  v-model="onlineSendOrderFrm.remark">
+                </el-input>
+              </el-form-item>
+            </el-row>
+            <el-form-item>
+              <el-button type="primary" @click="onlineSubmitSend()">立即发货</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="线下发货" name="offline" style="height:600px">
+          <el-form ref="form" :rules="rules" :model="sendOrderFrm" label-width="80px">
+            <el-form-item label="订单编号">
+              <el-input v-model="sendOrderFrm.orderNo" :disabled="true"></el-input>
+            </el-form-item>
+            <el-form-item label="物流公司" prop="expressId">
+              <el-select v-model="sendOrderFrm.expressId" placeholder="请选择">
+                <el-option
+                  v-for="item in expressList"
+                  :key="item.id"
+                  :label="item.text"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="退货地址" prop="sendAddrId">
+              <el-select v-model="sendOrderFrm.sendAddrId" placeholder="请选择" style="width:460px">
+                <el-option
+                  v-for="item in addrList"
+                  :key="item.addrId"
+                  :label="item.addrDtl"
+                  :value="item.addrId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="物流单号" prop="expressNo">
+              <el-input v-model="sendOrderFrm.expressNo"></el-input>
+            </el-form-item>
+            <el-form-item label="操作说明">
+              <el-input
+                type="textarea"
+                :rows="4"
+                placeholder="请输入内容"
+                v-model="sendOrderFrm.opContent">
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitSend()">立即发货</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -606,7 +658,15 @@ export default {
     }
   },
   data() {
+    let quantityCheck = (rule, value, callback) => {
+      if (value <= 0 || value > 300) {
+        callback(new Error('包裹数量输入错误，只能1~300'));
+      }else {
+        callback();
+      }
+    };
     return {
+      activeName: 'online',
       ordAllPrice:'',
       showOrdDtl:false,
       dealPrice:false,
@@ -630,6 +690,11 @@ export default {
         60: '待沟通',
         50: '完成'
       },
+      onlineSendOrderFrm:{
+        orderNo:'',
+        quantity: null,
+        remark: null
+      },
       sendOrderFrm:{
         orderNo:'',
         expressId:'',
@@ -646,6 +711,13 @@ export default {
         supplierList:[ {
           dtlList:[]
         }]
+      },
+      onlineOrderDtl: {
+        orderNo:'',
+        recUname:'',
+        recPhone:'',
+        recArea:'',
+        recAddress:''
       },
       expressList:[
         {id:'SF',text:'顺丰速运'},
@@ -699,6 +771,9 @@ export default {
         expressId: [{ required: true, message: '请选择物流公司', trigger: 'change' }],
         sendAddrId: [{required: true, message: '请选择退货地址', trigger: 'change' }],
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
+      },
+      onlineRules: {
+        quantity: [{ validator: quantityCheck, trigger: 'blur' }]
       },
       orderId_: '',
       orderNo_: '',
@@ -1001,6 +1076,24 @@ export default {
         })
       })
     },
+    onlineSubmitSend() {
+      this.$refs['onlineForm'].validate((valid) => {
+        if (valid) {
+          postMethod('/bc/order/onlineSendOrder', this.onlineSendOrderFrm).then(res => {
+            if (res.code != 200) {
+              this.$message.error(res.message);
+              return
+            }
+            this.$message({
+              message: '发货成功',
+              type: 'success'
+            })
+            this.sendOrder = false
+            scope.loadList()
+          })
+        }
+      })
+    },
     submitSend(){
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -1054,6 +1147,17 @@ export default {
       }
 
       this.sendOrderFrm.orderNo = rowObj.orderNo
+      let param = {
+        orderId:rowObj.orderId
+      }
+      postMethod('/bc/order/getOrdDtl', param).then(res => {
+        if (res.code != 200) {
+          this.$message.error(res.message);
+          return
+        }
+        this.onlineOrderDtl = res.data
+        this.onlineSendOrderFrm.orderNo = res.data.orderNo
+      })
     },
     updataOrd(rowObj){
       this.updataOrder = true
@@ -1156,7 +1260,43 @@ export default {
       this.searchParam.pageNum = pageNum
       this.loadList()
     },
+    batchSendOrder() {
+      let selectList = this.$refs.mainTable.selection;
 
+      if (selectList.length <= 0) {
+        this.$message({
+          message: '请选择订单！',
+          type: 'warning'
+        })
+        return
+      }
+
+      let isAllcommited = false;
+      const orderNoList = []
+      for (let i = 0; i < selectList.length; i++) {
+        orderNoList[i] = selectList[i].orderNo
+        console.info(selectList[i].status)
+        if (selectList[i].status != 10) {
+          this.$message({
+            message: `${selectList[i].orderNo} 不是待发货`,
+            type: 'warning'
+          })
+          return
+        }
+      }
+      postMethod('/bc/order/batchSendOrder', orderNoList).then(res => {
+        if (res.data.length > 0) {
+          this.$alert(res.data, '批量发送订单出现错误', {
+            dangerouslyUseHTMLString: true
+          });
+        }
+        this.$message({
+          message: '发送成功',
+          type: 'success'
+        })
+        this.loadList()
+      })
+    },
     initLoad() {
       this.loadList()
     },

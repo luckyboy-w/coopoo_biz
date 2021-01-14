@@ -16,6 +16,7 @@ requestBodyUrl.push("/bu/good/modityGoodStock")
 requestBodyUrl.push("/bc/order/confirmReturnOrder")
 requestBodyUrl.push("/bu/orderBill/findBillDtl")
 requestBodyUrl.push("/bu/orderBill/findPlatApplyBill")
+requestBodyUrl.push("/bc/order/batchSendOrder")
 
 // create an axios instance
 const service = axios.create({
