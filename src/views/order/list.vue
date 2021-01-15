@@ -1145,7 +1145,13 @@ export default {
     onlineSubmitSend() {
       this.$refs['onlineForm'].validate((valid) => {
         if (valid) {
-          postMethod('/bc/order/batchOnlineSendOrder', this.onlineSendOrderFrm).then(res => {
+          let loading = this.$loading({
+            lock: true,
+            text: '正在发货中...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
+          postMethod('/bc/order/onlineSendOrder', this.onlineSendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message);
               return
@@ -1156,6 +1162,7 @@ export default {
             })
             this.sendOrder = false
             this.loadList()
+            loading.close()
           })
         }
       })
@@ -1175,6 +1182,12 @@ export default {
           this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
           let express = this.expressList.find(item => item.id == this.sendOrderFrm.expressId)
           this.sendOrderFrm.expressName = express.text
+          let loading = this.$loading({
+            lock: true,
+            text: '正在发货中...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
           postMethod('/bc/order/offlineSendOrder', this.sendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message);
@@ -1186,6 +1199,7 @@ export default {
             })
             this.sendOrder = false
             scope.loadList()
+            loading.close()
           })
         }
       })
@@ -1367,7 +1381,13 @@ export default {
           return
         }
       }
-      postMethod('/bc/order/batchSendOrder', this.onlineOrderList).then(res => {
+      let loading = this.$loading({
+        lock: true,
+        text: '正在发货中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      postMethod('/bc/order/batchOnlineSendOrder', this.onlineOrderList).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
@@ -1379,6 +1399,7 @@ export default {
         })
         this.loadList()
         this.showOnlineOrderList = false
+        loading.close()
       })
     },
     showOfflineBatchSendOrder() {
@@ -1415,6 +1436,12 @@ export default {
           return
         }
       }
+      let loading = this.$loading({
+        lock: true,
+        text: '正在发货中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       postMethod('/bc/order/batchOfflineSendOrder', this.offlineOrderList).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
@@ -1427,6 +1454,7 @@ export default {
         })
         this.loadList()
         this.showOfflineOrderList = false
+        loading.close()
       })
     },
     initLoad() {
