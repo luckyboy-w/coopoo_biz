@@ -5,19 +5,19 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 const errCode = {
-  "1000":'登录超时，请重新登录',
-  "-102":'结算失败，非结算日无法提交结算。'
+  '1000': '登录超时，请重新登录',
+  '-102': '结算失败，非结算日无法提交结算。'
 }
 
-let requestBodyUrl = []
-requestBodyUrl.push("/bc/order/bizOrderList")
-requestBodyUrl.push("/bu/orderBill/findListPost")
-requestBodyUrl.push("/bu/good/modityGoodStock")
-requestBodyUrl.push("/bc/order/confirmReturnOrder")
-requestBodyUrl.push("/bu/orderBill/findBillDtl")
-requestBodyUrl.push("/bu/orderBill/findPlatApplyBill")
-requestBodyUrl.push("/bc/order/batchOnlineSendOrder")
-requestBodyUrl.push("/bc/order/batchOfflineSendOrder")
+const requestBodyUrl = []
+requestBodyUrl.push('/bc/order/bizOrderList')
+requestBodyUrl.push('/bu/orderBill/findListPost')
+requestBodyUrl.push('/bu/good/modityGoodStock')
+requestBodyUrl.push('/bc/order/confirmReturnOrder')
+requestBodyUrl.push('/bu/orderBill/findBillDtl')
+requestBodyUrl.push('/bu/orderBill/findPlatApplyBill')
+requestBodyUrl.push('/bc/order/batchOnlineSendOrder')
+requestBodyUrl.push('/bc/order/batchOfflineSendOrder')
 
 // create an axios instance
 const service = axios.create({
@@ -38,14 +38,14 @@ service.interceptors.request.use(
     }
 
     config.headers['Biz-Site'] = 'Backend-Biz'
-    if(config['url'].indexOf('/bu/good/update') != -1){
+    if (config['url'].indexOf('/bu/good/update') != -1) {
       config.headers['Content-Type'] = 'application/json;charset=UTF-8'
-    }else{
+    } else {
       config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
       if (config['method'] != 'get') {
-        if(requestBodyUrl.indexOf(config.url) != -1){
+        if (requestBodyUrl.indexOf(config.url) != -1) {
           config.headers['Content-Type'] = 'application/json;charset=UTF-8'
-        }else{
+        } else {
           config.transformRequest = [function(data) {
             // 在请求之前对data传参进行格式转换
             data = Qs.stringify(data)
@@ -69,7 +69,7 @@ service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
-  */
+   */
 
   /**
    * Determine the request status by custom code
@@ -85,22 +85,22 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })*/
-		if (res.code == '500') {
-		  Message({
-		    message: res.message,
-		    type: 'error',
-		    duration: 3000
-		  })
-		}
-    if(res.msg == '登录超时，请重新登录'){
-      Message({
-        message: '登录超时，请重新登录',
-        type: 'error',
-        duration: 5 * 1000
-      });
-      location.href = process.env.NODE_ENV === 'production' ? '/' : '/backend';
-    }
-      if(res.code == 1000){
+      if (res.code == '500') {
+        Message({
+          message: res.message,
+          type: 'error',
+          duration: 3000
+        })
+      }
+      if (res.msg == '登录超时，请重新登录') {
+        Message({
+          message: '登录超时，请重新登录',
+          type: 'error',
+          duration: 5 * 1000
+        })
+        location.href = process.env.NODE_ENV === 'production' ? '/' : '/backend'
+      }
+      if (res.code == 1000) {
         Message({
           message: '登录超时，请重新登录',
           type: 'error',
@@ -109,7 +109,7 @@ service.interceptors.response.use(
         location.href = process.env.NODE_ENV === 'production' ? '/' : '/biz'
       }
 
-      if(res.code == 1100){
+      if (res.code == 1100) {
         Message({
           message: res.msg,
           type: 'error',
@@ -117,16 +117,16 @@ service.interceptors.response.use(
         })
       }
 
-      if(errCode[res.code] != undefined){
+      if (errCode[res.code] != undefined) {
         Message({
-          message:  errCode[res.code],
+          message: errCode[res.code],
           type: 'error',
           duration: 5 * 1000
         })
         return Promise.reject(new Error(res.code || 'Error'))
       }
 
-      if(res.message == "pwd.fail"){
+      if (res.message == 'pwd.fail') {
         Message({
           message: '密码错误，请重新输入',
           type: 'error',
@@ -134,7 +134,7 @@ service.interceptors.response.use(
         })
       }
 
-      if(res.message == "disabled"){
+      if (res.message == 'disabled') {
         Message({
           message: '账号被禁用',
           type: 'error',

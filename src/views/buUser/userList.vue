@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div  v-if="showList"  class="list-panel">
+    <div v-if="showList" class="list-panel">
       <table>
         <tr>
           <td>
-            <el-button @click="addOrEditUser()">新增用戶</el-button> 
+            <el-button @click="addOrEditUser()">新增用戶</el-button>
           </td>
           <td></td>
           <td></td>
@@ -22,18 +22,20 @@
               :data="userList"
               style="width: 100%; margin-bottom: 20px;"
               row-key="id"
-              border>
-              <el-table-column label="姓名" width="180" prop="name" ></el-table-column>
-              <el-table-column label="登录账号" width="180"  prop="loginName"></el-table-column>
-              <el-table-column label="邮箱" width="180" prop="email" ></el-table-column>
-              <el-table-column label="最近登录时间" width="180" prop="loginDate" >
+              border
+            >
+              <el-table-column label="姓名" width="180" prop="name"></el-table-column>
+              <el-table-column label="登录账号" width="180" prop="loginName"></el-table-column>
+              <el-table-column label="邮箱" width="180" prop="email"></el-table-column>
+              <el-table-column label="最近登录时间" width="180" prop="loginDate">
                 <template slot-scope="scope">
-                    {{scope.row.loginDate |_formatDate}}
+                  {{ scope.row.loginDate |_formatDate }}
                 </template>
               </el-table-column>
               <el-table-column
                 label="操作"
-                width="280" >
+                width="280"
+              >
                 <template slot-scope="scope">
                   <el-link type="primary" @click="editSysUser(scope.row)">编辑</el-link>
                   <el-link type="primary" @click="resetPwd(scope.row)">密码重置</el-link>
@@ -45,21 +47,23 @@
       </table>
     </div>
 
-    <el-dialog :visible="showReset"  v-if="showReset" title="密码重置" width="600px">
+    <el-dialog :visible="showReset" v-if="showReset" title="密码重置" width="600px">
       <el-form ref="dataForm" :model="resetFrm" label-width="100px" style="width:500px">
-        <el-form-item label="密码" >
+        <el-form-item label="密码">
           <el-input
             v-model="resetFrm.password"
             placeholder="请输入密码"
             show-password
-            clearable/>
+            clearable
+          />
         </el-form-item>
         <el-form-item label="确认密码">
           <el-input
             v-model="resetFrm.reppwd"
             placeholder=""
             show-password
-            clearable />
+            clearable
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitReset()">提交</el-button>
@@ -67,7 +71,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <addUser ref="addOrEditRef" v-if="showAddOrEdit" :edit-data="editData" @showListPanel="showListPanel" />
+    <addUser ref="addOrEditRef" v-if="showAddOrEdit" :edit-data="editData" @showListPanel="showListPanel"/>
   </div>
 </template>
 
@@ -81,81 +85,81 @@ export default {
   data() {
     return {
       editData: {
-        password:'',
-        reppwd:'',
+        password: '',
+        reppwd: ''
       },
-      resetFrm:{
-        buUserId:'',
-        password:'',
-        reppwd:''
+      resetFrm: {
+        buUserId: '',
+        password: '',
+        reppwd: ''
       },
-      resetFrm:{},
-      showReset:false,
+      resetFrm: {},
+      showReset: false,
       showList: true,
-      showAddOrEdit: false,      
+      showAddOrEdit: false,
       userList: []
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     this.loadUser()
   },
-  filters:{
-    _formatDate(time){
-      if(time == undefined){
-        return '';
+  filters: {
+    _formatDate(time) {
+      if (time == undefined) {
+        return ''
       }
-      let date = new Date(time);
+      let date = new Date(time)
       return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   },
-  created() { },
+  created() {
+  },
   methods: {
-    submitReset(){
+    submitReset() {
 
       let scope = this
-      
-      if(this.resetFrm.password != this.resetFrm.reppwd){
+
+      if (this.resetFrm.password != this.resetFrm.reppwd) {
         this.$message({
-					message: "两次输入的密码不一致",
-					type: "warring"
-				});
-        return;
+          message: '两次输入的密码不一致',
+          type: 'warring'
+        })
+        return
       }
-      
+
       postMethod('/bc/menu/resetPwd', this.resetFrm).then(res => {
         this.$message({
-					message: "重置完成",
-					type: "success"
-        });
+          message: '重置完成',
+          type: 'success'
+        })
         this.showList = true
         this.showReset = false
       })
     },
-    cancelSubmit(){
+    cancelSubmit() {
       this.showList = true
       this.showReset = false
     },
-    resetPwd(row){
+    resetPwd(row) {
       let scope = this
       scope.resetFrm.buUserId = row.buUserId
       this.showReset = true
       this.showAddOrEdit = false
     },
-    editSysUser(row){
+    editSysUser(row) {
       let param = {
-        id:row.buUserId
+        id: row.buUserId
       }
       getMethod('/bc/menu/findById', param).then(res => {
-          this.showAddOrEdit = true
-          this.showList = false
-          this.editData = res.data
+        this.showAddOrEdit = true
+        this.showList = false
+        this.editData = res.data
       })
     },
-    deleteUsr(row){
+    deleteUsr(row) {
       let param = {
-        sys_user_id:row.sysUserId
+        sys_user_id: row.sysUserId
       }
       postMethod('/backend/user/deleteById', param).then(res => {
       })
@@ -182,21 +186,22 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.list-panel{
-    padding:30px 20px
-}
-.el-dialog{
-    display: flex;
-    flex-direction: column;
-    margin:0 !important;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
+.list-panel {
+  padding: 30px 20px
 }
 
-.el-dialog .el-dialog__body{
-    flex:1;
-    overflow: auto;
+.el-dialog {
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.el-dialog .el-dialog__body {
+  flex: 1;
+  overflow: auto;
 }
 </style>

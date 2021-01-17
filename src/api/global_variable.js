@@ -23,15 +23,15 @@ const enableMap = {
 }
 
 const advertLocationList = [
-  {id:"1",label:'首页头部'},
-  {id:"2",label:'首页腰部'},
-  {id:"3",label:'个人中心'}
+  { id: '1', label: '首页头部' },
+  { id: '2', label: '首页腰部' },
+  { id: '3', label: '个人中心' }
 ]
 
 const advertLocationMap = {
-  "1":"首页头部",
-  "2":"首页腰部",
-  "3":"个人中心"
+  '1': '首页头部',
+  '2': '首页腰部',
+  '3': '个人中心'
 }
 
 const verifyProvinceMap = {
@@ -50,7 +50,6 @@ const verifyProvinceLevelMap = {
   6: 'EF类',
   7: 'EF-E类'
 }
-
 
 const pushTypeList = [
   { id: '1', label: '平台推送' },

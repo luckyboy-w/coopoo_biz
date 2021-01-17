@@ -2,7 +2,7 @@
   <div class="update-form-panel">
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="姓名">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name"/>
       </el-form-item>
       <el-form-item label="登录账号">
         <el-input
@@ -41,7 +41,8 @@
             :key="item.pkRoleId"
             :value-key="pkRoleId"
             :label="item.roleName"
-            :value="item.pkRoleId" />
+            :value="item.pkRoleId"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -54,11 +55,12 @@
 
 <script>
 import { getMethod, postMethod } from '@/api/request'
+
 export default {
   data() {
     return {
       roleData: [],
-      showPwd:true,
+      showPwd: true,
       form: {
         name: '',
         loginName: '',
@@ -69,23 +71,23 @@ export default {
       }
     }
   },
-  props:{
+  props: {
     editData: {
       type: Object,
       required: false
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     this.loadRole()
 
-    if(this.editData.buUserId){
+    if (this.editData.buUserId) {
       this.form = this.editData
       this.showPwd = false
     }
   },
-  created() {},
+  created() {
+  },
   methods: {
     loadRole() {
       const scope = this
@@ -99,51 +101,51 @@ export default {
     },
     submitUpdate() {
       let scope = this
-      if(this.form.buUserId == ''){
-        if(this.form.reppwd != this.form.password){
+      if (this.form.buUserId == '') {
+        if (this.form.reppwd != this.form.password) {
           this.$message({
-            message: "两次输入的密码不一致",
-            type: "warning"
-          });
-          return;
+            message: '两次输入的密码不一致',
+            type: 'warning'
+          })
+          return
         }
 
-        if(this.form.reppwd.length < 6){
+        if (this.form.reppwd.length < 6) {
           this.$message({
-            message: "密码长度不能少于6位",
-            type: "warning"
-          });
-          return;
+            message: '密码长度不能少于6位',
+            type: 'warning'
+          })
+          return
         }
-      }else{
+      } else {
         this.form.createDate = undefined
       }
 
-      if(this.form.roleId == '' || this.form.roleId == undefined){
+      if (this.form.roleId == '' || this.form.roleId == undefined) {
         this.$message({
-          message: "提交成功",
-          type: "success"
-        });
-        return;
+          message: '提交成功',
+          type: 'success'
+        })
+        return
       }
 
       postMethod('/bc/menu/addBizUser', this.form).then(res => {
         scope.roleData = res.data
         this.isEdit = false
         this.$message({
-          message: "提交成功",
-          type: "success"
-        });
+          message: '提交成功',
+          type: 'success'
+        })
         this.$emit('showListPanel', false)
       })
-      
+
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.update-form-panel{
-  padding:30px 20px;
+.update-form-panel {
+  padding: 30px 20px;
   width: 600px;
 }
 </style>
