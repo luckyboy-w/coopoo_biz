@@ -431,31 +431,6 @@
       <el-tabs v-model="activeName" type="border-card">
         <el-tab-pane label="在线发货" name="online" style="height:600px">
           <el-form ref="onlineForm" :rules="onlineRules" :model="onlineSendOrderFrm" label-width="80px">
-            <el-row :gutter="20">
-              <el-col :span="12">
-                <el-form-item label="物流公司" prop="logisticsCompanyId">
-                  <el-select v-model="logisticsCompanyId" size="small" @change="logisticsCompanySelectChange">
-                    <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item.companyId" :label="item.expressName" />
-                  </el-select>
-                  <el-select v-model="logisticsCompanyTypeId" size="small">
-                    <el-option v-for="(item) in logisticsCompanyTypeList" :key="item.id" :value="item.id" :label="item.expressTypeName" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="发货地址" prop="addrId">
-                  <el-select v-model="onlineSendOrderFrm.addrId" placeholder="请选择" style="width:460px">
-                    <el-option
-                      v-for="item in addrList"
-                      :key="item.addrId"
-                      :label="item.addrDtl"
-                      :value="item.addrId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
             <el-row :gutter="20" style="line-height:40px;" class="main-title">
               <el-col :span="12">
                 订单编号: {{onlineOrderDtl.orderNo}}
@@ -478,24 +453,38 @@
               </el-col>
             </el-row>
 
-            <el-row :gutter="20" style="line-height:60px;" class="main-title">
-              <el-col :span="12">
-                <el-form-item label="包裹数量" prop="quantity">
-                  <el-input v-model.number="onlineSendOrderFrm.quantity"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <el-form-item label="物流公司" prop="logisticsCompanyId">
+              <el-select v-model="logisticsCompanyId" size="small" @change="logisticsCompanySelectChange">
+                <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item.companyId" :label="item.expressName" />
+              </el-select>
+              <el-select v-model="logisticsCompanyTypeId" size="small">
+                <el-option v-for="(item) in logisticsCompanyTypeList" :key="item.id" :value="item.id" :label="item.expressTypeName" />
+              </el-select>
+            </el-form-item>
 
-            <el-row :gutter="20" style="line-height:60px;" class="main-title">
-              <el-form-item label="备注">
-                <el-input
-                  type="textarea"
-                  :rows="4"
-                  placeholder="请输入内容"
-                  v-model="onlineSendOrderFrm.remark">
-                </el-input>
-              </el-form-item>
-            </el-row>
+            <el-form-item label="发货地址" prop="addrId">
+              <el-select v-model="onlineSendOrderFrm.addrId" placeholder="请选择" style="width:460px">
+                <el-option
+                  v-for="item in addrList"
+                  :key="item.addrId"
+                  :label="item.addrDtl"
+                  :value="item.addrId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="包裹数量" prop="quantity" style="width:460px">
+              <el-input v-model.number="onlineSendOrderFrm.quantity"></el-input>
+            </el-form-item>
+
+            <el-form-item label="备注">
+              <el-input
+                type="textarea"
+                :rows="4"
+                placeholder="请输入内容"
+                v-model="onlineSendOrderFrm.remark">
+              </el-input>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onlineSubmitSend()">立即发货</el-button>
             </el-form-item>
@@ -516,7 +505,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="退货地址" prop="sendAddrId">
+            <el-form-item label="发货地址" prop="sendAddrId">
               <el-select v-model="sendOrderFrm.sendAddrId" placeholder="请选择" style="width:460px">
                 <el-option
                   v-for="item in addrList"
@@ -600,6 +589,33 @@
 
     <el-dialog title="线下批量发货" :visible.sync="showOfflineOrderList" v-if="showOfflineOrderList" @close='closeSendOrderDialog'>
       <el-form ref="batchOnlineForm" label-width="80px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="物流公司">
+              <el-select v-model="offlineExpressId" placeholder="请选择">
+                <el-option
+                  v-for="item in expressList"
+                  :key="item.id"
+                  :label="item.text"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发货地址">
+              <el-select v-model="offlineSendAddrId" placeholder="请选择" style="width:460px">
+                <el-option
+                  v-for="item in addrList"
+                  :key="item.addrId"
+                  :label="item.addrDtl"
+                  :value="item.addrId">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
         <div v-for="item in offlineOrderList" :key="item.orderId">
           <el-divider content-position="left">订单编号: {{item.orderNo}}</el-divider>
           <el-row :gutter="20" style="line-height:40px;" class="main-title">
@@ -796,6 +812,8 @@ export default {
       onlineOrderList: [],
       showOfflineOrderList: false,
       offlineOrderList: [],
+      offlineSendAddrId: null,
+      offlineExpressId: null,
       activeName: 'online',
       ordAllPrice:'',
       showOrdDtl:false,
@@ -906,8 +924,8 @@ export default {
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
       },
       onlineRules: {
-        quantity: [{ validator: quantityCheck, trigger: 'blur' }],
-        logisticsCompanyId: [{validator: expressCompanyCheck, trigger: 'change' }],
+        quantity: [{ required: true, validator: quantityCheck, trigger: 'blur' }],
+        logisticsCompanyId: [{required: true, validator: expressCompanyCheck, trigger: 'change' }],
         addrId: [{ required: true, message: '请选择发货地址', trigger: 'change' }]
       },
       orderId_: '',
@@ -1253,11 +1271,16 @@ export default {
       this.onlineSendOrderFrm.addrId = null
       this.logisticsCompanyTypeId = null
       this.addrId = null
+      this.offlineExpressId = null
+      this.offlineSendAddrId = null
       this.sendOrderFrm.expressNo = ''
       this.sendOrderFrm.opContent = ''
+      this.sendOrderFrm.addrId = null
+      this.sendOrderFrm.expressId = null
     },
     submitSend(){
       this.$refs['form'].validate((valid) => {
+        if (valid) {
         if (valid) {
           let scope = this
           let addrId = this.sendOrderFrm.sendAddrId
@@ -1508,11 +1531,13 @@ export default {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
           });
+        } else {
+          this.$message({
+            message: '发送成功',
+            type: 'success'
+          })
         }
-        this.$message({
-          message: '发送成功',
-          type: 'success'
-        })
+
         this.loadList()
         this.showOnlineOrderList = false
         this.closeSendOrderDialog()
@@ -1543,6 +1568,22 @@ export default {
       this.showOfflineOrderList = true
     },
     submitOfflineBatchSendOrder() {
+      if (this.offlineSendAddrId == null || this.offlineSendAddrId == undefined || this.offlineSendAddrId == '') {
+        this.$message({
+          message: '请选择发货地址',
+          type: 'warning'
+        })
+        return
+      }
+
+      if (this.offlineExpressId == null || this.offlineExpressId == undefined || this.offlineExpressId == '') {
+        this.$message({
+          message: '请选择物流公司',
+          type: 'warning'
+        })
+        return
+      }
+
       for (let i = 0; i < this.offlineOrderList.length; i++) {
         const expressNo = this.offlineOrderList[i].expressNo
         if (expressNo == undefined || expressNo == '') {
@@ -1552,13 +1593,19 @@ export default {
           })
           return
         }
+        this.offlineOrderList[i].sendAddress = this.getAddrLabel(this.offlineSendAddrId)
+        let express = this.expressList.find(item => item.id == this.offlineExpressId)
+        this.offlineOrderList[i].expressName = express.text
+        this.offlineOrderList[i].expressId = this.offlineExpressId
       }
+
       let loading = this.$loading({
         lock: true,
         text: '正在发货中...',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
+
       postMethod('/bc/order/batchOfflineSendOrder', this.offlineOrderList).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
