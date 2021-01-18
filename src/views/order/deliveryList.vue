@@ -5,11 +5,12 @@
         <table>
           <tr>
             <td>
+              <el-button plain type="danger" @click="remove()" icon="el-icon-delete">
+                删除
+              </el-button>
+
               <el-button plain type="primary" @click="addOrEdit('add')" icon="el-icon-document-add">
                 新建
-              </el-button>
-              <el-button v-if="false" plain type="primary" @click="remove('add')" icon="el-icon-document-add">
-                删除
               </el-button>
             </td>
           </tr>
@@ -24,31 +25,48 @@
             row-key="id"
             border
             default-expand-all
-            :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+            @selection-change="handleSelectionChange"
           >
 
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="addrName" label="地址名称" width="100px"></el-table-column>
-            <el-table-column prop="enable" label="地址类型" width="80px">
+            <el-table-column label="快递公司">
               <template slot-scope="scope">
-                {{ scope.row.type == '1' ? '发货地址' : '退货地址' }}
+                {{ scope.row.expressName }}
+                <el-tag
+                  v-if="scope.row.isDefault == 1"
+                  effect="light"
+                  size="mini"
+                >
+                  默认
+                </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="addrSeq" label="地址序号" width="100px"></el-table-column>
-            <el-table-column prop="person" label="联系人" width="100px"></el-table-column>
-            <el-table-column prop="mobilePhone" label="联系人手机号" width="120px"></el-table-column>
-            <el-table-column prop="sendCom" label="发货公司" width="100px"></el-table-column>
-            <el-table-column prop="areaNo" label="发货区号" width="100px"></el-table-column>
-            <el-table-column prop="addrDtl" label="发货地址" width="320px"></el-table-column>
-            <el-table-column prop="enable" label="状态" width="80px">
+            <el-table-column label="业务类型">
               <template slot-scope="scope">
-                {{ scope.row.enable == '0' ? '禁用' : '启用' }}
+                <el-tag
+                  v-for="item in scope.row.deliveryTypeList"
+                  :key="item.id"
+                  effect="light"
+                  class="my-tag"
+                >
+                  {{ item.expressTypeName }}
+                </el-tag>
               </template>
             </el-table-column>
-            <!-- <el-table-column prop="city" label="城市" width="150px"></el-table-column>
-            <el-table-column prop="province" label="省份" width="150px"></el-table-column> -->
+            <el-table-column label="付款方式">
+              <template slot-scope="scope">
+                {{ scope.row.paymentMethod == 1 ? '到付' : '' }}
+                {{ scope.row.paymentMethod == 2 ? '现付' : '' }}
+                {{ scope.row.paymentMethod == 3 ? '月结' : '' }}
+              </template>
+            </el-table-column>
+            <el-table-column label="状态">
+              <template slot-scope="scope">
+                {{ scope.row.status == '0' ? '启用' : '禁用' }}
+              </template>
+            </el-table-column>
 
-            <el-table-column prop="id" label="操作" width="200px">
+            <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button
                   @click.native.prevent="addOrEdit('edit',scope.$index, tableData)"
@@ -56,12 +74,20 @@
                   size="small"
                 >编辑
                 </el-button>
+                <el-divider direction="vertical"></el-divider>
                 <el-button
-                  v-if="false"
-                  @click.native.prevent="remove(scope.row.addrId)"
+                  v-if="scope.row.status == 0"
+                  @click.native.prevent="disable(scope.row.id)"
                   type="text"
                   size="small"
-                >删除
+                >禁用
+                </el-button>
+                <el-button
+                  v-else-if="scope.row.status == 1"
+                  @click.native.prevent="enable(scope.row.id)"
+                  type="text"
+                  size="small"
+                >启用
                 </el-button>
               </template>
             </el-table-column>
@@ -76,6 +102,7 @@
             @prev-click="currentPage"
             @next-click="currentPage"
             :total="tableData.total"
+            :page-size="this.searchParam.pageSize"
           ></el-pagination>
         </div>
       </div>
@@ -87,92 +114,70 @@
 
 <script>
 import saveOrEdit from './saveOrEdit'
-import { getMethod, postMethod } from '@/api/request'
+import { getMethod, postMethod, putMethod, deleteMethod } from '@/api/request'
 
 export default {
   computed: {},
   mounted() {
     this.initLoad()
-    this.loadcityList()
-    this.loadprovinceList()
   },
   components: { saveOrEdit },
   created() {
   },
   data() {
     return {
-      cityList: [],
-      provinceList: [],
       showList: true,
       showAddOrEdit: false,
       showPagination: false,
       editData: {},
       searchParam: {
-        delFlag: '1',
-        typeName: '',
         pageSize: 10,
         pageNum: 0
       },
       tableData: {
         list: []
       },
-      dataList: []
+      multipleSelection: []
     }
   },
   methods: {
-    loadcityList() {
-      let scope = this
-      // getMethod("/backend/areas/findCity", null).then(res => {
-      // 	scope.cityList = res.data.list;
-      // });
-    },
-    remove(ids) {
+    enable(id) {
       let param = {}
-      if (ids != undefined) {
-        param.addrIds = ids
-      } else {
-        let selectList = this.$refs.mainTable.selection
-        if (selectList.length == 0) {
-          this.$message({
-            message: '请选择一条要删除的记录',
-            type: 'success'
-          })
-        }
-        let idArr = []
-        for (let i = 0; i < selectList.length; i++) {
-          idArr.push(selectList[i].id)
-        }
-        let param = {
-          addrIds: idArr.join(',')
-        }
-      }
-      postMethod('/bc/sendAddr/delete', param).then(res => {
+      param.id = id
+      putMethod('/bu/delivery/enable', param).then(res => {
         this.$message({
-          message: '删除成功',
+          message: '操作成功',
           type: 'success'
         })
-        scope.editData = res.data[0]
+        this.loadList()
       })
-      this.searchParam.pageSize = 10
-      this.searchParam.pageNum = 0
-      this.loadList()
     },
-    loadprovinceList() {
-      let scope = this
-      // getMethod("/backend/areas/findProvince", null).then(res => {
-      // 	scope.provinceList = res.data.list;
-      // });
+    disable(id) {
+      let param = {}
+      param.id = id
+      putMethod('/bu/delivery/disable', param).then(res => {
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.loadList()
+      })
     },
-    deleteRow(rowIndex, data) {
-      let param = {
-        id: data.list[rowIndex].id
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    remove() {
+      const removeIds = []
+      for (let i = 0; i < this.multipleSelection.length; i++) {
+        removeIds.push(this.multipleSelection[i].id)
       }
+
       this.$confirm('是否继续删除操作?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        postMethod('/backend/sendAddr/delete', param).then(res => {
+        deleteMethod('/bu/delivery/company', removeIds).then(res => {
           this.loadList()
           this.$message('删除成功')
         })
@@ -236,7 +241,7 @@ export default {
     },
     loadList() {
       let scope = this
-      getMethod('/bc/sendAddr/findPage', this.searchParam).then(
+      getMethod('/bu/delivery/companyList', this.searchParam).then(
         res => {
           scope.tableData = res.data
           scope.showPagination = scope.tableData.total == 0
@@ -266,5 +271,11 @@ export default {
       display: inline;
     }
   }
+}
+
+.my-tag {
+  margin-right: 5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
 </style>

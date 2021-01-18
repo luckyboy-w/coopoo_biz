@@ -16,6 +16,22 @@ export const postMethod = (url, data) => {
   })
 }
 
+export const putMethod = (url, data) => {
+  return request({
+    url: url,
+    data,
+    method: 'put'
+  })
+}
+
+export const deleteMethod = (url, data) => {
+  return request({
+    url: url,
+    data,
+    method: 'delete'
+  })
+}
+
 export const getUploadUrl = () => {
   return process.env.VUE_APP_BASE_API + '/bu/oss/upload'
 }
