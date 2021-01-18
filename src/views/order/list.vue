@@ -1281,7 +1281,6 @@ export default {
     submitSend(){
       this.$refs['form'].validate((valid) => {
         if (valid) {
-        if (valid) {
           let scope = this
           let addrId = this.sendOrderFrm.sendAddrId
           this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
