@@ -141,47 +141,54 @@ export default {
     }
   },
   methods: {
-    enable(id) {
-      let param = {}
-      param.id = id
-      putMethod('/bu/delivery/enable', param).then(res => {
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-        this.loadList()
-      })
+    async enable(id) {
+      let res = await putMethod('/bu/delivery/enable', { id })
+      if (res.code !== 200) {
+        this.$message.error('操作失败')
+        return
+      }
+      this.$message.success('操作成功')
+      this.loadList()
     },
-    disable(id) {
-      let param = {}
-      param.id = id
-      putMethod('/bu/delivery/disable', param).then(res => {
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-        this.loadList()
-      })
+    async disable(id) {
+      let res = await putMethod('/bu/delivery/disable', { id })
+      if (res.code !== 200) {
+        this.$message.error('操作失败')
+        return
+      }
+      this.$message.success('操作成功')
+      this.loadList()
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
-    remove() {
+    async remove() {
       const removeIds = []
       for (let i = 0; i < this.multipleSelection.length; i++) {
         removeIds.push(this.multipleSelection[i].id)
       }
 
-      this.$confirm('是否继续删除操作?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteMethod('/bu/delivery/company', removeIds).then(res => {
-          this.loadList()
-          this.$message('删除成功')
+      if (removeIds.length == 0) {
+        this.$message.warning('要删除的元素不能为空')
+        return
+      }
+      try {
+        await this.$confirm('是否继续删除操作?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
-      })
+
+        let res = await deleteMethod('/bu/delivery/company', { ids: removeIds })
+        if (res.code !== 200) {
+          this.$message.error('删除失败')
+          return
+        }
+
+        this.loadList()
+        this.$message.success('删除成功')
+      } catch (e) {
+      }
     },
     batchDeleteRow(rowIndex, data) {
       let selectList = this.$refs.mainTable.selection
@@ -239,14 +246,10 @@ export default {
     initLoad() {
       this.loadList()
     },
-    loadList() {
-      let scope = this
-      getMethod('/bu/delivery/companyList', this.searchParam).then(
-        res => {
-          scope.tableData = res.data
-          scope.showPagination = scope.tableData.total == 0
-        }
-      )
+    async loadList() {
+      let res = await getMethod('/bu/delivery/companyList', this.searchParam)
+      this.tableData = res.data
+      this.showPagination = this.tableData.total == 0
     }
   }
 }
