@@ -137,12 +137,24 @@ export default {
       tableData: {
         list: []
       },
+      // 全选框选中集合
       multipleSelection: []
     }
   },
   methods: {
+    initLoad() {
+      this.loadList()
+    },
+    async loadList() {
+      const { data } = await getMethod('/bu/delivery/companyList', this.searchParam)
+      this.tableData = data
+      this.showPagination = this.tableData.total == 0
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
     async enable(id) {
-      let res = await putMethod('/bu/delivery/enable', { id })
+      const res = await putMethod('/bu/delivery/enable', { id })
       if (res.code !== 200) {
         this.$message.error('操作失败')
         return
@@ -151,16 +163,13 @@ export default {
       this.loadList()
     },
     async disable(id) {
-      let res = await putMethod('/bu/delivery/disable', { id })
+      const res = await putMethod('/bu/delivery/disable', { id })
       if (res.code !== 200) {
         this.$message.error('操作失败')
         return
       }
       this.$message.success('操作成功')
       this.loadList()
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
     },
     async remove() {
       const removeIds = []
@@ -172,6 +181,7 @@ export default {
         this.$message.warning('要删除的元素不能为空')
         return
       }
+
       try {
         await this.$confirm('是否继续删除操作?', '提示', {
           confirmButtonText: '确定',
@@ -179,7 +189,7 @@ export default {
           type: 'warning'
         })
 
-        let res = await deleteMethod('/bu/delivery/company', { ids: removeIds })
+        const res = await deleteMethod('/bu/delivery/company', { ids: removeIds })
         if (res.code !== 200) {
           this.$message.error('删除失败')
           return
@@ -242,14 +252,6 @@ export default {
     currentPage(pageNum) {
       this.searchParam.pageNum = pageNum
       this.loadList()
-    },
-    initLoad() {
-      this.loadList()
-    },
-    async loadList() {
-      let res = await getMethod('/bu/delivery/companyList', this.searchParam)
-      this.tableData = res.data
-      this.showPagination = this.tableData.total == 0
     }
   }
 }
