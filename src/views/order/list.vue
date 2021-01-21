@@ -464,25 +464,44 @@
               </el-col>
             </el-row>
 
-            <el-row :gutter="20" style="line-height:60px;" class="main-title">
-              <el-col :span="12">
-                <el-form-item label="包裹数量" prop="quantity">
-                  <el-input v-model.number="onlineSendOrderFrm.quantity"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <el-form-item label="物流公司" prop="logisticsCompanyId">
+              <el-select v-model="logisticsCompanyId" size="small" @change="logisticsCompanySelectChange">
+                <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item.companyId"
+                           :label="item.expressName"
+                />
+              </el-select>
+              <el-select v-model="logisticsCompanyTypeId" size="small">
+                <el-option v-for="(item) in logisticsCompanyTypeList" :key="item.id" :value="item.id"
+                           :label="item.expressTypeName"
+                />
+              </el-select>
+            </el-form-item>
 
-            <el-row :gutter="20" style="line-height:60px;" class="main-title">
-              <el-form-item label="备注">
-                <el-input
-                  type="textarea"
-                  :rows="4"
-                  placeholder="请输入内容"
-                  v-model="onlineSendOrderFrm.remark"
+            <el-form-item label="发货地址" prop="addrId">
+              <el-select v-model="onlineSendOrderFrm.addrId" placeholder="请选择" style="width:460px">
+                <el-option
+                  v-for="item in addrList"
+                  :key="item.addrId"
+                  :label="item.addrDtl"
+                  :value="item.addrId"
                 >
-                </el-input>
-              </el-form-item>
-            </el-row>
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="包裹数量" prop="quantity" style="width:460px">
+              <el-input v-model.number="onlineSendOrderFrm.quantity"></el-input>
+            </el-form-item>
+
+            <el-form-item label="备注">
+              <el-input
+                type="textarea"
+                :rows="4"
+                placeholder="请输入内容"
+                v-model="onlineSendOrderFrm.remark"
+              >
+              </el-input>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onlineSubmitSend()">立即发货</el-button>
             </el-form-item>
@@ -504,7 +523,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="退货地址" prop="sendAddrId">
+            <el-form-item label="发货地址" prop="sendAddrId">
               <el-select v-model="sendOrderFrm.sendAddrId" placeholder="请选择" style="width:460px">
                 <el-option
                   v-for="item in addrList"
@@ -535,8 +554,42 @@
       </el-tabs>
     </el-dialog>
 
-    <el-dialog title="在线批量发货" :visible.sync="showOnlineOrderList" v-if="showOnlineOrderList">
+    <el-dialog title="在线批量发货" :visible.sync="showOnlineOrderList" v-if="showOnlineOrderList"
+               @close="closeSendOrderDialog"
+    >
       <el-form ref="batchOnlineForm" label-width="80px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="物流公司">
+              <el-select v-model="logisticsCompanyId" size="small" @change="logisticsCompanySelectChange"
+                         prop="logisticsCompanyId"
+              >
+                <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item.companyId"
+                           :label="item.expressName"
+                />
+              </el-select>
+              <el-select v-model="logisticsCompanyTypeId" size="small" prop="logisticsCompanyTypeId">
+                <el-option v-for="(item) in logisticsCompanyTypeList" :key="item.id" :value="item.id"
+                           :label="item.expressTypeName"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发货地址">
+              <el-select v-model="addrId" placeholder="请选择" style="width:460px">
+                <el-option
+                  v-for="item in addrList"
+                  :key="item.addrId"
+                  :label="item.addrDtl"
+                  :value="item.addrId"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
         <div v-for="item in onlineOrderList" :key="item.orderId">
           <el-divider content-position="left">订单编号: {{ item.orderNo }}</el-divider>
           <el-row :gutter="20" style="line-height:40px;" class="main-title">
@@ -563,8 +616,39 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog title="线下批量发货" :visible.sync="showOfflineOrderList" v-if="showOfflineOrderList">
+    <el-dialog title="线下批量发货" :visible.sync="showOfflineOrderList" v-if="showOfflineOrderList"
+               @close="closeSendOrderDialog"
+    >
       <el-form ref="batchOnlineForm" label-width="80px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="物流公司">
+              <el-select v-model="offlineExpressId" placeholder="请选择">
+                <el-option
+                  v-for="item in expressList"
+                  :key="item.id"
+                  :label="item.text"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="发货地址">
+              <el-select v-model="offlineSendAddrId" placeholder="请选择" style="width:460px">
+                <el-option
+                  v-for="item in addrList"
+                  :key="item.addrId"
+                  :label="item.addrDtl"
+                  :value="item.addrId"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
         <div v-for="item in offlineOrderList" :key="item.orderId">
           <el-divider content-position="left">订单编号: {{ item.orderNo }}</el-divider>
           <el-row :gutter="20" style="line-height:40px;" class="main-title">
@@ -742,11 +826,27 @@ export default {
         callback()
       }
     }
+    let expressCompanyCheck = (rule, value, callback) => {
+      if (this.logisticsCompanyId == null) {
+        callback(new Error('请选择物流公司'))
+      } else if (this.logisticsCompanyTypeId == null) {
+        callback(new Error('请选择物流公司业务类型'))
+      } else {
+        callback()
+      }
+    }
     return {
+      logisticsCompanyList: [],
+      logisticsCompanyId: null,
+      logisticsCompanyTypeList: [],
+      logisticsCompanyTypeId: null,
+      addrId: null,
       showOnlineOrderList: false,
       onlineOrderList: [],
       showOfflineOrderList: false,
       offlineOrderList: [],
+      offlineSendAddrId: null,
+      offlineExpressId: null,
       activeName: 'online',
       ordAllPrice: '',
       showOrdDtl: false,
@@ -773,6 +873,9 @@ export default {
       },
       onlineSendOrderFrm: {
         orderNo: null,
+        addrId: null,
+        logisticsCompanyId: null,
+        logisticsCompanyTypeId: null,
         quantity: null,
         remark: null
       },
@@ -854,7 +957,9 @@ export default {
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
       },
       onlineRules: {
-        quantity: [{ validator: quantityCheck, trigger: 'blur' }]
+        quantity: [{ required: true, validator: quantityCheck, trigger: 'blur' }],
+        logisticsCompanyId: [{ required: true, validator: expressCompanyCheck, trigger: 'change' }],
+        addrId: [{ required: true, message: '请选择发货地址', trigger: 'change' }]
       },
       orderId_: '',
       orderNo_: '',
@@ -887,6 +992,7 @@ export default {
     this.initLoad()
     this.initAddrList()
     this.loadtypeIdList()
+    this.loadLogisticsCompanyList()
     if (this.$route.query.orderNo) {
       console.log(this.$route.query.orderNo, '898989')
       this.orderNo_ = this.$route.query.orderNo
@@ -1155,7 +1261,14 @@ export default {
         })
       })
     },
+    logisticsCompanySelectChange() {
+      this.logisticsCompanyTypeList = []
+      this.logisticsCompanyTypeId = null
+      this.loadLogisticsCompanyTypeList()
+    },
     onlineSubmitSend() {
+      this.onlineSendOrderFrm.logisticsCompanyId = this.logisticsCompanyId
+      this.onlineSendOrderFrm.logisticsCompanyTypeId = this.logisticsCompanyTypeId
       this.$refs['onlineForm'].validate((valid) => {
         if (valid) {
           let loading = this.$loading({
@@ -1175,6 +1288,7 @@ export default {
             })
             this.sendOrder = false
             this.loadList()
+            this.closeSendOrderDialog()
             loading.close()
           })
         }
@@ -1184,8 +1298,16 @@ export default {
       this.onlineSendOrderFrm.orderNo = null
       this.onlineSendOrderFrm.quantity = null
       this.onlineSendOrderFrm.remark = null
+      this.onlineSendOrderFrm.logisticsCompanyTypeId = null
+      this.onlineSendOrderFrm.addrId = null
+      this.logisticsCompanyTypeId = null
+      this.addrId = null
+      this.offlineExpressId = null
+      this.offlineSendAddrId = null
       this.sendOrderFrm.expressNo = ''
       this.sendOrderFrm.opContent = ''
+      this.sendOrderFrm.addrId = null
+      this.sendOrderFrm.expressId = null
     },
     submitSend() {
       this.$refs['form'].validate((valid) => {
@@ -1212,6 +1334,7 @@ export default {
             })
             this.sendOrder = false
             scope.loadList()
+            this.closeSendOrderDialog()
             loading.close()
           })
         }
@@ -1394,24 +1517,60 @@ export default {
           return
         }
       }
+
+      if (this.addrId == null || this.addrId == undefined || this.addrId == '') {
+        this.$message({
+          message: '请选择发货地址',
+          type: 'warning'
+        })
+        return
+      }
+
+      if (this.logisticsCompanyId == null || this.logisticsCompanyId == undefined || this.logisticsCompanyId == '') {
+        this.$message({
+          message: '请选择物流公司',
+          type: 'warning'
+        })
+        return
+      }
+
+      if (this.logisticsCompanyTypeId == null || this.logisticsCompanyTypeId == undefined || this.logisticsCompanyTypeId == '') {
+        this.$message({
+          message: '请选择物流公司业务类型',
+          type: 'warning'
+        })
+        return
+      }
+
       let loading = this.$loading({
         lock: true,
         text: '正在发货中...',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      postMethod('/bc/order/batchOnlineSendOrder', this.onlineOrderList).then(res => {
+
+      let param = {
+        'logisticsDTOList': this.onlineOrderList,
+        'logisticsCompanyId': this.logisticsCompanyId,
+        'logisticsCompanyTypeId': this.logisticsCompanyTypeId,
+        'addrId': this.addrId
+      }
+
+      postMethod('/bc/order/batchOnlineSendOrder', param).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
           })
+        } else {
+          this.$message({
+            message: '发送成功',
+            type: 'success'
+          })
         }
-        this.$message({
-          message: '发送成功',
-          type: 'success'
-        })
+
         this.loadList()
         this.showOnlineOrderList = false
+        this.closeSendOrderDialog()
         loading.close()
       })
     },
@@ -1439,6 +1598,22 @@ export default {
       this.showOfflineOrderList = true
     },
     submitOfflineBatchSendOrder() {
+      if (this.offlineSendAddrId == null || this.offlineSendAddrId == undefined || this.offlineSendAddrId == '') {
+        this.$message({
+          message: '请选择发货地址',
+          type: 'warning'
+        })
+        return
+      }
+
+      if (this.offlineExpressId == null || this.offlineExpressId == undefined || this.offlineExpressId == '') {
+        this.$message({
+          message: '请选择物流公司',
+          type: 'warning'
+        })
+        return
+      }
+
       for (let i = 0; i < this.offlineOrderList.length; i++) {
         const expressNo = this.offlineOrderList[i].expressNo
         if (expressNo == undefined || expressNo == '') {
@@ -1448,13 +1623,19 @@ export default {
           })
           return
         }
+        this.offlineOrderList[i].sendAddress = this.getAddrLabel(this.offlineSendAddrId)
+        let express = this.expressList.find(item => item.id == this.offlineExpressId)
+        this.offlineOrderList[i].expressName = express.text
+        this.offlineOrderList[i].expressId = this.offlineExpressId
       }
+
       let loading = this.$loading({
         lock: true,
         text: '正在发货中...',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
+
       postMethod('/bc/order/batchOfflineSendOrder', this.offlineOrderList).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
@@ -1467,6 +1648,7 @@ export default {
         })
         this.loadList()
         this.showOfflineOrderList = false
+        this.closeSendOrderDialog()
         loading.close()
       })
     },
@@ -1485,12 +1667,33 @@ export default {
         expressNo: '',
         opContent: ''
       },
-        postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
-          scope.tableData = res.data
-          scope.sendOrder = false
-          scope.updataOrder = false
-          scope.showPagination = scope.tableData.total == 0
-        })
+        console.log(this.searchParam, '6666666666')
+      postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
+        scope.tableData = res.data
+        scope.sendOrder = false
+        scope.updataOrder = false
+        scope.showPagination = scope.tableData.total == 0
+      })
+    },
+    loadLogisticsCompanyList() {
+      getMethod('/bu/delivery/companyNameList').then(res => {
+        this.logisticsCompanyList = res.data
+        if (res.data.length > 0) {
+          this.logisticsCompanyId = res.data[0].companyId
+        }
+        this.loadLogisticsCompanyTypeList()
+      })
+    },
+    loadLogisticsCompanyTypeList() {
+      const param = {
+        companyId: this.logisticsCompanyId
+      }
+      getMethod('/bu/delivery/companyTypeList', param).then(res => {
+        this.logisticsCompanyTypeList = res.data
+        if (res.data.length == 1) {
+          this.logisticsCompanyTypeId = res.data[0].id
+        }
+      })
     }
   }
 }

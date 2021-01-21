@@ -31,20 +31,11 @@
 
             <div v-for="(v, i) in list" :key="i" class="mt-20">
               <b>{{ v.name }}：</b>
-              <el-checkbox-group v-model="checkList[i].list">
-                <el-checkbox v-for="k in v.list" :key="k.skuId" :label="k.skuId" @change="handleClick">{{ k.skuText }}</el-checkbox>
+              <el-checkbox-group v-model="checkList[i].list" @change="handleClick">
+                <el-checkbox v-for="k in v.list" :key="k.skuId" :label="k.skuId" >{{ k.skuText }}</el-checkbox>
               </el-checkbox-group>
             </div>
 
-            <div v-show="false" class="mt-20">
-              <el-button type="primary" @click="handleClick">确认规格</el-button>
-            </div>
-            <el-tag
-              v-for="(item, index) in skuList"
-              v-show="false"
-              :key="index"
-              style="margin:10px 10px;"
-            >{{ item }}</el-tag>
           </el-form-item>
           <el-form-item label="SKU配置">
             <el-table ref="skuTable" :data="skuList" style="width: 100%; margin-bottom: 20px;">
@@ -272,8 +263,6 @@ export default {
   },
   data() {
     return {
-      skuIdToText: {},
-      skuIdList: [],
       dialogVisible: false,
       dialogImageUrl: '',
       loading: false,
@@ -333,13 +322,12 @@ export default {
         isGift: '',
         id: ''
       },
-      list: [],
-      checkList: [],
-      skuArray: [],
-      skuList: [],
-      skuDemoList: [{ 'skuText': '1', 'skuImg': 'http://bucket.coding88.com/2020-06-26/202006260648313.jpg' },
-        { 'skuText': '2', 'skuImg': '' },
-        { 'skuText': '3', 'skuImg': '' }]
+      list: [], // {规格名称, 规格值列表}
+      checkList: [], // 已选择的规格值 {规格名称, [规格值ID]}
+      skuArray: [], //已选择sku Id数组
+      skuList: [], // good value sku配置（选完规格值之后生成的）
+      skuIdToText: {}, //key 规格值ID（skuId） {//规格值文本  //规格名称}
+      skuIdList: [], // 点击checkbox后选择的skuId
     }
   },
   computed: {},
@@ -449,13 +437,13 @@ export default {
 
         scope.skuIdToText = {}
         list.forEach(o => {
-          const existsList = o['skuObj']
+          const existsList = o['skuObj'] //规格对应的所有规格值列表
 
           for (let i = 0; i < o['skuObj'].length; i++) {
             const skuObject = o['skuObj'][i]
             scope.skuIdToText[skuObject.skuId] = {
-              skuText: skuObject.skuText,
-              typeName: skuObject.typeName
+              skuText: skuObject.skuText, //规格值
+              typeName: skuObject.typeName //规格名称
             }
           }
 
@@ -473,34 +461,30 @@ export default {
             this.$nextTick(function() {
               this.checkList.forEach(checkObj => {
                 existsList.forEach(o => {
-                  console.log(JSON.stringify(allPriceText))
-                  console.log(checkObj.name + ':' + o.skuText)
-                  if (allPriceText.indexOf(checkObj.name + ':' + o.skuText) != -1) {
-                    console.log('----------------------')
+                  if (checkObj.name == o.typeName && allPriceText.indexOf(checkObj.name + ':' + o.skuText) != -1) {
                     checkObj.list.push(o.skuId)
                   }
                 })
               })
-              this.skuList = this.dataForm.skuPriceList
+
             })
           }
         })
       })
     },
-    handleClick() {
-      console.log(1111111111111)
+    handleClick(value) {
       // 先清空数据，保证连续点击按钮，数据不会重复
       this.skuArray = []
       this.skuList = []
       this.skuIdList = []
+
       // this.checkList=[]
-      console.log('-------------------')
-      console.log(this.checkList, '33333333')
       // 将选中的规格组合成一个大数组 [[1, 2], [a, b]...]
       this.checkList.forEach(element => {
         element.list.length > 0 ? this.skuArray.push(element.list) : ''
       })
       // 勾选了规格，才调用方法
+
       if (this.skuArray.length > 0) {
         this.getSkuData([], 0, this.skuArray)
       } else {
@@ -509,7 +493,6 @@ export default {
     },
     // 递归获取每条SKU数据
     getSkuData(skuArr = [], i, list) {
-      console.log(list, '11112222222222222222222')
       for (let j = 0; j < list[i].length; j++) {
         if (i < list.length - 1) {
           skuArr[i] = list[i][j]
@@ -519,8 +502,6 @@ export default {
           skuArr[i] = this.getSkuKey(list[i][j])
 
           const titleText = [...skuArr].join(';')
-          console.log('-------------------------')
-          console.log(this.getSkuText(titleText))
 
           let stockSingle = 0
           // 如果是全局库存
