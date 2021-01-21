@@ -25,7 +25,18 @@
           >
 
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="addrName" label="地址名称" width="100px"></el-table-column>
+            <el-table-column prop="addrName" label="地址名称" width="150px">
+              <template slot-scope="scope">
+                {{ scope.row.addrName }}
+                <el-tag
+                  v-if="scope.row.isDefault == 1"
+                  effect="light"
+                  size="mini"
+                >
+                  默认
+                </el-tag>
+              </template>
+            </el-table-column>
             <el-table-column prop="enable" label="地址类型" width="80px">
               <template slot-scope="scope">
                 {{ scope.row.type == '1' ? '发货地址' : '退货地址' }}

@@ -35,7 +35,8 @@
                 value-format="yyyy-MM-dd"
                 v-model="searchParam.startTime"
                 type="date"
-                placeholder="开始时间">
+                placeholder="开始时间"
+              >
               </el-date-picker>
             </td>
             <td style="padding-left:20px">至</td>
@@ -45,7 +46,8 @@
                 value-format="yyyy-MM-dd"
                 v-model="searchParam.endTime"
                 type="date"
-                placeholder="结束时间">
+                placeholder="结束时间"
+              >
               </el-date-picker>
             </td>
             <td>订单状态:</td>
@@ -71,8 +73,10 @@
               </el-select>
             </td>
             <td>
-              <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货</el-button>
-              <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货</el-button>
+              <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货
+              </el-button>
+              <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
+              </el-button>
             </td>
           </tr>
         </table>
@@ -85,13 +89,15 @@
             style="width: 100%; margin-bottom: 20px;"
             row-key="orderId"
             border
-            :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+            :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+          >
             <el-table-column type="expand">
               <template slot-scope="props">
                 <el-table
                   :data="props.row.supplierList[0].dtlList"
                   style="width: 100%; margin-bottom: 20px;"
-                  border>
+                  border
+                >
                   <el-table-column prop="goodName" label="商品名称" width="400px"></el-table-column>
                   <el-table-column prop="goodSinglePrice" label="商品单价" width="150px"></el-table-column>
                   <el-table-column prop="goodNum" label="商品数量" width="150px"></el-table-column>
@@ -125,7 +131,7 @@
             <el-table-column prop="recPhone" label="买家手机号码" width="120px"/>
             <el-table-column prop="taxId" label="是否需要开发票" width="150px">
               <template slot-scope="scope">
-                {{scope.row.taxId != undefined && scope.row.taxId != '' ? '是':'否'}}
+                {{ scope.row.taxId != undefined && scope.row.taxId != '' ? '是' : '否' }}
               </template>
             </el-table-column>
             <el-table-column prop="status" label="订单状态" width="150px">
@@ -135,18 +141,18 @@
             </el-table-column>
             <el-table-column prop="orderType" label="订单类型" width="150px">
               <template slot-scope="scope">
-                {{ scope.row.orderType | type2Text}}
+                {{ scope.row.orderType | type2Text }}
               </template>
             </el-table-column>
 
             <el-table-column prop="ordPrice" label="订单总价" width="150px">
               <template slot-scope="scope">
-                {{ scope.row | fmtPrice}}
+                {{ scope.row | fmtPrice }}
               </template>
             </el-table-column>
             <el-table-column prop="ordPayPrice" label="实付金额" width="150px">
               <template slot-scope="scope">
-                {{ scope.row | fmtPayPrice}}
+                {{ scope.row | fmtPayPrice }}
               </template>
             </el-table-column>
             <!-- 订单状态;0:订单被取消;10:已提交,待发货20;已发货,待收货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价; -->
@@ -210,7 +216,8 @@
                   v-for="item in expressList"
                   :key="item.id"
                   :label="item.text"
-                  :value="item.id">
+                  :value="item.id"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
@@ -246,7 +253,8 @@
         :data="props.row.skuPriceList"
         style="width: 100%; margin-bottom: 20px;"
         row-key="id"
-        border>
+        border
+      >
         <el-table-column prop="skuText" label="SKU属性" width="260px"/>
         <el-table-column prop="stock" label="库存" width="150px"/>
         <el-table-column prop="salePrice" label="零售价" width="150px"/>
@@ -274,10 +282,10 @@
 
       <el-row :gutter="20" style="line-height:60px;font-size:14px;background-color:#FFFFF0">
         <el-col :span="6">
-          <div>订单编号:{{ordDtl.orderNo}}</div>
+          <div>订单编号:{{ ordDtl.orderNo }}</div>
         </el-col>
         <el-col :span="6">
-          <div>状态:{{ordDtl.status | statuts2Text }}</div>
+          <div>状态:{{ ordDtl.status | statuts2Text }}</div>
         </el-col>
         <el-col :span="6"></el-col>
         <el-col :span="6"></el-col>
@@ -314,7 +322,8 @@
           <el-table
             :data="ordDtl.supplierList[0].dtlList"
             style="width: 1180px; margin-bottom: 20px;font-size:12px;height:100%"
-            border>
+            border
+          >
             <el-table-column prop="goodImage" label="商品图片" width="140px">
               <template slot-scope="scope">
                 <img :src="scope.row.goodImage" height="40px" width="40px"/>
@@ -325,7 +334,7 @@
             <el-table-column prop="goodNum" label="商品数量" width="150px"></el-table-column>
             <el-table-column prop="goodSinglePrice" label="商品总价" width="150px">
               <template slot-scope="scope">
-                {{scope.row.goodSinglePrice * scope.row.goodNum}}
+                {{ scope.row.goodSinglePrice * scope.row.goodNum }}
               </template>
             </el-table-column>
             <el-table-column prop="skuInfo" label="规格" width="150px"></el-table-column>
@@ -339,14 +348,14 @@
           <el-col :span="24">付款信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">付款方式：{{ordDtl.payType | pay2Text}}</el-col>
-          <el-col :span="6">订单金额：{{ordDtl.ordPrice}}</el-col>
-          <el-col :span="6">应付金额：{{ordDtl.ordPayPrice}}</el-col>
-          <el-col :span="6">实付金额：{{ordDtl.totalAmount}}</el-col>
+          <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
+          <el-col :span="6">订单金额：{{ ordDtl.ordPrice }}</el-col>
+          <el-col :span="6">应付金额：{{ ordDtl.ordPayPrice }}</el-col>
+          <el-col :span="6">实付金额：{{ ordDtl.totalAmount }}</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">运费：{{ordDtl.expressPrice == '0' ? '0.00' : ordDtl.expressPrice }}</el-col>
-          <el-col :span="6">优惠金额：{{ordDtl.ordSubPrice == '0' ? '0.00' : ordDtl.ordSubPrice }}</el-col>
+          <el-col :span="6">运费：{{ ordDtl.expressPrice == '0' ? '0.00' : ordDtl.expressPrice }}</el-col>
+          <el-col :span="6">优惠金额：{{ ordDtl.ordSubPrice == '0' ? '0.00' : ordDtl.ordSubPrice }}</el-col>
           <el-col :span="6"></el-col>
           <el-col :span="6"></el-col>
         </el-row>
@@ -357,9 +366,9 @@
           <el-col :span="24">收货人信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">收货人：{{ordDtl.recUname }}</el-col>
-          <el-col :span="6">收货地址：{{ordDtl.recArea}}</el-col>
-          <el-col :span="6">收货人电话：{{ordDtl.recPhone }}</el-col>
+          <el-col :span="6">收货人：{{ ordDtl.recUname }}</el-col>
+          <el-col :span="6">收货地址：{{ ordDtl.recArea }}</el-col>
+          <el-col :span="6">收货人电话：{{ ordDtl.recPhone }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
       </div>
@@ -369,9 +378,9 @@
           <el-col :span="24">支付及配送信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">付款方式：{{ordDtl.payType | pay2Text}}</el-col>
-          <el-col :span="6">支付时间：{{ordDtl.payTime | _formatDate}}</el-col>
-          <el-col :span="6">运费：{{ordDtl.expressPrice }}</el-col>
+          <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
+          <el-col :span="6">支付时间：{{ ordDtl.payTime | _formatDate }}</el-col>
+          <el-col :span="6">运费：{{ ordDtl.expressPrice }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
       </div>
@@ -381,41 +390,43 @@
           <el-col :span="24">物流信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">物流公司：{{ordDtl.expressName}}</el-col>
-          <el-col :span="6">快递单号：{{ordDtl.expressNo}}</el-col>
+          <el-col :span="6">物流公司：{{ ordDtl.expressName }}</el-col>
+          <el-col :span="6">快递单号：{{ ordDtl.expressNo }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
       </div>
 
       <div
-        style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;">
+        style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;"
+      >
         <el-row :gutter="20" style="line-height:40px" class="main-title">
           <el-col :span="24">发票信息</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
           <el-col :span="6">发票类型：普通发票</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ordDtl.tax.taxTitle == '1'?'公司':'个人'}}
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ ordDtl.tax.taxTitle == '1' ? '公司' : '个人' }}
           </el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ordDtl.tax.compTaxNo}}</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">公司名称：{{ordDtl.tax.companyName}}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ ordDtl.tax.compTaxNo }}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">公司名称：{{ ordDtl.tax.companyName }}</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ordDtl.tax.email}}</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.phoneNo">手机号码：{{ordDtl.tax.phoneNo}}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ ordDtl.tax.email }}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.phoneNo">手机号码：{{ ordDtl.tax.phoneNo }}</el-col>
           <el-col :span="6"></el-col>
           <el-col :span="6"></el-col>
         </el-row>
       </div>
 
       <div v-if="ordDtl.ordDtlList[0].goodCustom" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-       padding:10px;margin:10px 0px 10px 0;">
+       padding:10px;margin:10px 0px 10px 0;"
+      >
         <el-row :gutter="20" style="line-height:40px" class="main-title">
           <el-col :span="24">定制信息</el-col>
         </el-row>
         <el-row :gutter="24" style="line-height:40px;font-size:12px">
-          <el-col :span="6">联系人：{{ordDtl.ordDtlList[0].goodCustom.userName}}</el-col>
-          <el-col :span="6">联系电话：{{ordDtl.ordDtlList[0].goodCustom.userPhone}}</el-col>
-          <el-col :span="12">定制内容：{{ordDtl.ordDtlList[0].goodCustom.customInfo}}</el-col>
+          <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>
+          <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>
+          <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>
         </el-row>
       </div>
 
@@ -427,29 +438,29 @@
 
     </div>
 
-    <el-dialog title="发货" :visible.sync="sendOrder" v-if="sendOrder" @close='closeSendOrderDialog'>
+    <el-dialog title="发货" :visible.sync="sendOrder" v-if="sendOrder" @close="closeSendOrderDialog">
       <el-tabs v-model="activeName" type="border-card">
         <el-tab-pane label="在线发货" name="online" style="height:600px">
           <el-form ref="onlineForm" :rules="onlineRules" :model="onlineSendOrderFrm" label-width="80px">
             <el-row :gutter="20" style="line-height:40px;" class="main-title">
               <el-col :span="12">
-                订单编号: {{onlineOrderDtl.orderNo}}
+                订单编号: {{ onlineOrderDtl.orderNo }}
               </el-col>
             </el-row>
             <el-row :gutter="20" style="line-height:40px;" class="main-title">
               <el-col :span="12">
-                收件人: {{onlineOrderDtl.recUname}}
+                收件人: {{ onlineOrderDtl.recUname }}
               </el-col>
               <el-col :span="12">
-                买家手机号: {{onlineOrderDtl.recPhone}}
+                买家手机号: {{ onlineOrderDtl.recPhone }}
               </el-col>
             </el-row>
             <el-row :gutter="20" style="line-height:40px;" class="main-title">
               <el-col :span="12">
-                省市区: {{onlineOrderDtl.recArea}}
+                省市区: {{ onlineOrderDtl.recArea }}
               </el-col>
               <el-col :span="12">
-                地址详情: {{onlineOrderDtl.recAddress}}
+                地址详情: {{ onlineOrderDtl.recAddress }}
               </el-col>
             </el-row>
 
@@ -467,7 +478,8 @@
                   type="textarea"
                   :rows="4"
                   placeholder="请输入内容"
-                  v-model="onlineSendOrderFrm.remark">
+                  v-model="onlineSendOrderFrm.remark"
+                >
                 </el-input>
               </el-form-item>
             </el-row>
@@ -487,7 +499,8 @@
                   v-for="item in expressList"
                   :key="item.id"
                   :label="item.text"
-                  :value="item.id">
+                  :value="item.id"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
@@ -497,7 +510,8 @@
                   v-for="item in addrList"
                   :key="item.addrId"
                   :label="item.addrDtl"
-                  :value="item.addrId">
+                  :value="item.addrId"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
@@ -509,7 +523,8 @@
                 type="textarea"
                 :rows="4"
                 placeholder="请输入内容"
-                v-model="sendOrderFrm.opContent">
+                v-model="sendOrderFrm.opContent"
+              >
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -523,13 +538,13 @@
     <el-dialog title="在线批量发货" :visible.sync="showOnlineOrderList" v-if="showOnlineOrderList">
       <el-form ref="batchOnlineForm" label-width="80px">
         <div v-for="item in onlineOrderList" :key="item.orderId">
-          <el-divider content-position="left">订单编号: {{item.orderNo}}</el-divider>
+          <el-divider content-position="left">订单编号: {{ item.orderNo }}</el-divider>
           <el-row :gutter="20" style="line-height:40px;" class="main-title">
             <el-col :span="12">
-              收件人: {{item.recUname}}
+              收件人: {{ item.recUname }}
             </el-col>
             <el-col :span="12">
-              买家手机号: {{item.recPhone}}
+              买家手机号: {{ item.recPhone }}
             </el-col>
           </el-row>
 
@@ -551,13 +566,13 @@
     <el-dialog title="线下批量发货" :visible.sync="showOfflineOrderList" v-if="showOfflineOrderList">
       <el-form ref="batchOnlineForm" label-width="80px">
         <div v-for="item in offlineOrderList" :key="item.orderId">
-          <el-divider content-position="left">订单编号: {{item.orderNo}}</el-divider>
+          <el-divider content-position="left">订单编号: {{ item.orderNo }}</el-divider>
           <el-row :gutter="20" style="line-height:40px;" class="main-title">
             <el-col :span="12">
-              收件人: {{item.recUname}}
+              收件人: {{ item.recUname }}
             </el-col>
             <el-col :span="12">
-              买家手机号: {{item.recPhone}}
+              买家手机号: {{ item.recPhone }}
             </el-col>
           </el-row>
 
@@ -584,51 +599,51 @@ import { formatDate } from '@/api/tools.js'
 import { getToken } from '@/utils/auth.js'
 
 export default {
-  components: { },
+  components: {},
   filters: {
-    taxType2Text(type){
+    taxType2Text(type) {
 
     },
     _formatDate(time) {
-      if(time == undefined){
+      if (time == undefined) {
         return '尚未支付，暂无时间'
       }
       const date = new Date(time)
       return formatDate(date, 'yyyy-MM-dd hh:mm')
     },
-    pay2Text(pay){
-      if(pay == 1) {
+    pay2Text(pay) {
+      if (pay == 1) {
         return '支付宝'
-      } else if(pay == 2){
+      } else if (pay == 2) {
         return '微信'
-      }else if(pay == 3){
+      } else if (pay == 3) {
         return '微信'
       }
       return '未支付'
     },
-    fmtPrice(row){
-      if(row.orderType != 4){
+    fmtPrice(row) {
+      if (row.orderType != 4) {
         return row.ordPrice
       }
-      if(row.ordPrice == 0){
+      if (row.ordPrice == 0) {
         return '待定价'
       }
       return row.ordPrice
     },
-    fmtPayPrice(row){
-      if(row.orderType != 4){
+    fmtPayPrice(row) {
+      if (row.orderType != 4) {
         return row.totalAmount
       }
-      if(row.ordPayPrice == 0){
+      if (row.ordPayPrice == 0) {
         return '待定价'
       }
       return row.totalAmount
     },
-    statuts2RowText(row){
+    statuts2RowText(row) {
       let status = row.status
       let orderType = row.orderType
       let statusText = ''
-      if(orderType == 1){
+      if (orderType == 1) {
         if (status == '0') {
           statusText = '已取消'
         } else if (status == '10') {
@@ -643,10 +658,10 @@ export default {
           statusText = '退货中'
         } else if (status == '60') {
           statusText = '定制信息确认中'
-        }else if (status == '50' || status == '51' || status == '52') {
+        } else if (status == '50' || status == '51' || status == '52') {
           statusText = '交易完成'
         }
-      }else if(orderType == 2){
+      } else if (orderType == 2) {
         if (status == '0') {
           statusText = '已取消'
         } else if (status == '10') {
@@ -661,10 +676,10 @@ export default {
           statusText = '退货中'
         } else if (status == '60') {
           statusText = '定制信息确认中'
-        }else if (status == '50' || status == '51' || status == '52') {
+        } else if (status == '50' || status == '51' || status == '52') {
           statusText = '交易完成'
         }
-      }else if(orderType == 4){
+      } else if (orderType == 4) {
         if (status == '0') {
           statusText = '已取消'
         } else if (status == '10') {
@@ -679,11 +694,11 @@ export default {
           statusText = '退货中'
         } else if (status == '60') {
           statusText = '定制信息确认中'
-        }else if (status == '50' || status == '51' || status == '52') {
+        } else if (status == '50' || status == '51' || status == '52') {
           statusText = '交易完成'
         }
       }
-      return statusText;
+      return statusText
     },
     statuts2Text(status) {
       // 订单状态;0:订单被取消;10:已提交,待发货20;已付款,待发货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价;
@@ -703,7 +718,7 @@ export default {
         statusText = '退货中'
       } else if (status == '60') {
         statusText = '定制信息确认中'
-      }else if (status == '50' || status == '51' || status == '52') {
+      } else if (status == '50' || status == '51' || status == '52') {
         statusText = '交易完成'
       }
       return statusText
@@ -712,9 +727,9 @@ export default {
       // 审核状态;10:待审核;20:已通过;30:被驳回
       if (verifyStatus == 1) {
         return '普通订单'
-      } else if (verifyStatus == 2){
+      } else if (verifyStatus == 2) {
         return '礼品订单'
-      } else if (verifyStatus == 4){
+      } else if (verifyStatus == 4) {
         return '定制订单'
       }
     }
@@ -722,31 +737,31 @@ export default {
   data() {
     let quantityCheck = (rule, value, callback) => {
       if (value <= 0 || value > 300) {
-        callback(new Error('包裹数量输入错误，只能1~300'));
-      }else {
-        callback();
+        callback(new Error('包裹数量输入错误，只能1~300'))
+      } else {
+        callback()
       }
-    };
+    }
     return {
       showOnlineOrderList: false,
       onlineOrderList: [],
       showOfflineOrderList: false,
       offlineOrderList: [],
       activeName: 'online',
-      ordAllPrice:'',
-      showOrdDtl:false,
-      dealPrice:false,
-      addrList:[],
-      ordStep:1,
-      ptStep:false,
-      lpStep:false,
-      dzStep:false,
-      isCancelTitle:'已完成',
-      dealPriceFrm:{
-        orderNo:'',
-        orderId:'',
-        ordPrice:'',
-        goodNum:'2'
+      ordAllPrice: '',
+      showOrdDtl: false,
+      dealPrice: false,
+      addrList: [],
+      ordStep: 1,
+      ptStep: false,
+      lpStep: false,
+      dzStep: false,
+      isCancelTitle: '已完成',
+      dealPriceFrm: {
+        orderNo: '',
+        orderId: '',
+        ordPrice: '',
+        goodNum: '2'
       },
       //订单状态;0:订单被取消;10:已提交,待发货20;已付款,待发货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价
       ordMarks: {
@@ -756,55 +771,55 @@ export default {
         60: '待沟通',
         50: '完成'
       },
-      onlineSendOrderFrm:{
+      onlineSendOrderFrm: {
         orderNo: null,
         quantity: null,
         remark: null
       },
-      sendOrderFrm:{
-        orderNo:'',
-        expressId:'',
-        expressName:'',
-        sendAddress:'',
-        expressNo:'',
-        opContent:''
+      sendOrderFrm: {
+        orderNo: '',
+        expressId: '',
+        expressName: '',
+        sendAddress: '',
+        expressNo: '',
+        opContent: ''
       },
-      ordDtl:{
-        status:10,
-        tax:{
-          taxTitle:''
+      ordDtl: {
+        status: 10,
+        tax: {
+          taxTitle: ''
         },
-        supplierList:[ {
-          dtlList:[]
+        supplierList: [{
+          dtlList: []
         }]
       },
       onlineOrderDtl: {
-        orderNo:'',
-        recUname:'',
-        recPhone:'',
-        recArea:'',
-        recAddress:''
+        orderNo: '',
+        recUname: '',
+        recPhone: '',
+        recArea: '',
+        recAddress: ''
       },
-      expressList:[
-        {id:'SF',text:'顺丰速运'},
-        {id:'YZBK',text:'邮政国内标快'},
-        {id:'YZPY',text:'邮政快递包裹'},
-        {id:'STO',text:'申通快递'},
-        {id:'DBL',text:'德邦快递'},
-        {id:'JD',text:'京东快递'},
-        {id:'HHTT',text:'天天快递'},
-        {id:'JTSD',text:'极兔速递'},
-        {id:'SNWL',text:'苏宁物流'},
-        {id:'ZTO',text:'中通快递'},
-        {id:'YD',text:'韵达速递'},
-        {id:'HTKY',text:'百世快递'},
-        {id:'YTO',text:'圆通速递'}
+      expressList: [
+        { id: 'SF', text: '顺丰速运' },
+        { id: 'YZBK', text: '邮政国内标快' },
+        { id: 'YZPY', text: '邮政快递包裹' },
+        { id: 'STO', text: '申通快递' },
+        { id: 'DBL', text: '德邦快递' },
+        { id: 'JD', text: '京东快递' },
+        { id: 'HHTT', text: '天天快递' },
+        { id: 'JTSD', text: '极兔速递' },
+        { id: 'SNWL', text: '苏宁物流' },
+        { id: 'ZTO', text: '中通快递' },
+        { id: 'YD', text: '韵达速递' },
+        { id: 'HTKY', text: '百世快递' },
+        { id: 'YTO', text: '圆通速递' }
       ],
-      updataOrder:false,
-      sendOrder:false,
+      updataOrder: false,
+      sendOrder: false,
       pushStockBatch: false,
       pushStock: false,
-      toToken:'',
+      toToken: '',
       typeIdList: [],
       typeId2List: [],
       typeIdList: [],
@@ -816,17 +831,17 @@ export default {
         stockNum: ''
       },
       searchParam: {
-        orderNo:'',
-        recUname:'',
-        recMobile:'',
-        isBackend:'',
-        orderType:'',
-        isRequireTaxBill:'',
-        status:'',
-        startTime:'',
-        endTime:'',
+        orderNo: '',
+        recUname: '',
+        recMobile: '',
+        isBackend: '',
+        orderType: '',
+        isRequireTaxBill: '',
+        status: '',
+        startTime: '',
+        endTime: '',
         riskOrder: '',
-        dataType:'',
+        dataType: '',
         pageSize: 10,
         pageNum: 0
       },
@@ -835,7 +850,7 @@ export default {
       },
       rules: {
         expressId: [{ required: true, message: '请选择物流公司', trigger: 'change' }],
-        sendAddrId: [{required: true, message: '请选择退货地址', trigger: 'change' }],
+        sendAddrId: [{ required: true, message: '请选择退货地址', trigger: 'change' }],
         expressNo: [{ required: true, message: '请输入物流单号', trigger: 'blur' }]
       },
       onlineRules: {
@@ -846,28 +861,26 @@ export default {
       dataList: []
     }
   },
-  computed: {
-
-  },
-  props:{
-    orderStatus:{
-      type:Object,
-      required:false,
-      default:null
+  computed: {},
+  props: {
+    orderStatus: {
+      type: Object,
+      required: false,
+      default: null
     }
   },
   mounted() {
     // this.toToken=getToken()
     // console.log(this.toToken,'6666666')
-    if(null != this.orderStatus){
+    if (null != this.orderStatus) {
       this.searchParam.status = this.orderStatus.status
     }
-    if(this.$route.query.dt != undefined){
+    if (this.$route.query.dt != undefined) {
       this.searchParam.dataType = this.$route.query.dt
-      if(this.searchParam.dataType == '2'){
+      if (this.searchParam.dataType == '2') {
         this.searchParam.riskOrder = 'all'
       }
-    }else{
+    } else {
       this.searchParam.isBackend = '1'
     }
 
@@ -875,7 +888,7 @@ export default {
     this.initAddrList()
     this.loadtypeIdList()
     if (this.$route.query.orderNo) {
-      console.log(this.$route.query.orderNo,'898989')
+      console.log(this.$route.query.orderNo, '898989')
       this.orderNo_ = this.$route.query.orderNo
       console.log(this.orderId_)
       this.getOrdDtl_()
@@ -885,55 +898,55 @@ export default {
   created() {
   },
   methods: {
-    exportData(){
-      if(this.searchParam.startTime==null){
-        this.searchParam.startTime=''
-        }
-        if(this.searchParam.endTime==null){
-          this.searchParam.endTime=''
-          }
-       let param={
-              orderNo:this.searchParam.orderNo,
-              recUname:this.searchParam.recUname,
-              recMobile:this.searchParam.recMobile,
-              isBackend:this.searchParam.isBackend,
-              orderType:this.searchParam.orderType,
-              isRequireTaxBill:this.searchParam.isRequireTaxBill,
-              status:this.searchParam.status,
-              startTime:this.searchParam.startTime,
-              endTime:this.searchParam.endTime,
-              riskOrder: this.searchParam.riskOrder,
-              dataType:this.searchParam.dataType
-            }
-      let exportParam = [];
-      console.log(param,'999999')
-      for(let key in param){
-          exportParam.push(key+"="+param[key]);
+    exportData() {
+      if (this.searchParam.startTime == null) {
+        this.searchParam.startTime = ''
       }
-      console.log(exportParam,'传的参')
+      if (this.searchParam.endTime == null) {
+        this.searchParam.endTime = ''
+      }
+      let param = {
+        orderNo: this.searchParam.orderNo,
+        recUname: this.searchParam.recUname,
+        recMobile: this.searchParam.recMobile,
+        isBackend: this.searchParam.isBackend,
+        orderType: this.searchParam.orderType,
+        isRequireTaxBill: this.searchParam.isRequireTaxBill,
+        status: this.searchParam.status,
+        startTime: this.searchParam.startTime,
+        endTime: this.searchParam.endTime,
+        riskOrder: this.searchParam.riskOrder,
+        dataType: this.searchParam.dataType
+      }
+      let exportParam = []
+      console.log(param, '999999')
+      for (let key in param) {
+        exportParam.push(key + '=' + param[key])
+      }
+      console.log(exportParam, '传的参')
       //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
-      window.open( process.env.VUE_APP_BASE_API+'/bc/order/export?token='+getToken()+"&"+exportParam.join("&"))
+      window.open(process.env.VUE_APP_BASE_API + '/bc/order/export?token=' + getToken() + '&' + exportParam.join('&'))
     },
-    showOrdDtlClos(){
+    showOrdDtlClos() {
       this.showOrdDtl = false
-      this.ptStep  = false
+      this.ptStep = false
       this.lpStep = false
       this.dzStep = false
     },
-    getAddrLabel(val){
+    getAddrLabel(val) {
       //locations是v-for里面的也是datas里面的值
-      let obj = {};
-      obj = this.addrList.find((item)=>{
-        return item.addrId === val;
-      });
-      return obj.addrDtl;
+      let obj = {}
+      obj = this.addrList.find((item) => {
+        return item.addrId === val
+      })
+      return obj.addrDtl
     },
-    initAddrList(){
-      getMethod('/bc/sendAddr/findList', {'enable': 1, "type": 2}).then(res => {
+    initAddrList() {
+      getMethod('/bc/sendAddr/findList', { 'enable': 1, 'type': 2 }).then(res => {
         this.addrList = res.data
       })
     },
-    collect(row){
+    collect(row) {
       let scope = this
       let param = {
         orderNo: row.orderNo,
@@ -944,7 +957,7 @@ export default {
         scope.loadList()
       })
     },
-    doneGiftOrd(row){
+    doneGiftOrd(row) {
       let scope = this
       let param = {
         orderNo: row.orderNo,
@@ -955,35 +968,35 @@ export default {
         scope.loadList()
       })
     },
-    collectCus(rowObj){
+    collectCus(rowObj) {
       this.dealPriceFrm.orderNo = rowObj.orderNo
       this.dealPriceFrm.orderId = rowObj.orderId
       this.dealPriceFrm.goodNum = rowObj.supplierList[0].dtlList[0].goodNum
       this.dealPrice = true
     },
-    calcOrderAllPrice(){
+    calcOrderAllPrice() {
       this.ordAllPrice = this.dealPriceFrm.goodNum * this.dealPriceFrm.ordPrice
     },
-    submitDealPrice(){
-        let scope = this
-        if(this.dealPriceFrm.ordPrice == ''){
-             this.$message({
-              message: '价格不能为空',
-              type: 'warring'
-            })
-            return
-        }
-
-        postMethod('/bc/order/dealOrdPrice', this.dealPriceFrm).then(res => {
-          scope.dealPrice = false
-          scope.loadList()
-          this.$message({
-            message: '定价成功，请等待用户支付',
-            type: 'success'
-          })
+    submitDealPrice() {
+      let scope = this
+      if (this.dealPriceFrm.ordPrice == '') {
+        this.$message({
+          message: '价格不能为空',
+          type: 'warring'
         })
+        return
+      }
+
+      postMethod('/bc/order/dealOrdPrice', this.dealPriceFrm).then(res => {
+        scope.dealPrice = false
+        scope.loadList()
+        this.$message({
+          message: '定价成功，请等待用户支付',
+          type: 'success'
+        })
+      })
     },
-    getOrdDtl_(){
+    getOrdDtl_() {
       let scope = this
       let param = {
         orderNo: this.orderNo_
@@ -997,59 +1010,59 @@ export default {
         scope.dzStep = false
         scope.lpStep = false
 
-        if(scope.ordDtl.orderType == 1){
+        if (scope.ordDtl.orderType == 1) {
 
           scope.ptStep = true
-          if(scope.ordDtl.status == "10"){
+          if (scope.ordDtl.status == '10') {
             scope.ordStep = 1
-          }else if(scope.ordDtl.status == "20"){
+          } else if (scope.ordDtl.status == '20') {
             scope.ordStep = 2
-          }else if(scope.ordDtl.status == "30"){
+          } else if (scope.ordDtl.status == '30') {
             scope.ordStep = 3
-          }else {
+          } else {
             scope.ordStep = 4
           }
 
-          if(scope.ordDtl.status >= 40 && scope.ordDtl.status < 50){
+          if (scope.ordDtl.status >= 40 && scope.ordDtl.status < 50) {
             scope.isCancelTitle = '退货中'
-          }else if(scope.ordDtl.status == 0){
+          } else if (scope.ordDtl.status == 0) {
             scope.isCancelTitle = '已取消'
           }
 
-        }else if(scope.ordDtl.orderType == 2){
+        } else if (scope.ordDtl.orderType == 2) {
           scope.lpStep = true
 
-          if(scope.ordDtl.status == "10"){
+          if (scope.ordDtl.status == '10') {
             scope.ordStep = 1
-          }else if(scope.ordDtl.status == "20"){
+          } else if (scope.ordDtl.status == '20') {
             scope.ordStep = 2
-          }else if(scope.ordDtl.status == "30"){
+          } else if (scope.ordDtl.status == '30') {
             scope.ordStep = 3
-          }else {
+          } else {
             scope.ordStep = 4
           }
 
-        }else if(scope.ordDtl.orderType == 4){
+        } else if (scope.ordDtl.orderType == 4) {
           scope.dzStep = true
 
-          if(scope.ordDtl.status == "10"){
+          if (scope.ordDtl.status == '10') {
             scope.ordStep = 2
-          }else if(scope.ordDtl.status == "20"){
+          } else if (scope.ordDtl.status == '20') {
             scope.ordStep = 3
-          }else if(scope.ordDtl.status == "30"){
+          } else if (scope.ordDtl.status == '30') {
             scope.ordStep = 4
-          }else if(scope.ordDtl.status == "60"){
+          } else if (scope.ordDtl.status == '60') {
             scope.ordStep = 1
-          }else {
+          } else {
             scope.ordStep = 5
           }
         }
       })
     },
-    getOrdDtl(row){
+    getOrdDtl(row) {
       let scope = this
       let param = {
-        orderId:row.orderId
+        orderId: row.orderId
       }
 
       postMethod('/bc/order/getOrdDtl', param).then(res => {
@@ -1059,60 +1072,60 @@ export default {
         scope.dzStep = false
         scope.lpStep = false
 
-        if(scope.ordDtl.orderType == 1){
+        if (scope.ordDtl.orderType == 1) {
 
           scope.ptStep = true
-          if(scope.ordDtl.status == "10"){
+          if (scope.ordDtl.status == '10') {
             scope.ordStep = 1
-          }else if(scope.ordDtl.status == "20"){
+          } else if (scope.ordDtl.status == '20') {
             scope.ordStep = 2
-          }else if(scope.ordDtl.status == "30"){
+          } else if (scope.ordDtl.status == '30') {
             scope.ordStep = 3
-          }else {
+          } else {
             scope.ordStep = 4
           }
 
-          if(scope.ordDtl.status >= 40 && scope.ordDtl.status < 50){
+          if (scope.ordDtl.status >= 40 && scope.ordDtl.status < 50) {
             scope.isCancelTitle = '退货中'
-          }else if(scope.ordDtl.status == 0){
+          } else if (scope.ordDtl.status == 0) {
             scope.isCancelTitle = '已取消'
           }
 
-        }else if(scope.ordDtl.orderType == 2){
+        } else if (scope.ordDtl.orderType == 2) {
           scope.lpStep = true
 
-          if(scope.ordDtl.status == "10"){
+          if (scope.ordDtl.status == '10') {
             scope.ordStep = 1
-          }else if(scope.ordDtl.status == "20"){
+          } else if (scope.ordDtl.status == '20') {
             scope.ordStep = 2
-          }else if(scope.ordDtl.status == "30"){
+          } else if (scope.ordDtl.status == '30') {
             scope.ordStep = 3
-          }else {
+          } else {
             scope.ordStep = 4
           }
 
-        }else if(scope.ordDtl.orderType == 4){
+        } else if (scope.ordDtl.orderType == 4) {
           scope.dzStep = true
 
-          if(scope.ordDtl.status == "10"){
+          if (scope.ordDtl.status == '10') {
             scope.ordStep = 2
-          }else if(scope.ordDtl.status == "20"){
+          } else if (scope.ordDtl.status == '20') {
             scope.ordStep = 3
-          }else if(scope.ordDtl.status == "30"){
+          } else if (scope.ordDtl.status == '30') {
             scope.ordStep = 4
-          }else if(scope.ordDtl.status == "60"){
+          } else if (scope.ordDtl.status == '60') {
             scope.ordStep = 1
-          }else {
+          } else {
             scope.ordStep = 5
           }
         }
       })
     },
-    dealOrd(row){
+    dealOrd(row) {
       const param = {
         orderId: row.orderId
       }
-        this.$confirm('是否确认收货?', '提示', {
+      this.$confirm('是否确认收货?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -1120,14 +1133,14 @@ export default {
         postMethod('/bc/order/dealOrd', param).then(res => {
           this.loadList()
           this.$message(
-          {
-            message: '操作成功',
-            type: 'success'
-          })
+            {
+              message: '操作成功',
+              type: 'success'
+            })
         })
       })
     },
-    cancelOrd(row){
+    cancelOrd(row) {
       const param = {
         orderId: row.orderId
       }
@@ -1150,10 +1163,10 @@ export default {
             text: '正在发货中...',
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
-          });
+          })
           postMethod('/bc/order/onlineSendOrder', this.onlineSendOrderFrm).then(res => {
             if (res.code != 200) {
-              this.$message.error(res.message);
+              this.$message.error(res.message)
               return
             }
             this.$message({
@@ -1174,7 +1187,7 @@ export default {
       this.sendOrderFrm.expressNo = ''
       this.sendOrderFrm.opContent = ''
     },
-    submitSend(){
+    submitSend() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let scope = this
@@ -1187,10 +1200,10 @@ export default {
             text: '正在发货中...',
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
-          });
+          })
           postMethod('/bc/order/offlineSendOrder', this.sendOrderFrm).then(res => {
             if (res.code != 200) {
-              this.$message.error(res.message);
+              this.$message.error(res.message)
               return
             }
             this.$message({
@@ -1204,7 +1217,7 @@ export default {
         }
       })
     },
-    submitupdt(){
+    submitupdt() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let scope = this
@@ -1214,7 +1227,7 @@ export default {
           this.sendOrderFrm.expressName = express.text
           postMethod('/bc/order/orderLogisticCode', this.sendOrderFrm).then(res => {
             if (res.code != 200) {
-              this.$message.error(res.message);
+              this.$message.error(res.message)
               return
             }
             this.$message({
@@ -1227,7 +1240,7 @@ export default {
         }
       })
     },
-    sendOrd(rowObj){
+    sendOrd(rowObj) {
       this.sendOrder = true
       if (this.addrList.length > 0) {
         this.sendOrderFrm.sendAddrId = this.addrList[0].addrId
@@ -1235,18 +1248,18 @@ export default {
 
       this.sendOrderFrm.orderNo = rowObj.orderNo
       let param = {
-        orderId:rowObj.orderId
+        orderId: rowObj.orderId
       }
       postMethod('/bc/order/getOrdDtl', param).then(res => {
         if (res.code != 200) {
-          this.$message.error(res.message);
+          this.$message.error(res.message)
           return
         }
         this.onlineOrderDtl = res.data
         this.onlineSendOrderFrm.orderNo = res.data.orderNo
       })
     },
-    updataOrd(rowObj){
+    updataOrd(rowObj) {
       this.updataOrder = true
       if (this.addrList.length > 0) {
         this.sendOrderFrm.sendAddrId = this.addrList[0].addrId
@@ -1348,7 +1361,7 @@ export default {
       this.loadList()
     },
     showOnlineBatchSendOrder() {
-      this.onlineOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection));
+      this.onlineOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection))
 
       if (this.onlineOrderList.length <= 0) {
         this.$message({
@@ -1386,12 +1399,12 @@ export default {
         text: '正在发货中...',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
-      });
+      })
       postMethod('/bc/order/batchOnlineSendOrder', this.onlineOrderList).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
-          });
+          })
         }
         this.$message({
           message: '发送成功',
@@ -1403,7 +1416,7 @@ export default {
       })
     },
     showOfflineBatchSendOrder() {
-      this.offlineOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection));
+      this.offlineOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection))
 
       if (this.offlineOrderList.length <= 0) {
         this.$message({
@@ -1441,12 +1454,12 @@ export default {
         text: '正在发货中...',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
-      });
+      })
       postMethod('/bc/order/batchOfflineSendOrder', this.offlineOrderList).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
-          });
+          })
         }
         this.$message({
           message: '发送成功',
@@ -1465,48 +1478,51 @@ export default {
       const scope = this
 
       this.sendOrderFrm = {
-        orderNo:'',
-        expressName:'',
-        sendAddrId:'',
-        sendAddress:'',
-        expressNo:'',
-        opContent:''
+        orderNo: '',
+        expressName: '',
+        sendAddrId: '',
+        sendAddress: '',
+        expressNo: '',
+        opContent: ''
       },
-      console.log(this.searchParam,'6666666666')
-      postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
-        scope.tableData = res.data
-        scope.sendOrder = false
-        scope.updataOrder = false
-        scope.showPagination = scope.tableData.total == 0
-      })
+        postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
+          scope.tableData = res.data
+          scope.sendOrder = false
+          scope.updataOrder = false
+          scope.showPagination = scope.tableData.total == 0
+        })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .ly-container {
-	padding: 10px 20px;
-	font-size: 14px;
-	.ly-tool-panel {
-		line-height: "60px";
-		height: "60px";
-		width: 100%;
-		padding: 10px 10px;
-		.ly-tool-btn {
-			padding-left: 20px;
-			display: inline;
-		}
-	}
+  padding: 10px 20px;
+  font-size: 14px;
+
+  .ly-tool-panel {
+    line-height: "60px";
+    height: "60px";
+    width: 100%;
+    padding: 10px 10px;
+
+    .ly-tool-btn {
+      padding-left: 20px;
+      display: inline;
+    }
+  }
 }
 </style>
 <style lang="scss">
-.el-step__title{
+.el-step__title {
   font-size: 12px;
 }
-.main-title{
+
+.main-title {
   font-size: 14px;
 }
-.sub-title{
+
+.sub-title {
   font-size: 12px;
 }
 </style>

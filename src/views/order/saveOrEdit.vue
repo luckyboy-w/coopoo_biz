@@ -42,6 +42,9 @@
       <el-form-item label="是否启用">
         <el-switch v-model="dataForm.enable" inactive-value="0" active-value="1"/>
       </el-form-item>
+      <el-form-item label="是否默认">
+        <el-switch v-model="dataForm.isDefault" inactive-value="0" active-value="1"/>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitUpdate">添加</el-button>
         <el-button @click="cancelUpdate">取消</el-button>
@@ -74,6 +77,7 @@ export default {
       imageUrl: '',
       fileList: [],
       dataForm: {
+        isDefault: '0',
         type: '2',
         addrName: '',
         addrSeq: '',
@@ -98,6 +102,7 @@ export default {
     this.$nextTick(function() {
       if (this.editData.addrId) {
         this.dataForm = this.editData
+        this.dataForm.isDefault = this.dataForm.isDefault == 1 ? '1' : '0'
       }
     })
   },
@@ -178,17 +183,6 @@ export default {
           return false
         }
       }
-
-      /* for (let i = 0; i < notNvl.length; i++) {
-				if (this.dataForm[notNvl[i]] == "") {
-					this.$message({
-						message: "字段不能为空",
-						type: "warning"
-					});
-					return false;
-				}
-			}*/
-
       const needInt = []
       for (let i = 0; i < needInt.length; i++) {
         if (!isInteger(this.dataForm[needInt[i]])) {
