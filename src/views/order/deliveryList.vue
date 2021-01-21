@@ -106,14 +106,13 @@
           ></el-pagination>
         </div>
       </div>
-      <div class="list-panel"></div>
     </div>
-    <saveOrEdit v-if="showAddOrEdit" @showListPanel="showListPanel" :editData="editData"></saveOrEdit>
+    <deliverySaveOrEdit v-if="showAddOrEdit" @showListPanel="showListPanel" :editData="editData"/>
   </div>
 </template>
 
 <script>
-import saveOrEdit from './saveOrEdit'
+import deliverySaveOrEdit from './deliverySaveOrEdit'
 import { getMethod, postMethod, putMethod, deleteMethod } from '@/api/request'
 
 export default {
@@ -121,7 +120,7 @@ export default {
   mounted() {
     this.initLoad()
   },
-  components: { saveOrEdit },
+  components: { deliverySaveOrEdit },
   created() {
   },
   data() {
@@ -200,46 +199,18 @@ export default {
       } catch (e) {
       }
     },
-    batchDeleteRow(rowIndex, data) {
-      let selectList = this.$refs.mainTable.selection
-      let idArr = []
-      for (let i = 0; i < selectList.length; i++) {
-        idArr.push(selectList[i].id)
-      }
-      let param = {
-        delType: '2',
-        ids: idArr.join(',')
-      }
-      postMethod('/backend/sendAddr/delete', param).then(res => {
-        scope.editData = res.data[0]
-        this.showList = false
-        this.showAddOrEdit = true
-        this.$message({
-          message: '删除成功',
-          type: 'success'
-        })
-      })
-      this.searchParam.pageSize = 10
-      this.searchParam.pageNum = 0
-      this.loadList()
-    },
     search() {
       this.loadList()
     },
-    addOrEdit(oper, rowIndex, data) {
-      let scope = this
-
+    async addOrEdit(oper, rowIndex, data) {
       if (oper == 'edit') {
-        let param = {
-          addrId: data.list[rowIndex].addrId
-        }
-        getMethod('/bc/sendAddr/findObject', param).then(res => {
-          scope.editData = res.data[0]
-          this.showList = false
-          this.showAddOrEdit = true
-        })
+        const res = await getMethod(`/bu/delivery/companyInfo/${data.list[rowIndex].id}`)
+        res.data.kdnArgs = JSON.parse(res.data.kdnArgs)
+        this.editData = res.data
+        this.showList = false
+        this.showAddOrEdit = true
       } else {
-        scope.editData = {}
+        this.editData = {}
         this.showList = false
         this.showAddOrEdit = true
       }

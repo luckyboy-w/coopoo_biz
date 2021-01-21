@@ -2,43 +2,45 @@
   <div class="update-form-panel">
     <el-form ref="dataForm" :model="dataForm" label-width="100px">
       <el-form-item label="地址名称">
-        <el-input v-model="dataForm.addrName" />
+        <el-input v-model="dataForm.addrName"/>
       </el-form-item>
       <el-form-item label="地址类型">
         <el-input value="退货地址" disabled/>
         <!-- <el-select v-model="dataForm.type"> -->
-          <!-- <el-option value="1" label="发货地址" /> -->
-         <!-- <el-option value="2" label="退货地址" />
-        </el-select> -->
+        <!-- <el-option value="1" label="发货地址" /> -->
+        <!-- <el-option value="2" label="退货地址" />
+       </el-select> -->
       </el-form-item>
       <el-form-item label="地址序号">
-        <el-input v-model="dataForm.addrSeq" />
+        <el-input v-model="dataForm.addrSeq"/>
       </el-form-item>
       <el-form-item label="联系人">
-        <el-input v-model="dataForm.person" />
+        <el-input v-model="dataForm.person"/>
       </el-form-item>
       <el-form-item label="联系人手机号">
-        <el-input v-model="dataForm.mobilePhone" />
+        <el-input v-model="dataForm.mobilePhone"/>
       </el-form-item>
       <el-form-item label="地区号">
-        <el-input v-model="dataForm.areaNo" />
+        <el-input v-model="dataForm.areaNo"/>
       </el-form-item>
       <el-form-item label="地址">
-        <el-input v-model="dataForm.addrDtl" />
+        <el-input v-model="dataForm.addrDtl"/>
       </el-form-item>
       <el-form-item label="省份" style="width: 1000px">
-        <el-select v-model="selectProvince" size="small" value-key="provinceid" placeholder="请选择省份" @change="selectProvinceFun">
-          <el-option v-for="(item) in city" :key="item.provinceid" :value="item" :label="item.province" />
+        <el-select v-model="selectProvince" size="small" value-key="provinceid" placeholder="请选择省份"
+                   @change="selectProvinceFun"
+        >
+          <el-option v-for="(item) in city" :key="item.provinceid" :value="item" :label="item.province"/>
         </el-select>
         <el-select v-model="selectCity" size="small" value-key="cityid" placeholder="请选择城市" @change="selectCityFun">
-          <el-option v-for="(item) in cityList" :key="item.cityid" :value="item" :label="item.city" />
+          <el-option v-for="(item) in cityList" :key="item.cityid" :value="item" :label="item.city"/>
         </el-select>
         <el-select v-model="selectArea" size="small" value-key="areaid" placeholder="请选择区县" @change="selectAreaFun">
-          <el-option v-for="(item) in areaList" :key="item.areaid" :value="item" :label="item.area" />
+          <el-option v-for="(item) in areaList" :key="item.areaid" :value="item" :label="item.area"/>
         </el-select>
       </el-form-item>
       <el-form-item label="是否启用">
-        <el-switch v-model="dataForm.enable" inactive-value="0" active-value="1" />
+        <el-switch v-model="dataForm.enable" inactive-value="0" active-value="1"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitUpdate">添加</el-button>
@@ -72,7 +74,7 @@ export default {
       imageUrl: '',
       fileList: [],
       dataForm: {
-        type:'2',
+        type: '2',
         addrName: '',
         addrSeq: '',
         person: '',
@@ -84,7 +86,7 @@ export default {
         citytext: '',
         areaId: '',
         areaText: '',
-        addrDtl:'',
+        addrDtl: '',
         enable: true,
         id: ''
       }
@@ -108,7 +110,7 @@ export default {
     loadProvinceList() {
       const scope = this
       getMethod('/bc/province/findProvince').then(res => {
-      	scope.city = res.data
+        scope.city = res.data
       })
     },
     selectProvinceFun(event) {
@@ -125,7 +127,6 @@ export default {
       this.dataForm.provincetext = event.province
     },
     selectCityFun(event) {
-      console.info(event)
       this.selectArea = ''
       this.dataForm.areaText = ''
       if (event) {
@@ -139,7 +140,6 @@ export default {
     selectAreaFun(event) {
       this.dataForm.areaId = event.areaid
       this.dataForm.areaText = event.area
-      console.info(event)
     },
     saveObject() {
       const scope = this
@@ -213,12 +213,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .update-form-panel {
-	padding: 30px 20px;
-	width: 600px;
+  padding: 30px 20px;
+  width: 600px;
 }
 </style>
 <style lang="scss">
 .hide .el-upload--picture-card {
-	display: none;
+  display: none;
 }
 </style>
