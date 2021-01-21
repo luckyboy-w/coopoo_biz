@@ -15,15 +15,15 @@
                         </el-option>
                     </el-option-group>
             </el-select>
-        </el-form-item>        
+        </el-form-item>
         <el-form-item label="规格名称" :disabled="disableName">
             <el-input v-model="dataForm.specName"></el-input>
             <span>请填写常用的商品规格的名称；例如：颜色；尺寸等。</span>
-        </el-form-item>        
+        </el-form-item>
         <el-form-item label="备注名称">
             <el-input v-model="dataForm.specDescName"></el-input>
             <span>只有商家可见，用于商家更好的区别管理各个规格。</span>
-        </el-form-item>        
+        </el-form-item>
         <el-form-item label="规格序号">
             <el-input v-model="dataForm.specSort"></el-input>
             <span>请填写整数。</span>
@@ -140,13 +140,13 @@ export default {
                         typeData.push(this.editData.typeData[i].typeId);
                     }
                     this.typeData = typeData
-                    
+
                 }
             });
         })
     },
     removeSku(rowIndex){
-        this.dataForm.skuList.splice(rowIndex,1);            
+        this.dataForm.skuList.splice(rowIndex,1);
         this.$message({
             message: '操作成功',
             type: 'success'
@@ -156,7 +156,7 @@ export default {
         if(this.dataForm.skuList == undefined){
             this.dataForm.skuList = []
         }
-        
+
         this.dataForm.skuList.push({
             sort:'',
             skuText:'',
@@ -172,7 +172,7 @@ export default {
                 message: '排序字段请输入数字',
                 type: 'warning'
             });
-            return 
+            return
         }
         for(let i = 0 ; i < this.dataForm.skuList.length ; i++){
             if(isNaN(this.dataForm.skuList[i].sort)){
@@ -180,21 +180,33 @@ export default {
                   message: '排序字段请输入数字',
                   type: 'warning'
                 });
-                return 
+                return
             }
             if(this.dataForm.skuList[i].skuText == ''){
                 this.$message({
                   message: '规格值不能为空',
                   type: 'warning'
                 });
-                return 
+                return
             }
         }
-        
+
+        var skuTextArray = this.dataForm.skuList.map(item => item.skuText);
+        var isDuplicate = skuTextArray.some((item, idx) =>
+          skuTextArray.indexOf(item) != idx
+        );
+        if (isDuplicate){
+          this.$message({
+            message: '规格值不能重复',
+            type: 'warning'
+          });
+          return
+        }
+
         if(this.validate()){
             delete this.dataForm.createTime
             delete this.dataForm.createBy
-            
+
             this.dataForm.typeDataStr = this.typeData.join(",")
 
             let param = {
