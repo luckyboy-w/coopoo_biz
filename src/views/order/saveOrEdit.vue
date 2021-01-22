@@ -4,13 +4,13 @@
       <el-form-item label="地址名称">
         <el-input v-model="dataForm.addrName"/>
       </el-form-item>
-      <el-form-item label="地址类型">
-        <el-input value="退货地址" disabled/>
-        <!-- <el-select v-model="dataForm.type"> -->
-        <!-- <el-option value="1" label="发货地址" /> -->
-        <!-- <el-option value="2" label="退货地址" />
-       </el-select> -->
-      </el-form-item>
+      <!--      <el-form-item label="地址类型">-->
+      <!--        <el-input value="退货地址" disabled/>-->
+      <!--        &lt;!&ndash; <el-select v-model="dataForm.type"> &ndash;&gt;-->
+      <!--        &lt;!&ndash; <el-option value="1" label="发货地址" /> &ndash;&gt;-->
+      <!--        &lt;!&ndash; <el-option value="2" label="退货地址" />-->
+      <!--       </el-select> &ndash;&gt;-->
+      <!--      </el-form-item>-->
       <el-form-item label="地址序号">
         <el-input v-model="dataForm.addrSeq"/>
       </el-form-item>
@@ -23,10 +23,7 @@
       <el-form-item label="地区号">
         <el-input v-model="dataForm.areaNo"/>
       </el-form-item>
-      <el-form-item label="地址">
-        <el-input v-model="dataForm.addrDtl"/>
-      </el-form-item>
-      <el-form-item label="省份" style="width: 1000px">
+      <el-form-item label="所在城市" style="width: 1000px">
         <el-select v-model="selectProvince" size="small" value-key="provinceid" placeholder="请选择省份"
                    @change="selectProvinceFun"
         >
@@ -38,6 +35,9 @@
         <el-select v-model="selectArea" size="small" value-key="areaid" placeholder="请选择区县" @change="selectAreaFun">
           <el-option v-for="(item) in areaList" :key="item.areaid" :value="item" :label="item.area"/>
         </el-select>
+      </el-form-item>
+      <el-form-item label="详细地址">
+        <el-input v-model="dataForm.addrDtl"/>
       </el-form-item>
       <el-form-item label="是否启用">
         <el-switch v-model="dataForm.enable" inactive-value="0" active-value="1"/>

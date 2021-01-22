@@ -37,17 +37,22 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="enable" label="地址类型" width="80px">
-              <template slot-scope="scope">
-                {{ scope.row.type == '1' ? '发货地址' : '退货地址' }}
-              </template>
-            </el-table-column>
+            <!--            <el-table-column prop="enable" label="地址类型" width="80px">-->
+            <!--              <template slot-scope="scope">-->
+            <!--                {{ scope.row.type == '1' ? '发货地址' : '退货地址' }}-->
+            <!--              </template>-->
+            <!--            </el-table-column>-->
             <el-table-column prop="addrSeq" label="地址序号" width="100px"></el-table-column>
             <el-table-column prop="person" label="联系人" width="100px"></el-table-column>
             <el-table-column prop="mobilePhone" label="联系人手机号" width="120px"></el-table-column>
+            <el-table-column label="所在城市" width="200px">
+              <template slot-scope="scope">
+                {{ `${scope.row.provincetext} ${scope.row.citytext} ${scope.row.areaText}` }}
+              </template>
+            </el-table-column>
+
+            <el-table-column prop="addrDtl" label="详细地址" width="220px"></el-table-column>
             <el-table-column prop="sendCom" label="发货公司" width="100px"></el-table-column>
-            <el-table-column prop="areaNo" label="发货区号" width="100px"></el-table-column>
-            <el-table-column prop="addrDtl" label="发货地址" width="320px"></el-table-column>
             <el-table-column prop="enable" label="状态" width="80px">
               <template slot-scope="scope">
                 {{ scope.row.enable == '0' ? '禁用' : '启用' }}
