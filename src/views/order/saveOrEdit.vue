@@ -78,7 +78,7 @@ export default {
       fileList: [],
       dataForm: {
         isDefault: '0',
-        type: '2',
+        type: '1',
         addrName: '',
         addrSeq: '',
         person: '',
