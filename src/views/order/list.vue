@@ -1048,8 +1048,14 @@ export default {
       return obj.addrDtl
     },
     initAddrList() {
-      getMethod('/bc/sendAddr/findList', { 'enable': 1, 'type': 2 }).then(res => {
+      getMethod('/bc/sendAddr/findList', { 'enable': 1, 'type': 1 }).then(res => {
         this.addrList = res.data
+        if (res.data.length > 0) {
+          this.addrId = res.data[0].addrId
+          this.onlineSendOrderFrm.addrId = res.data[0].addrId
+          this.sendOrderFrm.sendAddrId = res.data[0].addrId
+          this.offlineSendAddrId = res.data[0].addrId
+        }
       })
     },
     collect(row) {
@@ -1290,6 +1296,8 @@ export default {
             this.loadList()
             this.closeSendOrderDialog()
             loading.close()
+          }).catch(err => {
+            loading.close()
           })
         }
       })
@@ -1336,6 +1344,8 @@ export default {
             scope.loadList()
             this.closeSendOrderDialog()
             loading.close()
+          }).catch(err => {
+            loading.close()
           })
         }
       })
@@ -1367,6 +1377,7 @@ export default {
       this.sendOrder = true
       if (this.addrList.length > 0) {
         this.sendOrderFrm.sendAddrId = this.addrList[0].addrId
+        this.onlineSendOrderFrm.addrId = this.addrList[0].addrId
       }
 
       this.sendOrderFrm.orderNo = rowObj.orderNo
@@ -1504,6 +1515,9 @@ export default {
         }
       }
 
+      if (this.addrList.length > 0) {
+        this.addrId = this.addrList[0].addrId
+      }
       this.showOnlineOrderList = true
     },
     submitOnlineBatchSendOrder() {
@@ -1561,6 +1575,8 @@ export default {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
           })
+          loading.close()
+          return
         } else {
           this.$message({
             message: '发送成功',
@@ -1595,6 +1611,9 @@ export default {
         }
       }
 
+      if (this.addrList.length > 0) {
+        this.offlineSendAddrId = this.addrList[0].addrId
+      }
       this.showOfflineOrderList = true
     },
     submitOfflineBatchSendOrder() {
@@ -1623,6 +1642,7 @@ export default {
           })
           return
         }
+        this.offlineOrderList[i].sendAddrId = this.offlineSendAddrId
         this.offlineOrderList[i].sendAddress = this.getAddrLabel(this.offlineSendAddrId)
         let express = this.expressList.find(item => item.id == this.offlineExpressId)
         this.offlineOrderList[i].expressName = express.text
@@ -1641,6 +1661,8 @@ export default {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
           })
+          loading.close()
+          return
         }
         this.$message({
           message: '发送成功',
@@ -1667,7 +1689,6 @@ export default {
         expressNo: '',
         opContent: ''
       },
-        console.log(this.searchParam, '6666666666')
       postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
         scope.tableData = res.data
         scope.sendOrder = false
