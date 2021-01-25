@@ -40,6 +40,7 @@
       <el-form-item
         v-for="(item,index) in deliveryAttrList"
         :label="item.attributeName"
+        :key="item.id"
       >
         <el-input v-model="dataForm.kdnArgs[item.attributeValue]"/>
       </el-form-item>
@@ -145,6 +146,12 @@ export default {
           return false
         }
       }
+
+      if (Object.keys(this.dataForm.kdnArgs).length == 0) {
+        this.$message.warning('快递鸟参数不能为空')
+        return false
+      }
+
       return true
     },
     async addObject() {
