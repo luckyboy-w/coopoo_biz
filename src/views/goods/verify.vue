@@ -1,36 +1,38 @@
 <template>
   <div>
-    <goodListDom :goodStatus="goodStatus" :dataSource='dataSource'/>
+    <goodListDom :goodStatus="goodStatus" :dataSource="dataSource"/>
   </div>
 </template>
 
 <script>
-  import goodListDom from './saleList'
+import goodListDom from './saleList'
 
-  export default {
-    name:'',
-    props:[''],
-    data () {
-      return {
-          goodStatus:{
-            verifyStatus: 10
-          },
-          dataSource:'unsale'
-      };
-    },
-    components: {goodListDom},
-    computed: {},
-    beforeMount() {},
+export default {
+  name: '',
+  props: [''],
+  data() {
+    return {
+      goodStatus: {
+        verifyStatus: 10
+      },
+      dataSource: 'unsale'
+    }
+  },
+  components: { goodListDom },
+  computed: {},
+  beforeMount() {
+  },
 
-    mounted() {},
+  mounted() {
+  },
 
-    methods: {},
+  methods: {},
 
-    watch: {}
+  watch: {}
 
-  }
+}
 
 </script>
-<style lang='' scoped>
+<style lang="" scoped>
 
 </style>

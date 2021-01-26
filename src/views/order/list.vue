@@ -162,7 +162,10 @@
                   <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>
                   <el-link type="primary" v-if="scope.row.status == 20" @click="updataOrd(scope.row)">修改快递</el-link>
                   <!-- 发货后七天可以手动确认 -->
-                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20" @click="dealOrd(scope.row)">确认收货</el-link>
+                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
+                           @click="dealOrd(scope.row)"
+                  >确认收货
+                  </el-link>
                   <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
                   <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
                   <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
@@ -176,10 +179,16 @@
                 <div v-if="scope.row.orderType == 4 ">
                   <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>
                   <!-- 发货后七天可以手动确认 -->
-                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20" @click="dealCustomOrd(scope.row)" >确认收货</el-link>
+                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
+                           @click="dealCustomOrd(scope.row)"
+                  >确认收货
+                  </el-link>
                   <el-link type="primary" v-if="scope.row.status == 60" @click="collectCus(scope.row)">发起定价收款</el-link>
-                  <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
                   <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
+                  <el-link type="primary" @click="cancelOrd(scope.row)"
+                           v-show="scope.row.status == 10 || scope.row.status == 60"
+                  >取消订单
+                  </el-link>
                 </div>
               </template>
             </el-table-column>
@@ -1710,12 +1719,12 @@ export default {
         expressNo: '',
         opContent: ''
       },
-      postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
-        scope.tableData = res.data
-        scope.sendOrder = false
-        scope.updataOrder = false
-        scope.showPagination = scope.tableData.total == 0
-      })
+        postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
+          scope.tableData = res.data
+          scope.sendOrder = false
+          scope.updataOrder = false
+          scope.showPagination = scope.tableData.total == 0
+        })
     },
     loadLogisticsCompanyList() {
       getMethod('/bu/delivery/companyNameList').then(res => {
