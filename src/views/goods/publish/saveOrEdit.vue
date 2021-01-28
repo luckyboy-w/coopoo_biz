@@ -5,7 +5,7 @@
 
         <el-form ref="dataForm" :model="dataForm" label-width="100px" label-position="left">
           <el-form-item label="商品名称">
-            <el-input v-model="dataForm.goodName" style="width:260px" placeholder="请输入商品名称" />
+            <el-input v-model="dataForm.goodName" style="width:260px" placeholder="请输入商品名称"/>
           </el-form-item>
           <el-form-item label="所属分类">
             <el-select v-model="dataForm.typeId" placeholder="请选择分类" @change="loadtypeId2List()">
@@ -32,7 +32,7 @@
             <div v-for="(v, i) in list" :key="i" class="mt-20">
               <b>{{ v.name }}：</b>
               <el-checkbox-group v-model="checkList[i].list" @change="handleClick">
-                <el-checkbox v-for="k in v.list" :key="k.skuId" :label="k.skuId" >{{ k.skuText }}</el-checkbox>
+                <el-checkbox v-for="k in v.list" :key="k.skuId" :label="k.skuId">{{ k.skuText }}</el-checkbox>
               </el-checkbox-group>
             </div>
 
@@ -40,25 +40,27 @@
           <el-form-item label="SKU配置">
             <el-table ref="skuTable" :data="skuList" style="width: 100%; margin-bottom: 20px;">
 
-              <el-table-column prop="skuText" label="SKU" width="220px" />
+              <el-table-column prop="skuText" label="SKU" width="220px"/>
               <el-table-column prop="stock" label="库存" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1" />
+                  <el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1"/>
                 </template>
               </el-table-column>
               <el-table-column prop="salePrice" label="建议零售价" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.salePrice" />
+                  <el-input v-model="scope.row.salePrice"/>
                 </template>
               </el-table-column>
               <el-table-column prop="saleMemPrice" label="建议会员价" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.saleMemPrice" />
+                  <el-input v-model="scope.row.saleMemPrice"/>
                 </template>
               </el-table-column>
               <el-table-column prop="skuImg" label="SKU展示图" width="150px">
                 <template slot-scope="scope">
-                  <img :src="scope.row.skuImg" width="60px" height="60px" onerror="this.src='https://bluemobi-lanyu.oss-cn-shanghai.aliyuncs.com/static/black_bg.png' ">
+                  <img :src="scope.row.skuImg" width="60px" height="60px"
+                       onerror="this.src='https://bluemobi-lanyu.oss-cn-shanghai.aliyuncs.com/static/black_bg.png' "
+                  >
                 </template>
               </el-table-column>
               <el-table-column prop="id" label="上传图片" width="150px">
@@ -70,7 +72,7 @@
                     :on-success="handleSuccessSkuImg"
                     :before-upload="beforeUploadSkuImg"
                   >
-                    <i class="el-icon-plus avatar-uploader-icon" @click="uploadClk(scope)" />
+                    <i class="el-icon-plus avatar-uploader-icon" @click="uploadClk(scope)"/>
                   </el-upload>
                 </template>
               </el-table-column>
@@ -81,13 +83,13 @@
             <el-radio v-model="dataForm.stockType" label="2" @change="stockChange">局部</el-radio>
           </el-form-item>
           <el-form-item v-if="dataForm.stockType==1" label="库存数量">
-            <el-input v-model="dataForm.stockNum" style="width:260px" @keyup.native="syncGlobalStock" />
+            <el-input v-model="dataForm.stockNum" style="width:260px" @keyup.native="syncGlobalStock"/>
           </el-form-item>
           <el-form-item label="商品产地">
-            <el-input v-model="dataForm.goodOrigin" style="width:260px" placeholder="输入商品产地" />
+            <el-input v-model="dataForm.goodOrigin" style="width:260px" placeholder="输入商品产地"/>
           </el-form-item>
           <el-form-item label="商品编码">
-            <el-input v-model="dataForm.goodCode" style="width:260px" />
+            <el-input v-model="dataForm.goodCode" style="width:260px"/>
           </el-form-item>
           <el-form-item label="所属品牌">
             <el-select v-model="dataForm.goodBrand">
@@ -102,7 +104,7 @@
           </el-form-item>
           <el-form-item label="封面图片">
             <div id="front-img">
-              <el-input v-show="false" v-model="dataForm.goodFrontImage" />
+              <el-input v-show="false" v-model="dataForm.goodFrontImage"/>
               <el-upload
                 :action="uploadGoodFrontImageUrl"
                 list-type="picture-card"
@@ -113,7 +115,7 @@
                 :file-list="uploadGoodFrontImageList"
                 :on-remove="handleGoodFrontImageRemove"
               >
-                <i :class="addFrontCls" />
+                <i :class="addFrontCls"/>
               </el-upload>
               <el-dialog>
                 <img width="100%" :src="imageUrl" alt>
@@ -121,7 +123,7 @@
             </div>
           </el-form-item>
           <el-form-item label="商品图片">
-            <el-input v-show="false" v-model="dataForm.goodImage" />
+            <el-input v-show="false" v-model="dataForm.goodImage"/>
             <el-upload
               :action="uploadGoodImageUrl"
               list-type="picture-card"
@@ -132,14 +134,39 @@
               :file-list="uploadGoodImageList"
               :on-remove="handleGoodImageRemove"
             >
-              <i class="el-icon-plus" />
+              <i class="el-icon-plus"/>
             </el-upload>
             <el-dialog>
               <img width="100%" :src="imageUrl" alt>
             </el-dialog>
           </el-form-item>
+
+          <el-form-item label="售后说明图片">
+            <el-radio
+              style="width: 240px;height: 200px"
+              v-for="item in goodSaleDescList"
+              v-model="dataForm.goodDescId"
+              :key="item.id"
+              :label="item.id"
+            >
+              <div style="display: inline-block;width: 190px;height: 180px">
+                <div style="width: 190px;height: 140px;">
+                  <el-image
+                    :src="item.imgUrl"
+                    fit="fill"
+                    style="width: 100%;height:100%"
+                    :preview-src-list="[item.imgUrl]"
+                  ></el-image>
+                </div>
+                <div style="width: 190px;height: 40px;line-height: 40px;text-align:center">
+                  {{ item.name }}
+                </div>
+              </div>
+
+            </el-radio>
+          </el-form-item>
           <el-form-item label="商品卖点">
-            <el-input v-model="dataForm.goodMerit" style="width:260px" placeholder="请输入卖点" />
+            <el-input v-model="dataForm.goodMerit" style="width:260px" placeholder="请输入卖点"/>
           </el-form-item>
           <el-form-item label="价格核算">
             <el-row>
@@ -147,19 +174,19 @@
                 成本价:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.primeCost" placeholder="成本价" style="width:80px" />
+                <el-input v-model="dataForm.primeCost" placeholder="成本价" style="width:80px"/>
               </el-col>
               <el-col :span="2">
                 包装成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.packageCost" placeholder="包装成本" style="width:80px" />
+                <el-input v-model="dataForm.packageCost" placeholder="包装成本" style="width:80px"/>
               </el-col>
               <el-col :span="2">
                 加工成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.processCost" placeholder="加工成本" style="width:80px" />
+                <el-input v-model="dataForm.processCost" placeholder="加工成本" style="width:80px"/>
               </el-col>
             </el-row>
             <el-row>
@@ -167,34 +194,37 @@
                 物流成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.expressCost" placeholder="物流成本" style="width:80px" />
+                <el-input v-model="dataForm.expressCost" placeholder="物流成本" style="width:80px"/>
               </el-col>
               <el-col :span="2">
                 利润:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.profit" placeholder="利润" style="width:80px" />
+                <el-input v-model="dataForm.profit" placeholder="利润" style="width:80px"/>
               </el-col>
               <el-col :span="2">
                 预估报价:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.predictFee" placeholder="预估报价" style="width:80px" />
+                <el-input v-model="dataForm.predictFee" placeholder="预估报价" style="width:80px"/>
               </el-col>
             </el-row>
           </el-form-item>
           <el-form-item v-show="false" label="是否礼品">
-            <el-input v-model="isGift" inactive-value="0" active-value="1" />
+            <el-input v-model="isGift" inactive-value="0" active-value="1"/>
           </el-form-item>
           <el-form-item label="是否推荐">
-            <el-switch v-model="dataForm.recommend" inactive-value="0" active-value="1" />
+            <el-switch v-model="dataForm.recommend" inactive-value="0" active-value="1"/>
           </el-form-item>
           <el-form-item label="是否定制">
-            <el-switch v-model="dataForm.custom" inactive-value="0" active-value="1" />
+            <el-switch v-model="dataForm.custom" inactive-value="0" active-value="1"/>
           </el-form-item>
           <el-form-item label="商品风格专场">
             <el-checkbox-group v-model="goodStyleList" @change="changeStyle">
-              <el-checkbox v-for="styleText in styleList" :key="styleText" :label="styleText">{{ styleText }}</el-checkbox>
+              <el-checkbox v-for="styleText in styleList" :key="styleText" :label="styleText">{{
+                  styleText
+                }}
+              </el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="商家承偌服务">
@@ -263,6 +293,7 @@ export default {
   },
   data() {
     return {
+      goodSaleDescList: [],
       dialogVisible: false,
       dialogImageUrl: '',
       loading: false,
@@ -271,7 +302,7 @@ export default {
       showSku: false,
       styleList: ['新品上架', '七星睡眠'],
       goodStyleList: [],
-      buServiceList:["正品保证","全场包邮","无理由退货","超时赔偿"],
+      buServiceList: ['正品保证', '全场包邮', '无理由退货', '超时赔偿'],
       serviceRuleList: [],
       typeIdList: [],
       typeId2List: [],
@@ -293,6 +324,7 @@ export default {
         listDetail: ''
       },
       dataForm: {
+        goodDescId: '',
         goodName: '',
         goodOrigin: '',
         goodMerit: '',
@@ -304,7 +336,6 @@ export default {
         predictFee: '',
         profit: '',
         goodCode: '',
-        typeId: '',
         typeId2: '',
         typeId: '',
         goodBrand: '',
@@ -327,12 +358,13 @@ export default {
       skuArray: [], //已选择sku Id数组
       skuList: [], // good value sku配置（选完规格值之后生成的）
       skuIdToText: {}, //key 规格值ID（skuId） {//规格值文本  //规格名称}
-      skuIdList: [], // 点击checkbox后选择的skuId
+      skuIdList: [] // 点击checkbox后选择的skuId
     }
   },
   computed: {},
   mounted() {
     this.loadtypeIdList()
+    this.loadGoodSaleDescList()
     this.initLoad()
     this.loadGoodBrandList()
     this.buildGoodImageGroupId()
@@ -352,7 +384,8 @@ export default {
       }
     })
   },
-  created() {},
+  created() {
+  },
   methods: {
     syncGlobalStock() {
       if (isNaN(this.dataForm.stockNum)) {
@@ -428,7 +461,8 @@ export default {
       getMethod('/bu/good/findTypeBySpec', param).then(res => {
         const list = res.data
 
-        const allPriceList = []; let allPriceText = ''
+        const allPriceList = []
+        let allPriceText = ''
         this.dataForm.skuPriceList.forEach(priceObj => {
           allPriceList.push(priceObj.skuText)
         })
@@ -544,6 +578,12 @@ export default {
         scope.typeIdList = res.data
       })
     },
+
+    async loadGoodSaleDescList() {
+      const res = await getMethod('/bu/good/findAllSaleList')
+
+      this.goodSaleDescList = res.data
+    },
     loadtypeId2List(typeId2) {
       const scope = this
       this.dataForm.typeId2 = typeId2 || ''
@@ -581,7 +621,7 @@ export default {
       for (let i = 0; i < this.uploadGoodImageList.length; i++) {
         if (
           this.uploadGoodImageList[i].filePath ==
-					(res.filePath || res.response.data.filePath)
+          (res.filePath || res.response.data.filePath)
         ) {
           this.uploadGoodImageList.splice(i, 1)
           break
@@ -609,9 +649,9 @@ export default {
     beforeGoodImageUpload(file) {
       // this.loading = true
       const fileTypeVerify =
-				file.type === 'image/jpeg' ||
-				file.type === 'image/png' ||
-				file.type === 'application/pdf'
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png' ||
+        file.type === 'application/pdf'
       const isLt2M = file.size / 1024 / 1024 < 5
 
       if (!fileTypeVerify) {
@@ -628,12 +668,13 @@ export default {
         this.dataForm.goodFrontImage = this.dataForm.goodFrontImage || res.data
       })
     },
-    handleGoodFrontImagePreview() {},
+    handleGoodFrontImagePreview() {
+    },
     handleGoodFrontImageRemove(res) {
       for (let i = 0; i < this.uploadGoodFrontImageList.length; i++) {
         if (
           this.uploadGoodFrontImageList[i].filePath ==
-					(res.filePath || res.response.data.filePath)
+          (res.filePath || res.response.data.filePath)
         ) {
           this.uploadGoodFrontImageList.splice(i, 1)
           break
@@ -663,9 +704,9 @@ export default {
     beforeGoodFrontImageUpload(file) {
       // this.loading = true
       const fileTypeVerify =
-				file.type === 'image/jpeg' ||
-				file.type === 'image/png' ||
-				file.type === 'application/pdf'
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png' ||
+        file.type === 'application/pdf'
       const isLt2M = file.size / 1024 / 1024 < 5
 
       if (!fileTypeVerify) {
@@ -697,8 +738,8 @@ export default {
         return errorMsg
       }
       if (amount == '0.0' ||
-				amount == '0.00' ||
-				amount == '0.') {
+        amount == '0.00' ||
+        amount == '0.') {
         return type + '的金额格式有误'
       }
 
@@ -941,35 +982,49 @@ export default {
 </script>
 <style lang="scss" scoped>
 .update-form-panel {
-	padding: 30px 20px;
-	width: 100%;
+  padding: 30px 20px;
+  width: 100%;
 }
-.avatar-uploader .el-upload{
-	border: 1px dashed #d9d9d9;
-	border-radius: 6px;
-	cursor: pointer;
-	position: relative;
-	overflow: hidden;
+
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
-	border-color: #409EFF;
+  border-color: #409EFF;
 }
+
 .avatar-uploader-icon {
-	// font-size: 28px;
-	color: #8c939d;
-	width: 60px;
-	height: 60px;
-	line-height: 60px;
-	text-align: center;
+  // font-size: 28px;
+  color: #8c939d;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
 }
+
 .avatar {
-	width: 60px;
-	height: 60px;
-	display: block;
+  width: 60px;
+  height: 60px;
+  display: block;
 }
 </style>
 <style lang="scss">
-.hide .el-upload--picture-card ,.hide{
-	display: none;
+.hide .el-upload--picture-card, .hide {
+  display: none;
 }
+.el-radio__input {
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  display: inline-block;
+  line-height: 1;
+  position: relative;
+  vertical-align: top;
+}
+
 </style>
