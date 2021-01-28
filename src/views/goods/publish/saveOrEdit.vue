@@ -140,25 +140,32 @@
               <img width="100%" :src="imageUrl" alt>
             </el-dialog>
           </el-form-item>
-
+          <el-dialog center :visible.sync="goodSaleDescImgVisible">
+            <img width="100%" :src="goodSaleDescImgUrl" alt>
+          </el-dialog>
           <el-form-item label="售后说明图片">
             <el-radio
-              style="width: 240px;height: 200px"
-              v-for="item in goodSaleDescList"
+              class="my-el-radio"
+              v-for="(item,index) in goodSaleDescList"
               v-model="dataForm.goodDescId"
               :key="item.id"
               :label="item.id"
             >
-              <div style="display: inline-block;width: 190px;height: 180px">
-                <div style="width: 190px;height: 140px;">
+              <div class="my-container">
+                <div class="img"
+                     @mouseover="changeImgMask(index,true)"
+                     @mouseout="changeImgMask(index,false)"
+                >
+                  <div ref="imgMask" class="img-mask">
+                    <i class="el-icon-zoom-in my-icon" @click="showBigImg(item.imgUrl)"></i>
+                  </div>
                   <el-image
                     :src="item.imgUrl"
                     fit="fill"
                     style="width: 100%;height:100%"
-                    :preview-src-list="[item.imgUrl]"
                   ></el-image>
                 </div>
-                <div style="width: 190px;height: 40px;line-height: 40px;text-align:center">
+                <div class="title">
                   {{ item.name }}
                 </div>
               </div>
@@ -293,6 +300,8 @@ export default {
   },
   data() {
     return {
+      goodSaleDescImgVisible: false,
+      goodSaleDescImgUrl: '',
       goodSaleDescList: [],
       dialogVisible: false,
       dialogImageUrl: '',
@@ -387,6 +396,13 @@ export default {
   created() {
   },
   methods: {
+    changeImgMask(index, flag) {
+      this.$refs.imgMask[index].style = flag ? 'display:block' : 'display:none'
+    },
+    showBigImg(url) {
+      this.goodSaleDescImgUrl = url
+      this.goodSaleDescImgVisible = true
+    },
     syncGlobalStock() {
       if (isNaN(this.dataForm.stockNum)) {
         this.$message({
@@ -583,6 +599,9 @@ export default {
       const res = await getMethod('/bu/good/findAllSaleList')
 
       this.goodSaleDescList = res.data
+      // for (let i = 0; i < this.goodSaleDescList.length; i++) {
+      //   this.showImgMask[this.goodSaleDescList[i].id] = false
+      // }
     },
     loadtypeId2List(typeId2) {
       const scope = this
@@ -1017,6 +1036,7 @@ export default {
 .hide .el-upload--picture-card, .hide {
   display: none;
 }
+
 .el-radio__input {
   white-space: nowrap;
   cursor: pointer;
@@ -1025,6 +1045,54 @@ export default {
   line-height: 1;
   position: relative;
   vertical-align: top;
+}
+
+.my-el-radio {
+  width: 240px;
+  height: 200px;
+
+  .my-container {
+    display: inline-block;
+    width: 190px;
+    height: 180px;
+
+    .img {
+      position: relative;
+      width: 190px;
+      height: 140px;
+      border-radius: 10px;
+      overflow: hidden;
+
+      .img-mask {
+        position: absolute;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1;
+        color: white;
+
+        .my-icon {
+          position: absolute;
+          display: inline-block;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 30px;
+        }
+      }
+    }
+
+    .title {
+      width: 190px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center
+    }
+
+  }
 }
 
 </style>
