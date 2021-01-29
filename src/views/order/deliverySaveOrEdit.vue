@@ -147,7 +147,7 @@ export default {
         }
       }
 
-      if (Object.keys(this.dataForm.kdnArgs).length == 0) {
+      if (this.deliveryAttrList.length != 0 && Object.keys(this.dataForm.kdnArgs).length == 0) {
         this.$message.warning('快递鸟参数不能为空')
         return false
       }
@@ -180,7 +180,6 @@ export default {
       this.$emit('showListPanel', true)
     },
     submitUpdate() {
-      this.dataForm.kdnArgs = JSON.stringify(this.dataForm.kdnArgs)
       if (this.dataForm.id == undefined) {
         this.addObject()
       } else {
