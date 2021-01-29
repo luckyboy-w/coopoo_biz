@@ -144,33 +144,33 @@
             <img width="100%" :src="goodSaleDescImgUrl" alt>
           </el-dialog>
           <el-form-item label="售后说明图片">
-            <el-radio
-              class="my-el-radio"
-              v-for="(item,index) in goodSaleDescList"
-              v-model="dataForm.goodDescId"
-              :key="item.id"
-              :label="item.id"
-            >
-              <div class="my-container">
-                <div class="img"
-                     @mouseover="changeImgMask(index,true)"
-                     @mouseout="changeImgMask(index,false)"
-                >
-                  <div ref="imgMask" class="img-mask">
-                    <i class="el-icon-zoom-in my-icon" @click="showBigImg(item.imgUrl)"></i>
+            <el-radio-group v-model="dataForm.afterSaleId">
+              <el-radio
+                class="my-el-radio"
+                v-for="(item,index) in goodSaleDescList"
+                :key="item.id"
+                :label="item.id"
+              >
+                <div class="my-container">
+                  <div class="img"
+                       @mouseover="changeImgMask(index,true)"
+                       @mouseout="changeImgMask(index,false)"
+                  >
+                    <div ref="imgMask" class="img-mask">
+                      <i class="el-icon-zoom-in my-icon" @click="showBigImg(item.imgUrl)"></i>
+                    </div>
+                    <el-image
+                      :src="item.imgUrl"
+                      fit="fill"
+                      style="width: 100%;height:100%"
+                    ></el-image>
                   </div>
-                  <el-image
-                    :src="item.imgUrl"
-                    fit="fill"
-                    style="width: 100%;height:100%"
-                  ></el-image>
+                  <div class="title">
+                    {{ item.name }}
+                  </div>
                 </div>
-                <div class="title">
-                  {{ item.name }}
-                </div>
-              </div>
-
-            </el-radio>
+              </el-radio>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label="商品卖点">
             <el-input v-model="dataForm.goodMerit" style="width:260px" placeholder="请输入卖点"/>
@@ -333,7 +333,7 @@ export default {
         listDetail: ''
       },
       dataForm: {
-        goodDescId: '',
+        afterSaleId: '',
         goodName: '',
         goodOrigin: '',
         goodMerit: '',
