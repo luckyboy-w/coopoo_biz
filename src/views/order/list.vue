@@ -253,6 +253,7 @@
             @current-change="currentPage"
             @prev-click="currentPage"
             @next-click="currentPage"
+            :page-size="searchParam.pageSize"
           />
         </div>
       </div>
@@ -936,7 +937,6 @@ export default {
       toToken: '',
       typeIdList: [],
       typeId2List: [],
-      typeIdList: [],
       goodBrandList: [],
       showPagination: false,
       editData: {},
