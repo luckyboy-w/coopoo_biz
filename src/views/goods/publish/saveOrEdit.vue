@@ -516,7 +516,7 @@ export default {
                   }
                 })
               })
-
+              this.skuList = this.dataForm.skuPriceList
             })
           }
         })

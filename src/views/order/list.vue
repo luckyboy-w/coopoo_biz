@@ -588,7 +588,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="发货地址">
-              <el-select v-model="addrId" placeholder="请选择" style="width:460px">
+              <el-select v-model="addrId" placeholder="请选择">
                 <el-option
                   v-for="item in addrList"
                   :key="item.addrId"
