@@ -476,8 +476,8 @@
             </el-row>
 
             <el-form-item label="物流公司" prop="logisticsCompanyId">
-              <el-select v-model="logisticsCompanyId" size="small" @change="logisticsCompanySelectChange">
-                <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item.companyId"
+              <el-select v-model="logisticsCompany" size="small" @change="logisticsCompanySelectChange" value-key="id">
+                <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item"
                            :label="item.expressName"
                 />
               </el-select>
@@ -572,10 +572,10 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="物流公司">
-              <el-select v-model="logisticsCompanyId" size="small" @change="logisticsCompanySelectChange"
-                         prop="logisticsCompanyId"
+              <el-select v-model="logisticsCompany" size="small" @change="logisticsCompanySelectChange"
+                         prop="logisticsCompanyId" value-key="id"
               >
-                <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item.companyId"
+                <el-option v-for="(item) in logisticsCompanyList" :key="item.id" :value="item"
                            :label="item.expressName"
                 />
               </el-select>
@@ -838,7 +838,7 @@ export default {
       }
     }
     let expressCompanyCheck = (rule, value, callback) => {
-      if (this.logisticsCompanyId == null) {
+      if (this.logisticsCompany == null) {
         callback(new Error('请选择物流公司'))
       } else if (this.logisticsCompanyTypeId == null) {
         callback(new Error('请选择物流公司业务类型'))
@@ -848,7 +848,7 @@ export default {
     }
     return {
       logisticsCompanyList: [],
-      logisticsCompanyId: null,
+      logisticsCompany: null,
       logisticsCompanyTypeList: [],
       logisticsCompanyTypeId: null,
       addrId: null,
@@ -969,7 +969,7 @@ export default {
       },
       onlineRules: {
         quantity: [{ required: true, validator: quantityCheck, trigger: 'blur' }],
-        logisticsCompanyId: [{ required: true, validator: expressCompanyCheck, trigger: 'change' }],
+        logisticsCompany: [{ required: true, validator: expressCompanyCheck, trigger: 'change' }],
         addrId: [{ required: true, message: '请选择发货地址', trigger: 'change' }]
       },
       orderId_: '',
@@ -1303,7 +1303,7 @@ export default {
       this.loadLogisticsCompanyTypeList()
     },
     onlineSubmitSend() {
-      this.onlineSendOrderFrm.logisticsCompanyId = this.logisticsCompanyId
+      this.onlineSendOrderFrm.logisticsCompanyId = this.logisticsCompany.id
       this.onlineSendOrderFrm.logisticsCompanyTypeId = this.logisticsCompanyTypeId
       this.$refs['onlineForm'].validate((valid) => {
         if (valid) {
@@ -1570,7 +1570,7 @@ export default {
         return
       }
 
-      if (this.logisticsCompanyId == null || this.logisticsCompanyId == undefined || this.logisticsCompanyId == '') {
+      if (this.logisticsCompany == null || this.logisticsCompany == undefined || this.logisticsCompany == '') {
         this.$message({
           message: '请选择物流公司',
           type: 'warning'
@@ -1595,7 +1595,7 @@ export default {
 
       let param = {
         'logisticsDTOList': this.onlineOrderList,
-        'logisticsCompanyId': this.logisticsCompanyId,
+        'logisticsCompanyId': this.logisticsCompany.id,
         'logisticsCompanyTypeId': this.logisticsCompanyTypeId,
         'addrId': this.addrId
       }
@@ -1730,14 +1730,14 @@ export default {
       getMethod('/bu/delivery/companyNameList').then(res => {
         this.logisticsCompanyList = res.data
         if (res.data.length > 0) {
-          this.logisticsCompanyId = res.data[0].companyId
+          this.logisticsCompany = res.data[0]
         }
         this.loadLogisticsCompanyTypeList()
       })
     },
     loadLogisticsCompanyTypeList() {
       const param = {
-        companyId: this.logisticsCompanyId
+        companyId: this.logisticsCompany.companyId
       }
       getMethod('/bu/delivery/companyTypeList', param).then(res => {
         this.logisticsCompanyTypeList = res.data
