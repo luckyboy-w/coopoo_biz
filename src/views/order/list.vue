@@ -195,7 +195,7 @@
           </el-table>
         </div>
 
-        <el-dialog title="商品定价" visible="dealPrice" v-if="dealPrice">
+        <el-dialog title="商品定价" visible="dealPrice" v-if="dealPrice" @close="closeGoodDealingDialog">
           <el-form ref="form" :model="dealPriceFrm" label-width="80px">
             <el-form-item label="订单编号">
               <el-input v-model="dealPriceFrm.orderNo" :disabled="true"></el-input>
@@ -211,7 +211,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitDealPrice()">提交定价</el-button>
-              <el-button @click="dealPrice=false">取消</el-button>
+              <el-button @click="closeGoodDealingDialog">取消</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -1346,6 +1346,10 @@ export default {
       this.sendOrderFrm.opContent = ''
       this.sendOrderFrm.addrId = null
       this.sendOrderFrm.expressId = null
+    },
+    closeGoodDealingDialog() {
+      this.dealPrice = false
+      this.dealPriceFrm.ordPrice = null
     },
     submitSend() {
       this.$refs['form'].validate((valid) => {
