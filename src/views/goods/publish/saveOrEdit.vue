@@ -5,10 +5,14 @@
 
         <el-form ref="dataForm" :model="dataForm" label-width="100px" label-position="left">
           <el-form-item label="商品名称">
-            <el-input v-model="dataForm.goodName" style="width:260px" placeholder="请输入商品名称"/>
+            <el-input v-model="dataForm.goodName" style="width:260px" placeholder="请输入商品名称"
+                      :disabled="isHiddenEditGood"
+            />
           </el-form-item>
           <el-form-item label="所属分类">
-            <el-select v-model="dataForm.typeId" placeholder="请选择分类" @change="loadtypeId2List()">
+            <el-select v-model="dataForm.typeId" placeholder="请选择分类" @change="loadtypeId2List()"
+                       :disabled="isHiddenEditGood"
+            >
               <el-option
                 v-for="item in typeIdList"
                 :key="item.id"
@@ -17,7 +21,9 @@
                 :value="item.id"
               />
             </el-select>
-            <el-select v-model="dataForm.typeId2" placeholder="请选择" @change="loadSkuCompose()">
+            <el-select v-model="dataForm.typeId2" placeholder="请选择" @change="loadSkuCompose()"
+                       :disabled="isHiddenEditGood"
+            >
               <el-option
                 v-for="item in typeId2List"
                 :key="item.id"
@@ -31,7 +37,7 @@
 
             <div v-for="(v, i) in list" :key="i" class="mt-20">
               <b>{{ v.name }}：</b>
-              <el-checkbox-group v-model="checkList[i].list" @change="handleClick">
+              <el-checkbox-group v-model="checkList[i].list" @change="handleClick" :disabled="isHiddenEditGood">
                 <el-checkbox v-for="k in v.list" :key="k.skuId" :label="k.skuId">{{ k.skuText }}</el-checkbox>
               </el-checkbox-group>
             </div>
@@ -43,17 +49,17 @@
               <el-table-column prop="skuText" label="SKU" width="220px"/>
               <el-table-column prop="stock" label="库存" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1"/>
+                  <el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column prop="salePrice" label="建议零售价" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.salePrice"/>
+                  <el-input v-model="scope.row.salePrice"  :disabled="isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column prop="saleMemPrice" label="建议会员价" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.saleMemPrice"/>
+                  <el-input v-model="scope.row.saleMemPrice"  :disabled="isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column prop="skuImg" label="SKU展示图" width="150px">
@@ -66,6 +72,7 @@
               <el-table-column prop="id" label="上传图片" width="150px">
                 <template slot-scope="scope">
                   <el-upload
+                    :disabled="isHiddenEditGood"
                     class="avatar-uploader"
                     :action="uploadSkuImgUrl"
                     :show-file-list="false"
@@ -80,19 +87,24 @@
           </el-form-item>
           <el-form-item label="库存类型" v-show="false">
             <!-- <el-radio v-model="dataForm.stockType" label="1" @change="stockChange">全局</el-radio> -->
-            <el-radio v-model="dataForm.stockType" label="2" @change="stockChange">局部</el-radio>
+            <el-radio v-model="dataForm.stockType" label="2" @change="stockChange" :disabled="isHiddenEditGood">局部
+            </el-radio>
           </el-form-item>
           <el-form-item v-if="dataForm.stockType==1" label="库存数量">
-            <el-input v-model="dataForm.stockNum" style="width:260px" @keyup.native="syncGlobalStock"/>
+            <el-input v-model="dataForm.stockNum" style="width:260px" @keyup.native="syncGlobalStock"
+                      :disabled="isHiddenEditGood"
+            />
           </el-form-item>
           <el-form-item label="商品产地">
-            <el-input v-model="dataForm.goodOrigin" style="width:260px" placeholder="输入商品产地"/>
+            <el-input v-model="dataForm.goodOrigin" style="width:260px" placeholder="输入商品产地"
+                      :disabled="isHiddenEditGood"
+            />
           </el-form-item>
           <el-form-item label="商品编码">
-            <el-input v-model="dataForm.goodCode" style="width:260px"/>
+            <el-input v-model="dataForm.goodCode" style="width:260px" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item label="所属品牌">
-            <el-select v-model="dataForm.goodBrand">
+            <el-select v-model="dataForm.goodBrand" :disabled="isHiddenEditGood">
               <el-option
                 v-for="item in brandList"
                 :key="item.id"
@@ -104,7 +116,7 @@
           </el-form-item>
           <el-form-item label="封面图片">
             <div id="front-img">
-              <el-input v-show="false" v-model="dataForm.goodFrontImage"/>
+              <el-input v-show="false" v-model="dataForm.goodFrontImage" :disabled="isHiddenEditGood"/>
               <el-upload
                 :action="uploadGoodFrontImageUrl"
                 list-type="picture-card"
@@ -114,6 +126,7 @@
                 :class="{hide:hideGoodFrontImageUpload}"
                 :file-list="uploadGoodFrontImageList"
                 :on-remove="handleGoodFrontImageRemove"
+                :disabled="isHiddenEditGood"
               >
                 <i :class="addFrontCls"/>
               </el-upload>
@@ -123,7 +136,7 @@
             </div>
           </el-form-item>
           <el-form-item label="商品图片">
-            <el-input v-show="false" v-model="dataForm.goodImage"/>
+            <el-input v-show="false" v-model="dataForm.goodImage" :disabled="isHiddenEditGood"/>
             <el-upload
               :action="uploadGoodImageUrl"
               list-type="picture-card"
@@ -133,6 +146,7 @@
               :class="{hide:hideGoodImageUpload}"
               :file-list="uploadGoodImageList"
               :on-remove="handleGoodImageRemove"
+              :disabled="isHiddenEditGood"
             >
               <i class="el-icon-plus"/>
             </el-upload>
@@ -144,7 +158,7 @@
             <img width="100%" :src="goodSaleDescImgUrl" alt>
           </el-dialog>
           <el-form-item label="售后说明图片">
-            <el-radio-group v-model="dataForm.afterSaleId">
+            <el-radio-group v-model="dataForm.afterSaleId" :disabled="isHiddenEditGood">
               <el-radio
                 class="my-el-radio"
                 v-for="(item,index) in goodSaleDescList"
@@ -173,7 +187,9 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="商品卖点">
-            <el-input v-model="dataForm.goodMerit" style="width:260px" placeholder="请输入卖点"/>
+            <el-input v-model="dataForm.goodMerit" style="width:260px" placeholder="请输入卖点"
+                      :disabled="isHiddenEditGood"
+            />
           </el-form-item>
           <el-form-item label="价格核算">
             <el-row>
@@ -181,19 +197,25 @@
                 成本价:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.primeCost" placeholder="成本价" style="width:80px"/>
+                <el-input v-model="dataForm.primeCost" placeholder="成本价" style="width:80px"
+                          :disabled="isHiddenEditGood"
+                />
               </el-col>
               <el-col :span="2">
                 包装成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.packageCost" placeholder="包装成本" style="width:80px"/>
+                <el-input v-model="dataForm.packageCost" placeholder="包装成本" style="width:80px"
+                          :disabled="isHiddenEditGood"
+                />
               </el-col>
               <el-col :span="2">
                 加工成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.processCost" placeholder="加工成本" style="width:80px"/>
+                <el-input v-model="dataForm.processCost" placeholder="加工成本" style="width:80px"
+                          :disabled="isHiddenEditGood"
+                />
               </el-col>
             </el-row>
             <el-row>
@@ -201,33 +223,37 @@
                 物流成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.expressCost" placeholder="物流成本" style="width:80px"/>
+                <el-input v-model="dataForm.expressCost" placeholder="物流成本" style="width:80px"
+                          :disabled="isHiddenEditGood"
+                />
               </el-col>
               <el-col :span="2">
                 利润:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.profit" placeholder="利润" style="width:80px"/>
+                <el-input v-model="dataForm.profit" placeholder="利润" style="width:80px" :disabled="isHiddenEditGood"/>
               </el-col>
               <el-col :span="2">
                 预估报价:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.predictFee" placeholder="预估报价" style="width:80px"/>
+                <el-input v-model="dataForm.predictFee" placeholder="预估报价" style="width:80px"
+                          :disabled="isHiddenEditGood"
+                />
               </el-col>
             </el-row>
           </el-form-item>
           <el-form-item v-show="false" label="是否礼品">
-            <el-input v-model="isGift" inactive-value="0" active-value="1"/>
+            <el-input v-model="isGift" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item label="是否推荐">
-            <el-switch v-model="dataForm.recommend" inactive-value="0" active-value="1"/>
+            <el-switch v-model="dataForm.recommend" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item label="是否定制">
-            <el-switch v-model="dataForm.custom" inactive-value="0" active-value="1"/>
+            <el-switch v-model="dataForm.custom" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item label="商品风格专场">
-            <el-checkbox-group v-model="goodStyleList" @change="changeStyle">
+            <el-checkbox-group v-model="goodStyleList" @change="changeStyle" :disabled="isHiddenEditGood">
               <el-checkbox v-for="styleText in styleList" :key="styleText" :label="styleText">{{
                   styleText
                 }}
@@ -235,7 +261,7 @@
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="商家承偌服务">
-            <el-checkbox-group v-model="serviceRuleList">
+            <el-checkbox-group v-model="serviceRuleList" :disabled="isHiddenEditGood">
               <el-checkbox v-for="obj in buServiceList" :key="obj" :label="obj">{{ obj }}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
@@ -254,6 +280,7 @@
               :content-q1="detail.postSale"
               module-name="postSale"
               @changePostSaleContent="changePostSaleContent"
+              :disabled="isHiddenEditGood"
             />
           </el-form-item>
           <el-form-item v-show="false" label="商品清单">
@@ -262,11 +289,12 @@
               :q2content="detail.listDetail"
               module-name="listDetail"
               @changeListDetailContent="changeListDetailContent"
+              :disabled="isHiddenEditGood"
             />
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="submitUpdate">提交</el-button>
+            <el-button type="primary" @click="submitUpdate" :disabled="isHiddenEditGood">提交</el-button>
             <el-button @click="cancelUpdate">取消</el-button>
           </el-form-item>
         </el-form>
@@ -296,6 +324,11 @@ export default {
       type: String,
       required: true,
       default: '1'
+    },
+    isHiddenEditGood: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
