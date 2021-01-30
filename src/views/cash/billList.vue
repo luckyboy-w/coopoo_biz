@@ -101,7 +101,7 @@
           </el-table-column>
           <el-table-column prop="applyDate" label="申请时间" min-width="24%">
             <template slot-scope="scope">
-              {{scope.row.applyDate | _formateDate}}
+              {{scope.row.applyDate | _formateDateWithoutSeconds}}
             </template>
           </el-table-column>
           <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
@@ -148,7 +148,7 @@
           </el-table-column>
           <el-table-column prop="settleDate" label="入账时间" min-width="24%">
             <template slot-scope="scope">
-              {{scope.row.settleDate | _formateDate}}
+              {{scope.row.settleDate | _formateDateWithoutSeconds}}
             </template>
           </el-table-column>
           <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
@@ -282,6 +282,14 @@
         }
         let date = new Date(time);
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      },
+      _formateDateWithoutSeconds(time) {
+        if (time == '' ||
+          time == undefined) {
+          return '';
+        }
+        let date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd')
       },
     },
     mounted() {
