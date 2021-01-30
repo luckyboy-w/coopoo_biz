@@ -254,6 +254,7 @@
             @prev-click="currentPage"
             @next-click="currentPage"
             :page-size="searchParam.pageSize"
+            :current-page="searchParam.pageNum"
           />
         </div>
       </div>
