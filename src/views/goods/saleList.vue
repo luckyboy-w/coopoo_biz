@@ -15,7 +15,7 @@ un
             </td>
             <td>
               <el-button icon="el-icon-search" @click="search()">搜索</el-button>
-              <el-button plain type="primary" icon="el-icon-add" @click="addOrEdit('add')">新增</el-button>
+<!--              <el-button plain type="primary" icon="el-icon-add" @click="addOrEdit('add')">新增</el-button>-->
             </td>
           </tr>
         </table>
