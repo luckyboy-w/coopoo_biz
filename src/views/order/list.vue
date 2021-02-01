@@ -290,7 +290,7 @@
 
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
         <el-col :span="24">
-          <el-button type="success" @click="showOrdDtl=false">返回列表</el-button>
+          <el-button type="success" @click="handlerReturnPOrderList">返回列表</el-button>
         </el-col>
       </el-row>
 
@@ -976,7 +976,9 @@ export default {
       },
       orderId_: '',
       orderNo_: '',
-      dataList: []
+      dataList: [],
+      // routeFrom: {},
+      fromRoutePath: ''
     }
   },
   computed: {},
@@ -986,6 +988,9 @@ export default {
       required: false,
       default: null
     }
+  },
+  beforeMount() {
+    this.jumpOrderDtl()
   },
   mounted() {
     // this.toToken=getToken()
@@ -1006,17 +1011,37 @@ export default {
     this.initAddrList()
     this.loadtypeIdList()
     this.loadLogisticsCompanyList()
-    if (this.$route.query.orderNo) {
-      console.log(this.$route.query.orderNo, '898989')
-      this.orderNo_ = this.$route.query.orderNo
-      console.log(this.orderId_)
-      this.getOrdDtl_()
-    }
 
   },
   created() {
   },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      //因为当钩子执行前，组件实例还没被创建
+      // vm 就是当前组件的实例相当于上面的 this，所以在 next 方法里你就可以把 vm 当 this 来用了。
+
+      // 用个屁 详情页面连路由都没有
+      // if (from !== undefined) vm.routeFrom = from
+    })
+  },
   methods: {
+    handlerReturnPOrderList() {
+      if (this.fromRoutePath !== '') {
+        this.$router.push({
+          path: this.fromRoutePath
+        })
+      }
+      this.fromRoutePath = ''
+      this.showOrdDtl = false
+    },
+    jumpOrderDtl() {
+      if (this.$route.query.orderNo) {
+        this.showOrdDtl = true
+        this.orderNo_ = this.$route.query.orderNo
+        this.fromRoutePath = this.$route.query.fromRoutePath
+        this.getOrdDtl_()
+      }
+    },
     exportData() {
       if (this.searchParam.startTime == null) {
         this.searchParam.startTime = ''
@@ -1038,11 +1063,9 @@ export default {
         dataType: this.searchParam.dataType
       }
       let exportParam = []
-      console.log(param, '999999')
       for (let key in param) {
         exportParam.push(key + '=' + param[key])
       }
-      console.log(exportParam, '传的参')
       //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
       window.open(process.env.VUE_APP_BASE_API + '/bc/order/export?token=' + getToken() + '&' + exportParam.join('&'))
     },
@@ -1128,7 +1151,6 @@ export default {
       }
 
       postMethod('/bc/order/getOrdDtl', param).then(res => {
-        console.log(res.data)
         scope.showOrdDtl = true
         scope.ordDtl = res.data
         scope.ptStep = false

@@ -1,4 +1,3 @@
-un
 <template>
   <div>
     <div class="ly-container" v-if="showList">
@@ -15,7 +14,7 @@ un
             </td>
             <td>
               <el-button icon="el-icon-search" @click="search()">搜索</el-button>
-<!--              <el-button plain type="primary" icon="el-icon-add" @click="addOrEdit('add')">新增</el-button>-->
+              <!--              <el-button plain type="primary" icon="el-icon-add" @click="addOrEdit('add')">新增</el-button>-->
             </td>
           </tr>
         </table>
@@ -74,7 +73,10 @@ un
 
             <el-table-column prop="id" label="操作" width="200px" v-if="showOp">
               <template slot-scope="scope">
-
+                <el-button v-if="scope.row.verifyStatus == 10 || scope.row.verifyStatus == 20 "
+                           type="text" size="small" @click="addOrEdit('edit',scope.$index, tableData, true)"
+                >查看详情
+                </el-button>
                 <!--5:在仓库;10:待审核;20:已通过;30:被驳回;40:违规下架;-->
                 <!--isSale;-->
                 <el-button v-if="scope.row.verifyStatus == 20" type="text" size="small"
@@ -99,7 +101,6 @@ un
                            @click="offLine(scope.row,'3')"
                 >下架
                 </el-button>
-
                 <el-button v-if="scope.row.isSale == 3"
                            type="text" size="small" @click="deleteRow(scope.$index,tableData)"
                 >删除
@@ -178,7 +179,9 @@ un
         </el-form-item>
       </el-form>
     </el-dialog>
-    <saveOrEdit v-if="showAddOrEdit" :edit-data="editData" :isGift="isGift" @showListPanel="showListPanel"/>
+    <saveOrEdit v-if="showAddOrEdit" :edit-data="editData" :isGift="isGift" :isHiddenEditGood="isHiddenEditGood"
+                @showListPanel="showListPanel"
+    />
   </div>
 </template>
 
@@ -193,6 +196,7 @@ export default {
   },
   data() {
     return {
+      isHiddenEditGood: true,
       stockType: '',
       stockNum: '',
       showOp: true,
@@ -445,8 +449,8 @@ export default {
         })
       })
     },
-    addOrEdit(oper, rowIndex, data) {
-
+    addOrEdit(oper, rowIndex, data, hidden) {
+      this.isHiddenEditGood = hidden
       const scope = this
 
       if (oper == 'edit') {
