@@ -421,7 +421,7 @@
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ ordDtl.tax.taxTitle == '1' ? '公司' : '个人' }}
           </el-col>
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ ordDtl.tax.compTaxNo }}</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">公司名称：{{ ordDtl.tax.companyName }}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">{{ ordDtl.tax.taxTitle == '1' ? '公司名称' : '姓名' }}：{{ ordDtl.tax.companyName }}</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ ordDtl.tax.email }}</el-col>
