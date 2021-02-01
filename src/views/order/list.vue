@@ -988,8 +988,10 @@ export default {
       default: null
     }
   },
-  mounted() {
+  beforeMount() {
     this.jumpOrderDtl()
+  },
+  mounted() {
     // this.toToken=getToken()
     // console.log(this.toToken,'6666666')
     if (null != this.orderStatus) {
@@ -1033,6 +1035,7 @@ export default {
     },
     jumpOrderDtl() {
       if (this.$route.query.orderNo) {
+        this.showOrdDtl = true
         this.orderNo_ = this.$route.query.orderNo
         this.fromRoutePath = this.$route.query.fromRoutePath
         this.getOrdDtl_()
