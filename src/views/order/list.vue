@@ -77,6 +77,7 @@
               </el-button>
               <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
               </el-button>
+              <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
             </td>
           </tr>
         </table>
@@ -1555,6 +1556,45 @@ export default {
       }
       this.showOnlineOrderList = true
     },
+
+    showBatchOrderPrintTemplateWindow() {
+      const selectedOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection))
+
+      if (selectedOrderList.length <= 0) {
+        this.$message({
+          message: '请选择订单！',
+          type: 'warning'
+        })
+        return
+      }
+
+      let loading = this.$loading({
+        lock: true,
+        text: '正在生成电子面单页面...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+
+      postMethod('/bc/order/orderPrintTemplate', selectedOrderList).then(res => {
+        if (res.data.length <= 0) {
+          this.$message({
+            message: '选中的订单没有电子面单',
+            type: 'warning'
+          })
+          loading.close()
+          return
+        }
+        const orderPrintTemplateHtml = res.data.map(item => item.printTemplate).join()
+
+        let orderPrintTemplateWindow = window.open("","wildebeast")
+        orderPrintTemplateWindow.document.open()
+        orderPrintTemplateWindow.document.write(orderPrintTemplateHtml)
+        orderPrintTemplateWindow.document.close()
+        loading.close()
+      })
+
+    },
+
     submitOnlineBatchSendOrder() {
       for (let i = 0; i < this.onlineOrderList.length; i++) {
         const quantity = this.onlineOrderList[i].quantity
