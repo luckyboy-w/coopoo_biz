@@ -1,13 +1,19 @@
 <template>
-  <div class="sidebar-logo-container">
-    <img v-if="logo" :src="logo" class="sidebar-logo">
-    <h1>{{ title }}</h1>
+  <div class="sidebar-logo-container" :class="{'collapse':collapse}">
+    <transition name="sidebarLogoFade">
+      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+        <img v-if="logo" :src="logo" class="sidebar-logo-smail">
+        <h1 v-else class="sidebar-title">{{ title }} </h1>
+      </router-link>
+      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
+        <img v-if="logo" :src="logo" class="sidebar-logo">
+        <h1 class="sidebar-title">{{ title }} </h1>
+      </router-link>
+    </transition>
   </div>
 </template>
 
 <script>
-import logo from '@/assets/logo.png'
-
 export default {
   name: 'SidebarLogo',
   props: {
@@ -18,28 +24,80 @@ export default {
   },
   data() {
     return {
-      title: '蓝思羽',
-      logo: logo
+      title: 'Vue Element Admin',
+      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.sidebarLogoFade-enter-active {
+  transition: opacity 1.5s;
+}
+
+.sidebarLogoFade-enter,
+.sidebarLogoFade-leave-to {
+  opacity: 0;
+}
+
 .sidebar-logo-container {
+  position: relative;
   width: 100%;
   height: 30vh;
-  font-size: 15px;
   //background: #2b2f3a;
-  background: #FFFFFF;
+  background: #fff;
   text-align: center;
-  //overflow: hidden;
-  color: #414141;
+  overflow: hidden;
 
-  .sidebar-logo {
-    width: 12vh;
-    height: 12vh;
-    vertical-align: middle;
+  & .sidebar-logo-link {
+    height: 100%;
+    width: 100%;
+
+    & .sidebar-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10vh;
+      height: 10vh;
+      //align-items: center;
+      //vertical-align: middle;
+      //margin-right: 12px;
+    }
+
+    & .sidebar-logo-smail {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 32px;
+      height: 32px;
+      //vertical-align: middle;
+      //margin-right: 12px;
+    }
+
+
+    & .sidebar-title {
+      position: absolute;
+      top: 80%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: block;
+      margin: 0;
+      //color: #fff;
+      color: #2b2f3a;
+      font-weight: 600;
+      font-size: 14px;
+      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+      vertical-align: middle;
+    }
+  }
+
+  &.collapse {
+    .sidebar-logo {
+      margin-right: 0px;
+    }
   }
 }
 </style>

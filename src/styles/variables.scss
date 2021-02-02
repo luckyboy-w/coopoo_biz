@@ -7,6 +7,8 @@ $green: #30B08F;
 $tiffany: #4AB7BD;
 $yellow: #FEC171;
 $panGreen: #30B08F;
+$themeColor: #A49E83;
+$lineColor: #e8e8e8;
 
 // sidebar
 //$menuText:#bfcbd9;
@@ -19,12 +21,12 @@ $subMenuActiveText: #414141;
 //$menuBg:#304156;
 //$menuHover:#263445;
 $menuBg: #FFFFFF;
-$menuHover: #A49E83;
+$menuHover: $themeColor;
 
 //$subMenuBg:#1f2d3d;
 //$subMenuHover: #001528;
 $subMenuBg: #F6F6F6;
-$subMenuHover: #A49E83;
+$subMenuHover: $themeColor;
 
 $sideBarWidth: 280px;
 
