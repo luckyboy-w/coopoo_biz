@@ -77,6 +77,7 @@
               </el-button>
               <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
               </el-button>
+              <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
             </td>
           </tr>
         </table>
@@ -420,7 +421,7 @@
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ ordDtl.tax.taxTitle == '1' ? '公司' : '个人' }}
           </el-col>
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ ordDtl.tax.compTaxNo }}</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">公司名称：{{ ordDtl.tax.companyName }}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">{{ ordDtl.tax.taxTitle == '1' ? '公司名称' : '姓名' }}：{{ ordDtl.tax.companyName }}</el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ ordDtl.tax.email }}</el-col>
@@ -1577,6 +1578,45 @@ export default {
       }
       this.showOnlineOrderList = true
     },
+
+    showBatchOrderPrintTemplateWindow() {
+      const selectedOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection))
+
+      if (selectedOrderList.length <= 0) {
+        this.$message({
+          message: '请选择订单！',
+          type: 'warning'
+        })
+        return
+      }
+
+      let loading = this.$loading({
+        lock: true,
+        text: '正在生成电子面单页面...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+
+      postMethod('/bc/order/orderPrintTemplate', selectedOrderList).then(res => {
+        if (res.data.length <= 0) {
+          this.$message({
+            message: '选中的订单没有电子面单',
+            type: 'warning'
+          })
+          loading.close()
+          return
+        }
+        const orderPrintTemplateHtml = res.data.map(item => item.printTemplate).join()
+
+        let orderPrintTemplateWindow = window.open("","wildebeast")
+        orderPrintTemplateWindow.document.open()
+        orderPrintTemplateWindow.document.write(orderPrintTemplateHtml)
+        orderPrintTemplateWindow.document.close()
+        loading.close()
+      })
+
+    },
+
     submitOnlineBatchSendOrder() {
       for (let i = 0; i < this.onlineOrderList.length; i++) {
         const quantity = this.onlineOrderList[i].quantity
