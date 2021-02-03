@@ -1580,7 +1580,9 @@ export default {
     },
 
     showBatchOrderPrintTemplateWindow() {
-      const selectedOrderList = JSON.parse(JSON.stringify(this.$refs.mainTable.selection))
+      let mainTable = this.$refs.mainTable
+      let selection = mainTable.selection
+      const selectedOrderList = JSON.parse(JSON.stringify(selection))
 
       if (selectedOrderList.length <= 0) {
         this.$message({
@@ -1606,8 +1608,26 @@ export default {
           loading.close()
           return
         }
-        const orderPrintTemplateHtml = res.data.map(item => item.printTemplate).join()
 
+        const orderTemplateNo = res.data.map(item => item.orderNo)
+        const selectedOrderNo = selectedOrderList.map(item => item.orderNo)
+
+        let noTemplateOrderNo = selectedOrderNo.filter(x => !orderTemplateNo.includes(x));
+
+        if (noTemplateOrderNo.length > 0) {
+          this.$message({
+            message: `${[...noTemplateOrderNo]} 没有电子面单`,
+            type: 'warning'
+          })
+          let noTemplateOrderRow = selection.filter(item => orderTemplateNo.includes(item.orderNo))
+          mainTable.clearSelection();
+          console.info(noTemplateOrderRow)
+          noTemplateOrderRow.forEach(row => mainTable.toggleRowSelection(row, true))
+          loading.close()
+          return
+        }
+
+        const orderPrintTemplateHtml = res.data.map(item => item.printTemplate).join("</br>")
         let orderPrintTemplateWindow = window.open("","wildebeast")
         orderPrintTemplateWindow.document.open()
         orderPrintTemplateWindow.document.write(orderPrintTemplateHtml)
