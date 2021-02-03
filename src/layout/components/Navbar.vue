@@ -3,60 +3,8 @@
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
                @toggleClick="toggleSideBar"
     />
-
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container"/>
-
-    <el-dialog :visible="showReset" v-if="showReset" @close="close()" title="密码重置" width="600px">
-      <el-form ref="dataForm" :model="resetFrm" label-width="100px" style="width:500px">
-        <el-form-item label="旧密码">
-          <el-input v-model="resetFrm.oldPwd" placeholder="请输入密码" show-password clearable/>
-        </el-form-item>
-        <el-form-item label="新密码">
-          <el-input v-model="resetFrm.password" placeholder="请输入密码" show-password clearable/>
-        </el-form-item>
-        <el-form-item label="确认新密码">
-          <el-input v-model="resetFrm.reppwd" placeholder show-password clearable/>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitReset()">提交</el-button>
-          <el-button @click="showReset = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-    <div class="right-menu">
-      <div style="font-size:14px;float:left;padding:5px 40px 0px 0px">
-        <el-row style="width:400px">
-          <el-col></el-col>
-        </el-row>
-        <!-- <span style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">公司名称:{{bizName}} </span>
-        <span style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">登录账号:{{loginName}}  </span>
-        <span style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">最后一次登录时间:{{loginDate}} </span> -->
-        <el-row style="width:800px">
-          <el-col :span="6" style="font-size:14px">公司名称：{{ bizName }}</el-col>
-          <el-col :span="1">
-            <div class="grid-content bg-purple-light"></div>
-          </el-col>
-          <el-col :span="6" style="font-size:14px">登录账号：{{ loginName }}</el-col>
-          <el-col :span="1">
-            <div class="grid-content bg-purple-light"></div>
-          </el-col>
-          <el-col :span="10" style="font-size:14px">最后一次登录时间：{{ loginDate }}</el-col>
-        </el-row>
-
-
-      </div>
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom"/>
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="showResetPwd()">修改密码</el-dropdown-item>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">{{ $t('navbar.logOut') }}</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+    <div class="navbar-tag-container">
+      <tags-view v-if="needTagsView"/>
     </div>
   </div>
 </template>
@@ -64,7 +12,7 @@
 <script>
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -72,6 +20,7 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import Search from '@/components/HeaderSearch'
+import TagsView from '@/layout/components/TagsView'
 
 export default {
   components: {
@@ -81,7 +30,8 @@ export default {
     Screenfull,
     SizeSelect,
     LangSelect,
-    Search
+    Search,
+    TagsView
   },
   data() {
     return {
@@ -105,7 +55,10 @@ export default {
       'sidebar',
       'avatar',
       'device'
-    ])
+    ]),
+    ...mapState({
+      needTagsView: state => state.settings.tagsView
+    })
   },
   mounted() {
     this.getUser()
@@ -203,18 +156,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
+
 $height: 5vh;
 
 .navbar {
-  //height: 50px;
+  display: flex;
   height: $height;
-  overflow: hidden;
+  line-height: calc(#{$height} - 4px);
+  //overflow: hidden;
   position: relative;
   border-bottom: 1px solid $lineColor;
 
   .hamburger-container {
-    //line-height: 46px;
-    line-height: $height;
+    display: block;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -226,65 +180,9 @@ $height: 5vh;
     }
   }
 
-  .breadcrumb-container {
-    float: left;
-  }
-
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .right-menu {
-    float: right;
-    height: 100%;
-    line-height: $height;
-
-    &:focus {
-      outline: none;
-    }
-
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background .3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, .025)
-        }
-      }
-    }
-
-    .avatar-container {
-      margin-right: 30px;
-
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
-    }
+  .navbar-tag-container {
+    width: 97%;
+    height: $height;
   }
 }
 </style>
