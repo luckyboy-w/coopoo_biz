@@ -32,6 +32,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/styles/variables.scss";
+
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
 }
@@ -46,7 +48,7 @@ export default {
   width: 100%;
   height: 30vh;
   //background: #2b2f3a;
-  background: #fff;
+  background: $heavyBGColor;
   text-align: center;
   overflow: hidden;
 
@@ -61,9 +63,6 @@ export default {
       transform: translate(-50%, -50%);
       width: 10vh;
       height: 10vh;
-      //align-items: center;
-      //vertical-align: middle;
-      //margin-right: 12px;
     }
 
     & .sidebar-logo-smail {
@@ -73,8 +72,6 @@ export default {
       transform: translate(-50%, -50%);
       width: 32px;
       height: 32px;
-      //vertical-align: middle;
-      //margin-right: 12px;
     }
 
 
@@ -85,8 +82,7 @@ export default {
       transform: translate(-50%, -50%);
       display: block;
       margin: 0;
-      //color: #fff;
-      color: #2b2f3a;
+      color: $fontColor;
       font-weight: 600;
       font-size: 14px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
