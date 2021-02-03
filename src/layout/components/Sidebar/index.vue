@@ -15,6 +15,8 @@
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
+
+    <logo v-if="true" :collapse="isCollapse" />
   </div>
 </template>
 

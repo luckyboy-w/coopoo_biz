@@ -203,15 +203,18 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
+$height: 5vh;
 
 .navbar {
-  height: 50px;
+  //height: 50px;
+  height: $height;
   overflow: hidden;
   position: relative;
   border-bottom: 1px solid $lineColor;
 
   .hamburger-container {
-    line-height: 46px;
+    //line-height: 46px;
+    line-height: $height;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -235,7 +238,7 @@ export default {
   .right-menu {
     float: right;
     height: 100%;
-    line-height: 50px;
+    line-height: $height;
 
     &:focus {
       outline: none;
