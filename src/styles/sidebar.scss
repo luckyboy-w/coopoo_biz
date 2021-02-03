@@ -5,8 +5,8 @@
     transition: margin-left .28s;
     margin-left: $sideBarWidth;
     position: relative;
-    background: #F6F6F6;
-    padding: 6vh 3vw 0vw 3vw;
+    background: $lightBGColor;
+    padding: 6vh 3vw 5vh 3vw;
   }
 
   .sidebar-container {

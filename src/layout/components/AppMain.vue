@@ -25,11 +25,11 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   width: 100%;
-  height: 80vh;
+  min-height: 80vh;
   margin-top: 4vh;
   background: #FFFFFF;
   box-shadow: 0px 1px 5px #ccc;
-  padding: 5vh 1vw 0vh 1vw;
+  padding: 5vh 1vw 2vh 1vw;
 }
 </style>
 

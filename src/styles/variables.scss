@@ -7,25 +7,23 @@ $green: #30B08F;
 $tiffany: #4AB7BD;
 $yellow: #FEC171;
 $panGreen: #30B08F;
+
+// 自定义颜色
+$heavyBGColor: #FFFFFF;
+$lightBGColor: #F6F6F6;
 $themeColor: #A49E83;
-$lineColor: #e8e8e8;
+$lineColor: #E8E8E8;
+$fontColor: #414141;
 
 // sidebar
-//$menuText:#bfcbd9;
-//$menuActiveText:#409EFF;
-//$subMenuActiveText:#f4f4f5; // https://github.com/ElemeFE/element/issues/12951
-$menuText: #414141;
-$menuActiveText: #414141;
-$subMenuActiveText: #414141;
+$menuText: $fontColor;
+$menuActiveText: $fontColor;
+$subMenuActiveText: $fontColor;
 
-//$menuBg:#304156;
-//$menuHover:#263445;
-$menuBg: #FFFFFF;
+$menuBg: $heavyBGColor;
 $menuHover: $themeColor;
 
-//$subMenuBg:#1f2d3d;
-//$subMenuHover: #001528;
-$subMenuBg: #F6F6F6;
+$subMenuBg: $lightBGColor;
 $subMenuHover: $themeColor;
 
 $sideBarWidth: 280px;
