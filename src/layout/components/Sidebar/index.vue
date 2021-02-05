@@ -17,8 +17,6 @@
       </el-menu>
       <NavButtomButton :collapse="isCollapse"/>
     </el-scrollbar>
-
-<!--    <BottomButton :collapse="isCollapse"/>-->
   </div>
 </template>
 
