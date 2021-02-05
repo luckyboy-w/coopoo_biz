@@ -1,41 +1,29 @@
 <template>
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
-
-
-    <transition-group name="sidebarBottomFade">
-      <router-link v-if="collapse" key="collapse1" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <span v-else class="sidebar-title">修改密码</span>
-      </router-link>
-      <router-link v-else key="expand1" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <span class="sidebar-title">修改密码</span>
-      </router-link>
-
-      <router-link v-if="collapse" key="collapse2" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <span v-else class="sidebar-title">退出登录</span>
-      </router-link>
-      <router-link v-else key="expand2" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <span class="sidebar-title">退出登录</span>
-      </router-link>
-
-    </transition-group>
-
-
-    <!--      <router-link key="expand1" class="sidebar-logo-link" to="/">-->
-    <!--        <img v-if="logo" :src="logo" class="sidebar-logo">-->
-    <!--        <h1 class="sidebar-title">修改密码</h1>-->
-    <!--      </router-link>-->
-    <!--      <router-link key="expand2" class="sidebar-logo-link" to="/">-->
-    <!--        <img v-if="logo" :src="logo" class="sidebar-logo">-->
-    <!--        <h1 class="sidebar-title">退出</h1>-->
-    <!--      </router-link>-->
+    <!--    不使用动画,代码保留-->
+    <!--    <transition-group name="sidebarBottomFade">-->
+    <router-link v-if="collapse" key="collapse1" class="sidebar-logo-link" to="/">
+      <img :src="ChangePasswd" class="sidebar-logo">
+    </router-link>
+    <router-link v-else key="expand1" class="sidebar-logo-link" to="/">
+      <img :src="ChangePasswd" class="sidebar-logo">
+      <span class="sidebar-title">修改密码</span>
+    </router-link>
+    <router-link v-if="collapse" key="collapse2" class="sidebar-logo-link" to="/">
+      <img :src="Logout" class="sidebar-logo">
+    </router-link>
+    <router-link v-else key="expand2" class="sidebar-logo-link" to="/">
+      <img :src="Logout" class="sidebar-logo">
+      <span class="sidebar-title">退出登录</span>
+    </router-link>
+    <!--    </transition-group>-->
   </div>
 </template>
 
 <script>
+import Logout from '@/assets/logout.png'
+import ChangePasswd from '@/assets/changePasswd.png'
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -46,8 +34,8 @@ export default {
   },
   data() {
     return {
-      title: 'Vue Element Admin',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      Logout,
+      ChangePasswd
     }
   }
 }
@@ -61,7 +49,7 @@ export default {
   margin-top: 15vh;
   width: 100%;
   height: 10vh;
-  text-align: center;
+  padding-left: 20px;
   overflow: hidden;
 
   & .sidebar-logo-link {
@@ -70,10 +58,10 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      width: 14px;
+      height: 14px;
       vertical-align: middle;
-      margin-right: 12px;
+      margin-right: 16px;
     }
 
     & .sidebar-title {
@@ -81,7 +69,6 @@ export default {
       margin: 0;
       color: $fontColor;
       font-weight: 500;
-      line-height: 5vh;
       font-size: 14px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;

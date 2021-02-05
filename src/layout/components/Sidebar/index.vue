@@ -23,13 +23,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
-import BottomButton from './BottomButton'
 import NavButtomButton from './NavButtomButton'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 
 export default {
-  components: { SidebarItem, Logo, BottomButton, NavButtomButton },
+  components: { SidebarItem, Logo, NavButtomButton },
   computed: {
     ...mapGetters([
       'permission_routes',
