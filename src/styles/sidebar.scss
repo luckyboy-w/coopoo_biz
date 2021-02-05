@@ -30,6 +30,12 @@
     .scrollbar-wrapper {
       overflow-x: hidden !important;
       height: 65vh;
+
+      .el-submenu.is-active,
+      .el-menu-item.is-active {
+        background-color: $themeColor !important;
+        color: $heavyBGColor !important;
+      }
     }
 
     .el-scrollbar__bar.is-vertical {
