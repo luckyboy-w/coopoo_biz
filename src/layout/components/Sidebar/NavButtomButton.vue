@@ -1,16 +1,38 @@
 <template>
-  <transition name="sidebarLogoFade">
-    <div class="sidebar-logo-container" :class="{'collapse':collapse}" v-show="!collapse">
-      <router-link key="expand1" class="sidebar-logo-link" to="/">
+  <div class="sidebar-logo-container" :class="{'collapse':collapse}">
+
+
+    <transition-group name="sidebarBottomFade">
+      <router-link v-if="collapse" key="collapse1" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">修改密码</h1>
+        <span v-else class="sidebar-title">修改密码</span>
       </router-link>
-      <router-link key="expand2" class="sidebar-logo-link" to="/">
+      <router-link v-else key="expand1" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">退出</h1>
+        <span class="sidebar-title">修改密码</span>
       </router-link>
-    </div>
-  </transition>
+
+      <router-link v-if="collapse" key="collapse2" class="sidebar-logo-link" to="/">
+        <img v-if="logo" :src="logo" class="sidebar-logo">
+        <span v-else class="sidebar-title">退出登录</span>
+      </router-link>
+      <router-link v-else key="expand2" class="sidebar-logo-link" to="/">
+        <img v-if="logo" :src="logo" class="sidebar-logo">
+        <span class="sidebar-title">退出登录</span>
+      </router-link>
+
+    </transition-group>
+
+
+    <!--      <router-link key="expand1" class="sidebar-logo-link" to="/">-->
+    <!--        <img v-if="logo" :src="logo" class="sidebar-logo">-->
+    <!--        <h1 class="sidebar-title">修改密码</h1>-->
+    <!--      </router-link>-->
+    <!--      <router-link key="expand2" class="sidebar-logo-link" to="/">-->
+    <!--        <img v-if="logo" :src="logo" class="sidebar-logo">-->
+    <!--        <h1 class="sidebar-title">退出</h1>-->
+    <!--      </router-link>-->
+  </div>
 </template>
 
 <script>
@@ -58,7 +80,7 @@ export default {
       display: inline-block;
       margin: 0;
       color: $fontColor;
-      font-weight: 600;
+      font-weight: 500;
       line-height: 5vh;
       font-size: 14px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
@@ -73,13 +95,12 @@ export default {
   }
 }
 
-.sidebarLogoFade-enter-active {
+.sidebarBottomFade-enter-active {
   transition: opacity 1.5s;
 }
 
-.sidebarLogoFade-enter,
-.sidebarLogoFade-leave-to {
+.sidebarBottomFade-enter,
+.sidebarBottomFade-leave-to {
   opacity: 0;
 }
-
 </style>
