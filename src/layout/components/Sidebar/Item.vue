@@ -20,24 +20,21 @@ export default {
 
     if (icon) {
       // vnodes.push(<svg-icon icon-class={icon}/>)
+      vnodes.push(<svg-icon icon-class="test"/>)
 
-      // vnodes.push(<img src="require('../../../assets/logout.png')"
-      //                  style="width: 14px;height: 14px;"
-      //                  class="svg-icon"
-      // />)
-      vnodes.push(h('img', {
-        class: 'svg-icon',
-        style: {
-          width: '14px',
-          height: '14px',
-          verticalAlign: 'middle'
-          // marginRight: '16px',
-          // marginLeft: '20px'
-        },
-        attrs: {
-          src: require('../../../assets/logout.png')
-        }
-      }))
+      // vnodes.push(h('img', {
+      //   class: 'svg-icon',
+      //   style: {
+      //     width: '14px',
+      //     height: '14px',
+      //     verticalAlign: 'middle'
+      //     // marginRight: '16px',
+      //     // marginLeft: '20px'
+      //   },
+      //   attrs: {
+      //     src: require('@/assets/logout.png')
+      //   }
+      // }))
 
     }
 
