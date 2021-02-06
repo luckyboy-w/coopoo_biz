@@ -5,11 +5,10 @@
     <!--    <transition-group name="sidebarBottomFade">-->
     <div v-if="collapse" key="collapse1" class="sidebar-logo-link" @click="showResetPwd()">
       <img :src="ChangePasswd" class="sidebar-logo">
-
     </div>
     <div v-else key="expand1" class="sidebar-logo-link" @click="showResetPwd()">
       <img :src="ChangePasswd" class="sidebar-logo">
-      <span class="sidebar-title" @click.native="showResetPwd()">修改密码</span>
+      <span class="sidebar-title">修改密码</span>
     </div>
     <div v-if="collapse" key="collapse2" class="sidebar-logo-link" @click="logout">
       <img :src="Logout" class="sidebar-logo">
