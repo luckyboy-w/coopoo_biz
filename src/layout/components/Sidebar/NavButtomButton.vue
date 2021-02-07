@@ -165,7 +165,8 @@ export default {
 
 .sidebar-logo-container {
   margin-top: 15vh;
-  width: 100%;
+  //width: 100%;
+  width: $sideBarWidth;
   height: 10vh;
   overflow: hidden;
 
@@ -173,7 +174,8 @@ export default {
     line-height: 5vh;
     padding-left: 20px;
     height: 5vh;
-    width: 100%;
+    //width: 100%;
+    width: $sideBarWidth;
 
     & .sidebar-logo {
       width: 14px;
