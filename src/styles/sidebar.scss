@@ -28,7 +28,6 @@
     }
 
     .scrollbar-wrapper {
-      width: $sideBarWidth !important;
       overflow-x: hidden !important;
       height: 65vh;
 
@@ -44,6 +43,7 @@
     }
 
     .el-scrollbar {
+      width: $sideBarWidth;
       height: 65vh;
     }
 
