@@ -28,6 +28,7 @@
     }
 
     .scrollbar-wrapper {
+      width: $sideBarWidth !important;
       overflow-x: hidden !important;
       height: 65vh;
 
