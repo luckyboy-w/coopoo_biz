@@ -1,9 +1,12 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :class="className" :style="{height:height,width:width}"/>
 </template>
 
 <script>
 import echarts from 'echarts'
+
+import variables from '@/styles/variables.scss'
+
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
@@ -20,12 +23,17 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '50vh'
     }
   },
   data() {
     return {
       chart: null
+    }
+  },
+  computed: {
+    variables() {
+      return variables
     }
   },
   mounted() {
@@ -45,31 +53,57 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
 
       this.chart.setOption({
+        title: {
+          text: '商品销量TOP10',
+          textStyle: {
+            color: this.variables.fontColor,
+            fontWeight: 500,
+            fontFamily: 'PingFang SC'
+          }
+        },
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+          borderWidth: '1',
+          borderColor: this.variables.lineColor,
+          backgroundColor: this.variables.heavyBGColor,
+          padding: [
+            5,  // 上
+            15, // 右
+            5,  // 下
+            15 // 左
+          ],
+          textStyle: {
+            color: this.variables.fontColor,
+            fontWeight: 400,
+            fontFamily: 'PingFang SC'
+          }
         },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
-        },
+        // legend: {
+        //   left: 'center',
+        //   bottom: '10',
+        //   data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+        // },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '访问来源',
             type: 'pie',
-            roseType: 'radius',
-            radius: [15, 95],
-            center: ['50%', '38%'],
+            // roseType 南丁格尔图
+            // radius 扇区圆心角展现数据的百分比，半径展现数据的大小。
+            // area 所有扇区圆心角相同，仅通过半径展现数据大小。
+            // roseType: 'area',
+            // radius: [50, 100],// 内外半径
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: 1048, name: '搜索引擎', itemStyle: { color: '#82C6F7' } },
+              { value: 735, name: '直接访问', itemStyle: { color: '#F7D7B0' } },
+              { value: 580, name: '邮件营销', itemStyle: { color: '#FD999B' } },
+              { value: 484, name: '联盟广告', itemStyle: { color: '#916CC9' } },
+              { value: 300, name: '视频广告', itemStyle: { color: '#F7C92F' } }
+              // { value: 0, name: '无数据', itemStyle: { color: '#ccc' } }
             ],
-            animationEasing: 'cubicInOut',
-            animationDuration: 2600
+            label: {
+              // 去除引导线
+              show: false
+            }
           }
         ]
       })
@@ -77,3 +111,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.asdf {
+  background: black;
+}
+</style>

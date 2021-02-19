@@ -1,14 +1,22 @@
+@import "./variables";
+
+$--color-primary: $themeColor;
+$--color-success: #13ce66;
+$--color-warning: #FFBA00;
+$--color-danger: #ff4949;
+// $--color-info: #1E1E1E;
+
 /**
 * I think element-ui's default theme color is too light for long-term use.
 * So I modified the default color and you can modify it to your liking.
 **/
 
 /* theme color */
-$--color-primary: #1890ff;
-$--color-success: #13ce66;
-$--color-warning: #FFBA00;
-$--color-danger: #ff4949;
-// $--color-info: #1E1E1E;
+//$--color-primary: #1890ff;
+//$--color-success: #13ce66;
+//$--color-warning: #FFBA00;
+//$--color-danger: #ff4949;
+//// $--color-info: #1E1E1E;
 
 $--button-font-weight: 400;
 

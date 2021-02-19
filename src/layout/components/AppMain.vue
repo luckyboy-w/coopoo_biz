@@ -1,5 +1,5 @@
 <template>
-  <section class="app-main">
+  <section class="app-main" :class="{ 'app-main-bg': this.$route.path !== '/dashboard' }">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
         <router-view :key="key"/>
@@ -23,11 +23,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/styles/variables.scss";
 .app-main {
   width: 100%;
   min-height: 80vh;
   margin-top: 4vh;
-  background: #FFFFFF;
+}
+
+.app-main-bg{
+  background: $heavyBGColor;
   box-shadow: 0px 1px 5px #ccc;
   padding: 5vh 1vw 2vh 1vw;
 }
