@@ -69,7 +69,22 @@
                 <el-option value="" label="全部"></el-option>
                 <el-option value="1" label="是"></el-option>
                 <el-option value="0" label="否"></el-option>
-
+              </el-select>
+            </td>
+            <td>是否打印电子面单:</td>
+            <td>
+              <el-select v-model="searchParam.isPrintedTemplate" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="1" label="是"></el-option>
+                <el-option value="0" label="否"></el-option>
+              </el-select>
+            </td>
+            <td>是否超期未付款:</td>
+            <td>
+              <el-select v-model="searchParam.isOverDuePayment" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="1" label="是"></el-option>
+                <el-option value="0" label="否"></el-option>
               </el-select>
             </td>
             <td>
@@ -121,7 +136,18 @@
               </template>
             </el-table-column>
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="orderNo" label="订单编号" width="220px"/>
+            <el-table-column prop="orderNo" label="订单编号" width="270px">
+              <template slot-scope="scope">
+                {{ scope.row.orderNo }}
+                <el-tag
+                  v-if="scope.row.isPrintedTemplate == '1'"
+                  effect="light"
+                  size="mini"
+                >
+                  已打印
+                </el-tag>
+              </template>
+            </el-table-column>
             <el-table-column prop="expressNo" label="快递单号" width="220px"/>
             <el-table-column prop="createTime" label="下单时间" width="150px">
               <template slot-scope="scope">
@@ -953,6 +979,8 @@ export default {
         isBackend: '',
         orderType: '',
         isRequireTaxBill: '',
+        isPrintedTemplate: '',
+        isOverDuePayment: '',
         status: '',
         startTime: '',
         endTime: '',
