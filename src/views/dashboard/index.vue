@@ -175,10 +175,11 @@
 
     <el-row :span="24" class="counter-area">
       <el-col :xs="24" :sm="24" :lg="12">
-        <pie-chart/>
+        <pie-chart ref="pieChart" :circle-color="chartsCircleColor"/>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="12">
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" class="dashbord-tab-list" @tab-click="changeChartsTitle()">
+          <el-tab-pane width="30" disabled></el-tab-pane>
           <el-tab-pane label="商品销量TOP10" name="salesNum">
             <div>
               <!--              <div class="analysis-title">商品销量TOP10</div>-->
@@ -189,6 +190,17 @@
                   style="width: 100%; margin-bottom: 20px;"
                   row-key="id"
                 >
+                  <el-table-column width="30">
+                    <template slot-scope="scope">
+                      <div :style="{
+                        width:'15px',
+                        height:'15px',
+                        background: chartsCircleColor[scope.$index]
+                      }"
+                      >
+                      </div>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="goodName" label="商品名称" min-width="70%">
                   </el-table-column>
                   <el-table-column prop="dataCnt" label="销量" min-width="30%">
@@ -206,7 +218,18 @@
                   :data="bestFav"
                   style="width: 100%; margin-bottom: 20px;"
                   row-key="id"
-                > <el-table-column>1</el-table-column>
+                >
+                  <el-table-column width="30">
+                    <template slot-scope="scope">
+                      <div :style="{
+                        width:'15px',
+                        height:'15px',
+                        background: chartsCircleColor[scope.$index]
+                      }"
+                      >
+                      </div>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="goodName" label="商品名称" min-width="70%">
                   </el-table-column>
                   <el-table-column prop="dataCnt" label="收藏量" min-width="30%">
@@ -265,6 +288,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState, mapActions } from 'vuex'
 import CountTo from 'vue-count-to'
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
@@ -275,12 +299,12 @@ export default {
   props: [''],
   data() {
     return {
-      activeName: 'salesNum',
+      // 被VUEX 替换
+      // bestSale: [],
+      // worseSale: [],
+      // bestFav: [],
+      // worseFav: [],
       readyEval: '/bc-order/readyEval',
-      bestSale: [],
-      worseSale: [],
-      bestFav: [],
-      worseFav: [],
       ordDtl: {
         rejectGood: 0,
         reaySend: 0,
@@ -296,23 +320,40 @@ export default {
         dateList: [],
         ordListL: [],
         payList: []
-      }
+      },
+      chartsCircleColor: ['#82c6f7', '#F7D7B0', '#FD999B', '#916CC9', '#F7C92F']
     }
   },
   components: {
     CountTo,
     PieChart
   },
-  computed: {},
+  computed: {
+    activeName: {
+      get() {
+        return this.$store.state.dashboard.activeName
+      },
+      set(value) {
+        this.$store.commit('dashboard/CHANGE_ACTIVE_NAME', { value })
+      }
+    },
+    ...mapGetters('dashboard', ['chartsTitle']),
+    ...mapState({
+      bestSale: state => state.dashboard.bestSale,
+      worseSale: state => state.dashboard.worseSale,
+      bestFav: state => state.dashboard.bestFav,
+      worseFav: state => state.dashboard.worseFav
+    })
+  },
   beforeMount() {
   },
   mounted() {
     this.initData()
   },
   methods: {
+    ...mapActions('dashboard', ['getAnalysisData']),
     initData() {
       let scope = this
-
       getMethod('/bc/analysis/findOrdLine', {}).then(res => {
 
         let resData = res.data
@@ -328,26 +369,12 @@ export default {
 
         }
       })
-
-      getMethod('/bc/analysis/findAnalysisList', {}).then(res => {
-
-        let resData = res.data
-        resData.forEach((rowObj) => {
-          if (rowObj.dataType == 'bestSale') {
-            scope.bestSale = rowObj.analysisList
-          } else if (rowObj.dataType == 'worseSale') {
-            scope.worseSale = rowObj.analysisList
-          } else if (rowObj.dataType == 'bestFav') {
-            scope.bestFav = rowObj.analysisList
-          } else {
-            scope.worseFav = rowObj.analysisList
-          }
-        })
-      })
-
+      this.getAnalysisData()
+    },
+    changeChartsTitle() {
+      this.$refs.pieChart.chartSetData()
     }
-  },
-  watch: {}
+  }
 }
 
 </script>
@@ -478,11 +505,30 @@ export default {
 
 }
 
-
 .el-divider--horizontal {
   display: block;
   height: 1px;
   width: 100%;
   margin: 14px 0;
 }
+
+.el-table > > > th.is-leaf, .el-table > > > td {
+  border: none;
+}
+
+.el-table::before {
+  height: 0px;
+}
+
+.dashbord-tab-list > > > .el-tabs__nav-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0px;
+  z-index: 1;
+}
 </style>
+
+

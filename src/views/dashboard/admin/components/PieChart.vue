@@ -4,6 +4,7 @@
 
 <script>
 import echarts from 'echarts'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 import variables from '@/styles/variables.scss'
 
@@ -24,6 +25,10 @@ export default {
     height: {
       type: String,
       default: '50vh'
+    },
+    circleColor: {
+      type: Array,
+      default: () => ['#82c6f7', '#F7D7B0', '#FD999B', '#916CC9', '#F7C92F']
     }
   },
   data() {
@@ -34,12 +39,15 @@ export default {
   computed: {
     variables() {
       return variables
-    }
+    },
+    ...mapGetters('dashboard', {
+      chartsTitle: 'chartsTitle',
+      chartsData: 'chartsData'
+    }),
+    ...mapState({})
   },
   mounted() {
-    this.$nextTick(() => {
-      this.initChart()
-    })
+    this.initChart()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -51,10 +59,33 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
+      this.chartSetData()
+    },
+    handlerChartsData() {
 
+      if (this.chartsData.length === 0){
+        return [
+          {
+            value: 0,
+            name: '暂无数据',
+            itemStyle: { color: '#ccc' }
+          }
+        ]
+      }
+
+      return this.chartsData.map((item, index) => {
+        return {
+          value: item.dataCnt,
+          name: item.goodName,
+          itemStyle: { color: this.circleColor[index] }
+        }
+      })
+    },
+    chartSetData() {
+      let printData = this.handlerChartsData()
       this.chart.setOption({
         title: {
-          text: '商品销量TOP10',
+          text: this.chartsTitle,
           textStyle: {
             color: this.variables.fontColor,
             fontWeight: 500,
@@ -85,21 +116,22 @@ export default {
         // },
         series: [
           {
-            name: '访问来源',
+            name: '',
             type: 'pie',
             // roseType 南丁格尔图
             // radius 扇区圆心角展现数据的百分比，半径展现数据的大小。
             // area 所有扇区圆心角相同，仅通过半径展现数据大小。
             // roseType: 'area',
             // radius: [50, 100],// 内外半径
-            data: [
-              { value: 1048, name: '搜索引擎', itemStyle: { color: '#82C6F7' } },
-              { value: 735, name: '直接访问', itemStyle: { color: '#F7D7B0' } },
-              { value: 580, name: '邮件营销', itemStyle: { color: '#FD999B' } },
-              { value: 484, name: '联盟广告', itemStyle: { color: '#916CC9' } },
-              { value: 300, name: '视频广告', itemStyle: { color: '#F7C92F' } }
-              // { value: 0, name: '无数据', itemStyle: { color: '#ccc' } }
-            ],
+            data: printData,
+            // data: [
+            //   { value: 1048, name: '搜索引擎', itemStyle: { color: this.circleColor[0] } },
+            //   { value: 735, name: '直接访问', itemStyle: { color: this.circleColor[1] } },
+            //   { value: 580, name: '邮件营销', itemStyle: { color: this.circleColor[2] } },
+            //   { value: 484, name: '联盟广告', itemStyle: { color: this.circleColor[3] } },
+            //   { value: 300, name: '视频广告', itemStyle: { color: this.circleColor[4] } }
+            //   { value: 0, name: '无数据', itemStyle: { color: '#ccc' } }
+            // ],
             label: {
               // 去除引导线
               show: false
