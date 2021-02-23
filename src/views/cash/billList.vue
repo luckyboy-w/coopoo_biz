@@ -7,16 +7,16 @@
             </el-row> -->
       <el-tab-pane label="可结算" name="readyBill" style="height:600px">
         <tr>
-          <td>订单号:</td>
+          <td>订单号:&nbsp;</td>
           <td>
             <el-input v-model="searchParam.orderNo" width="180px"/>
           </td>
-          <td style="padding-left:20px">入账时间:</td>
+          <td style="padding-left:20px">入账时间:&nbsp;</td>
           <td>
             <el-date-picker v-model="searchParam.startTime" type="date" value-format="yyyy-MM-dd" placeholder="开始日期">
             </el-date-picker>
           </td>
-          <td style="text-align: center;">至</td>
+          <td style="text-align: center;">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
           <td>
             <el-date-picker v-model="searchParam.endTime" type="date" value-format="yyyy-MM-dd" placeholder="结束日期">
             </el-date-picker>
