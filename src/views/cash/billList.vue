@@ -1,6 +1,6 @@
 <template>
-  <div style="padding-top:20px;width:100%">
-    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+  <div>
+    <el-tabs v-model="activeName"  @tab-click="handleClick">
       <!-- <el-row style="line-height:40px;padding:10px 0px ">
                 <el-col v-if="!isCanBill" :span="24" style="color: red">今天不是结算日</el-col>
                 <el-col :span="24">{{billDate}}</el-col>

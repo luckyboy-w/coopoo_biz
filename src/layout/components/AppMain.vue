@@ -33,7 +33,7 @@ export default {
 .app-main-bg{
   background: $heavyBGColor;
   box-shadow: 0px 1px 5px #ccc;
-  padding: 5vh 1vw 2vh 1vw;
+  padding: 2vh 1vw 2vh 1vw;
 }
 </style>
 
