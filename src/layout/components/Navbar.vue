@@ -12,7 +12,7 @@
 <script>
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -58,12 +58,20 @@ export default {
     ]),
     ...mapState({
       needTagsView: state => state.settings.tagsView
+    }),
+    ...mapState('user', {
+      supplierName: 'supplierName',
+      supplierAvatar: 'supplierAvatar'
     })
   },
   mounted() {
-    this.getUser()
+    // 此时外层是异步的 并不影响最终的数据回显 所以没设置同步
+    this.getUserInfo()
   },
   methods: {
+    ...mapActions('user', {
+      getUserInfo: 'getUserInfo'
+    }),
     close() {
       this.showReset = false
       console.log('44444')
@@ -116,24 +124,6 @@ export default {
           this.showReset = false
         }
 
-      })
-    },
-    getUser() {
-      let scope = this
-      getMethod('/bc/lyBuUser/getUser', {}).then(res => {
-        let data = res.data
-        if (data.enable == '0') {
-          this.$essage({
-            message: '账号被禁用',
-            type: 'error',
-            duration: 5 * 1000
-          })
-          scope.logout()
-        }
-
-        scope.bizName = data.bizName
-        scope.loginName = data.loginName
-        scope.loginDate = scope.fmtDate(data.loginDate)
       })
     },
     fmtDate(date) {

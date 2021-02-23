@@ -1,13 +1,22 @@
-import { buLogin, login, logout, getInfo } from '@/api/user'
+import {
+  // buLogin,
+  login,
+  logout,
+  getInfo,
+  getUserInfo
+} from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import { requirer } from 'runjs/lib/script'
 
 const state = {
   token: getToken(),
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  supplierName: '',
+  supplierAvatar: ''
 }
 
 const mutations = {
@@ -28,25 +37,32 @@ const mutations = {
   },
   SET_MENUS: (state, menus) => {
     state.menus = menus
+  },
+  SET_SUPPLIER_NAME: (state, payload) => {
+    state.supplierName = payload
+  },
+  SET_SUPPLIER_AVATAR: (state, payload) => {
+    state.supplierAvatar = payload
   }
 }
 
 const actions = {
 
   // bu-user login
-  buLogin({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      buLogin({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
+  // buLogin({ commit }, userInfo) {
+  //   const { username, password } = userInfo
+  //   return new Promise((resolve, reject) => {
+  //     buLogin({ username: username.trim(), password: password }).then(response => {
+  //       const { data } = response
+  //       commit('SET_TOKEN', data.token)
+  //       setToken(data.token)
+  //       resolve()
+  //     }).catch(error => {
+  //       reject(error)
+  //     })
+  //   })
+  // },
+
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
@@ -69,9 +85,9 @@ const actions = {
         const { access, name, avatar, introduction } = response.data
 
         // roles must be a non-empty array
-/*        if (!access || access.length <= 0) {
-          reject('getInfo: access must be a non-null array!')
-        }*/
+        /*        if (!access || access.length <= 0) {
+                  reject('getInfo: access must be a non-null array!')
+                }*/
 
         const menus = []
 
@@ -129,7 +145,7 @@ const actions = {
       resetRouter()
 
       // generate accessible routes map based on roles
-      const accessRoutes = await dispatch('permission/generateRoutes', {access, buUser})
+      const accessRoutes = await dispatch('permission/generateRoutes', { access, buUser })
 
       // dynamically add accessible routes
       router.addRoutes(accessRoutes)
@@ -139,6 +155,14 @@ const actions = {
 
       resolve()
     })
+  },
+
+  // get user info
+  async getUserInfo({ commit, state }) {
+    const { data } = await getUserInfo()
+
+    commit('SET_SUPPLIER_NAME', data.bizName)
+    commit('SET_SUPPLIER_AVATAR', require('@/icons/avatar-default.png'))
   }
 }
 

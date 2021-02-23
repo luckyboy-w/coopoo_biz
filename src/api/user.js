@@ -24,3 +24,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getUserInfo(token) {
+  return request({
+    url: '/bc/lyBuUser/getUser',
+    method: 'get'
+  })
+}

@@ -2,18 +2,21 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo-smail">
-        <h1 v-else class="sidebar-title">{{ title }} </h1>
+        <img v-if="supplierAvatar" :src="supplierAvatar" class="sidebar-logo-smail">
+        <h1 v-else class="sidebar-title">{{ supplierName }} </h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">{{ title }} </h1>
+        <img v-if="supplierAvatar" :src="supplierAvatar" class="sidebar-logo">
+        <h1 class="sidebar-title">{{ supplierName }} </h1>
       </router-link>
     </transition>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import avatar from '@/icons/avatar-default.png'
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -25,8 +28,14 @@ export default {
   data() {
     return {
       title: 'Vue Element Admin',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      logo: ''
     }
+  },
+  computed: {
+    ...mapState('user', {
+      supplierName: 'supplierName',
+      supplierAvatar: 'supplierAvatar'
+    })
   }
 }
 </script>
@@ -64,6 +73,11 @@ export default {
       width: 10vh;
       height: 10vh;
     }
+    img{
+
+      width: 120px;
+      height: 120px;
+    }
 
     & .sidebar-logo-smail {
       position: absolute;
@@ -83,8 +97,9 @@ export default {
       display: block;
       margin: 0;
       color: $fontColor;
-      font-weight: 600;
-      font-size: 14px;
+      font-family: PingFang SC;
+      font-weight: 500;
+      font-size: 20px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }
