@@ -312,7 +312,7 @@
       </el-form>
     </el-dialog>
 
-    <div style="height:600px;padding:40px;width:100%" v-if="showOrdDtl">
+    <div style="padding:40px;width:100%"  v-if="showOrdDtl">
 
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
         <el-col :span="24">
