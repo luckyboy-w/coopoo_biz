@@ -24,7 +24,7 @@ export default {
     },
     height: {
       type: String,
-      default: '50vh'
+      default: '40vh'
     },
     circleColor: {
       type: Array,
@@ -63,7 +63,7 @@ export default {
     },
     handlerChartsData() {
 
-      if (this.chartsData.length === 0){
+      if (this.chartsData.length === 0) {
         return [
           {
             value: 0,
@@ -88,12 +88,22 @@ export default {
           text: this.chartsTitle,
           textStyle: {
             color: this.variables.fontColor,
-            fontWeight: 500,
-            fontFamily: 'PingFang SC'
-          }
+            fontWeight: 600,
+            fontFamily: 'PingFang SC',
+            // 必须为60  否则页面右侧tab标签的高度也得改才能保证水平对齐
+            lineHeight: 60
+          },
+          padding: 0
         },
         tooltip: {
           trigger: 'item',
+          // formatter: '@{name} <span style="position: absolute;right: 15px">{c}</span><br/>{b}',
+          formatter: function(params, ticket, callback) {
+            const { data } = params
+            return `<span style="display: inline-block;width: 15px;height: 15px;background: ${data.itemStyle.color}"></span>
+                    <span style="position: absolute;right: 15px;font-weight: bold;font-size: 15px;line-height: 15px">${data.value}</span>
+                    <br/>${data.name}`
+          },
           borderWidth: '1',
           borderColor: this.variables.lineColor,
           backgroundColor: this.variables.heavyBGColor,

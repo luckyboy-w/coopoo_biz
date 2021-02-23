@@ -12,7 +12,7 @@ const state = {
 // getters
 const getters = {
   chartsTitle: (state) => {
-    return state.activeName === 'startsNum' ? '收藏量TOP10' : '商品销量TOP10'
+    return state.activeName === 'startsNum' ? '收藏量TOP5' : '商品销量TOP5'
   },
   chartsData: (state) => {
     if (state.activeName === 'startsNum') {

@@ -178,8 +178,9 @@
         <pie-chart ref="pieChart" :circle-color="chartsCircleColor"/>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="12">
+        <!--stretch-->
         <el-tabs v-model="activeName" class="dashbord-tab-list" @tab-click="changeChartsTitle()">
-          <el-tab-pane width="30" disabled></el-tab-pane>
+          <el-tab-pane width="30" label="" disabled></el-tab-pane>
           <el-tab-pane label="商品销量TOP10" name="salesNum">
             <div>
               <!--              <div class="analysis-title">商品销量TOP10</div>-->
@@ -189,6 +190,11 @@
                   :data="bestSale"
                   style="width: 100%; margin-bottom: 20px;"
                   row-key="id"
+                  :header-cell-style="{
+                    fontSize: '18px',
+                    fontWeight: '500',
+                    color: scss.fontColor
+                  }"
                 >
                   <el-table-column width="30">
                     <template slot-scope="scope">
@@ -218,6 +224,11 @@
                   :data="bestFav"
                   style="width: 100%; margin-bottom: 20px;"
                   row-key="id"
+                  :header-cell-style="{
+                    fontSize: '18px',
+                    fontWeight: '500',
+                    color: scss.fontColor
+                  }"
                 >
                   <el-table-column width="30">
                     <template slot-scope="scope">
@@ -288,11 +299,13 @@
 </template>
 
 <script>
+import scss from '@/styles/variables.scss'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import CountTo from 'vue-count-to'
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
 import PieChart from '@/views/dashboard/admin/components/PieChart'
+import variables from '@/styles/variables.scss'
 
 export default {
   name: '',
@@ -329,6 +342,9 @@ export default {
     PieChart
   },
   computed: {
+    scss() {
+      return scss
+    },
     activeName: {
       get() {
         return this.$store.state.dashboard.activeName
@@ -528,6 +544,28 @@ export default {
   width: 100%;
   height: 0px;
   z-index: 1;
+}
+
+.dashbord-tab-list {
+}
+
+.dashbord-tab-list > > > .el-tabs__item {
+  & el-tab-pane:nth-of-type(2) {
+    background: #ff0000;
+  }
+
+  padding: 0 20px;
+  height: 30px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 30px;
+  display: inline-block;
+  list-style: none;
+  font-family: PingFang SC;
+  font-size: 14px;
+  font-weight: 600;
+  color: #939393;
+  position: relative;
 }
 </style>
 
