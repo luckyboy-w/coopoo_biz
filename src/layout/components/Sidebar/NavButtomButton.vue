@@ -5,6 +5,7 @@
     <!--    <transition-group name="sidebarBottomFade">-->
     <div v-if="collapse" key="collapse1" class="sidebar-logo-link" @click="showResetPwd()">
       <img :src="ChangePasswd" class="sidebar-logo">
+      <span class="sidebar-title" style="visibility: hidden">修改密码</span>
     </div>
     <div v-else key="expand1" class="sidebar-logo-link" @click="showResetPwd()">
       <img :src="ChangePasswd" class="sidebar-logo">
@@ -12,6 +13,7 @@
     </div>
     <div v-if="collapse" key="collapse2" class="sidebar-logo-link" @click="logout">
       <img :src="Logout" class="sidebar-logo">
+      <span class="sidebar-title" style="visibility: hidden">退出登录</span>
     </div>
     <div v-else key="expand2" class="sidebar-logo-link" @click="logout">
       <img :src="Logout" class="sidebar-logo">
