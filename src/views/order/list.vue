@@ -6,19 +6,19 @@
           <tr>
             <td>订单编号:</td>
             <td>
-              <el-input v-model="searchParam.orderNo" width="180px"/>
+              <el-input v-model="searchParam.orderNo"/>
             </td>
             <td>快递单号:</td>
             <td>
-              <el-input v-model="searchParam.expressNo" width="180px"/>
+              <el-input v-model="searchParam.expressNo"/>
             </td>
             <td>买家姓名：</td>
             <td>
-              <el-input v-model="searchParam.recUname" width="180px"/>
+              <el-input v-model="searchParam.recUname"/>
             </td>
             <td>买家电话：</td>
             <td>
-              <el-input v-model="searchParam.recPhone" width="180px"/>
+              <el-input v-model="searchParam.recPhone"/>
             </td>
             <td>
               <el-button icon="el-icon-search" @click="search()">搜索</el-button>
@@ -31,7 +31,6 @@
             <td>下单时间</td>
             <td>
               <el-date-picker
-                style="width:203px"
                 value-format="yyyy-MM-dd"
                 v-model="searchParam.startTime"
                 type="date"
@@ -39,10 +38,9 @@
               >
               </el-date-picker>
             </td>
-            <td style="padding-left:20px">至</td>
+            <td>至</td>
             <td>
               <el-date-picker
-                style="width:195px"
                 value-format="yyyy-MM-dd"
                 v-model="searchParam.endTime"
                 type="date"
@@ -63,6 +61,8 @@
                 <el-option value="60" label="定制信息确认中"></el-option>
               </el-select>
             </td>
+          </tr>
+          <tr>
             <td>是否需要开发票:</td>
             <td>
               <el-select v-model="searchParam.isRequireTaxBill" placeholder="请选择">
@@ -183,40 +183,134 @@
               </template>
             </el-table-column>
             <!-- 订单状态;0:订单被取消;10:已提交,待发货20;已发货,待收货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价; -->
-            <el-table-column prop="id" label="操作" width="250px">
+            <el-table-column fixed="right" prop="id" label="操作" width="250px">
               <template slot-scope="scope">
-                <div v-if="scope.row.orderType == 1 ">
-                  <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>
-                  <el-link type="primary" v-if="scope.row.status == 20" @click="updataOrd(scope.row)">修改快递</el-link>
-                  <!-- 发货后七天可以手动确认 -->
-                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
-                           @click="dealOrd(scope.row)"
-                  >确认收货
-                  </el-link>
-                  <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
-                  <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
-                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
-                </div>
-                <div v-if="scope.row.orderType == 2 ">
-                  <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>
-                  <el-link type="primary" v-if="scope.row.status == 20" @click="dealOrd(scope.row)">确认收货</el-link>
-                  <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>
-                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
-                </div>
-                <div v-if="scope.row.orderType == 4 ">
-                  <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>
-                  <!-- 发货后七天可以手动确认 -->
-                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
-                           @click="dealCustomOrd(scope.row)"
-                  >确认收货
-                  </el-link>
-                  <el-link type="primary" v-if="scope.row.status == 60" @click="collectCus(scope.row)">发起定价收款</el-link>
-                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
-                  <el-link type="primary" @click="cancelOrd(scope.row)"
-                           v-show="scope.row.status == 10 || scope.row.status == 60"
-                  >取消订单
-                  </el-link>
-                </div>
+                <el-button-group>
+                  <template v-if="scope.row.orderType == 1 ">
+                    <!--                  <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.status == 10"
+                      @click="sendOrd(scope.row)"
+                    >
+                      发货
+                    </el-button>
+
+                    <!--                  <el-link type="primary" v-if="scope.row.status == 20" @click="updataOrd(scope.row)">修改快递</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.status == 20"
+                      @click="updataOrd(scope.row)"
+                    >
+                      修改快递
+                    </el-button>
+
+                    <!-- 发货后七天可以手动确认 -->
+                    <!--                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20" @click="dealOrd(scope.row)">确认收货</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
+                      @click="dealOrd(scope.row)"
+                    >确认收货
+                    </el-button>
+
+                    <!--                  这个本来就是注释的 不改-->
+                    <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
+
+                    <!--                  <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.status == 10"
+                      @click="cancelOrd(scope.row)"
+                    >
+                      取消订单
+                    </el-button>
+
+
+                    <!--                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      @click="getOrdDtl(scope.row)"
+                    >查看订单
+                    </el-button>
+
+                  </template>
+                  <template v-if="scope.row.orderType == 2 ">
+                    <!--                    <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.status == 10"
+                      @click="sendOrd(scope.row)"
+                    >
+                      发货
+                    </el-button>
+
+                    <!--                    <el-link type="primary" v-if="scope.row.status == 20" @click="dealOrd(scope.row)">确认收货</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.status == 20"
+                      @click="dealOrd(scope.row)"
+                    >
+                      确认收货
+                    </el-button>
+
+                    <!--                    <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.status == 10"
+                      @click="cancelOrd(scope.row)"
+                    >
+                      取消订单
+                    </el-button>
+
+                    <!--                    <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      @click="getOrdDtl(scope.row)"
+                    >
+                      查看订单
+                    </el-button>
+                  </template>
+                  <template v-if="scope.row.orderType == 4 ">
+                    <!--                    <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.status == 10"
+                      @click="sendOrd(scope.row)"
+                    >
+                      发货
+                    </el-button>
+
+                    <!-- 发货后七天可以手动确认 -->
+                    <!--                    <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20" @click="dealCustomOrd(scope.row)">确认收货</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
+                      @click="dealCustomOrd(scope.row)"
+                    >
+                      确认收货
+                    </el-button>
+
+                    <!--                    <el-link type="primary" v-if="scope.row.status == 60" @click="collectCus(scope.row)">发起定价收款</el-link>-->
+                    <el-button type="primary" size="mini" v-if="scope.row.status == 60" @click="collectCus(scope.row)">
+                      发起定价收款
+                    </el-button>
+
+                    <!--                    <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
+                    <el-button type="primary" size="mini" @click="getOrdDtl(scope.row)">
+                      查看订单
+                    </el-button>
+
+                    <!--                    <el-link type="primary" @click="cancelOrd(scope.row)" v-show="scope.row.status == 10 || scope.row.status == 60" >取消订单 </el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-show="scope.row.status == 10 || scope.row.status == 60"
+                      @click="cancelOrd(scope.row)"
+                    >
+                      取消订单
+                    </el-button>
+                  </template>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -311,175 +405,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
-    <div style="padding:40px;width:100%" v-if="showOrdDtl">
-
-      <el-row :gutter="20" style="line-height:40px;font-size:12px">
-        <el-col :span="24">
-          <el-button type="primary" icon="el-icon-back" @click="handlerReturnPOrderList">返回列表</el-button>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="20" style="line-height:60px;font-size:14px;background-color:#FFFFF0">
-        <el-col :span="6">
-          <div>订单编号:{{ ordDtl.orderNo }}</div>
-        </el-col>
-        <el-col :span="6">
-          <div>状态:{{ ordDtl.status | statuts2Text }}</div>
-        </el-col>
-        <el-col :span="6"></el-col>
-        <el-col :span="6"></el-col>
-      </el-row>
-
-      <el-row :gutter="20" style="line-height:40px;padding:25px 0px;">
-        <el-col :span="24">
-          <el-steps :active="ordStep" align-center v-if="ptStep">
-            <el-step title="待发货"></el-step>
-            <el-step title="待收货"></el-step>
-            <el-step title="待支付"></el-step>
-            <el-step :title="isCancelTitle"></el-step>
-          </el-steps>
-
-          <el-steps :active="ordStep" align-center v-if="lpStep">
-            <el-step title="待支付"></el-step>
-            <el-step title="待发货"></el-step>
-            <el-step title="待收货"></el-step>
-            <el-step title="已完成"></el-step>
-          </el-steps>
-
-          <el-steps :active="ordStep" align-center v-if="dzStep">
-            <el-step title="待沟通"></el-step>
-            <el-step title="待发货"></el-step>
-            <el-step title="待收货"></el-step>
-            <el-step title="待支付"></el-step>
-            <el-step title="已完成"></el-step>
-          </el-steps>
-        </el-col>
-      </el-row>
-
-      <div style="padding:10px;margin:10px 0px 10px 0;">
-        <el-row :gutter="20" style="padding-top:20px;">
-          <el-table
-            :data="ordDtl.supplierList[0].dtlList"
-            style="width: 1180px; margin-bottom: 20px;font-size:12px;height:100%"
-            border
-          >
-            <el-table-column prop="goodImage" label="商品图片" width="140px">
-              <template slot-scope="scope">
-                <img :src="scope.row.goodImage" height="40px" width="40px"/>
-              </template>
-            </el-table-column>
-            <el-table-column prop="goodName" label="商品名称" width="288px"></el-table-column>
-            <el-table-column prop="goodSinglePrice" label="商品单价" width="150px"></el-table-column>
-            <el-table-column prop="goodNum" label="商品数量" width="150px"></el-table-column>
-            <el-table-column prop="goodSinglePrice" label="商品总价" width="150px">
-              <template slot-scope="scope">
-                {{ scope.row.goodSinglePrice * scope.row.goodNum }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="skuInfo" label="规格" width="150px"></el-table-column>
-            <el-table-column prop="goodCode" label="商品货号" width="150px"></el-table-column>
-          </el-table>
-        </el-row>
-      </div>
-
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px;" class="main-title">
-          <el-col :span="24">付款信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
-          <el-col :span="6">订单金额：{{ ordDtl.ordPrice }}</el-col>
-          <el-col :span="6">应付金额：{{ ordDtl.ordPayPrice }}</el-col>
-          <el-col :span="6">实付金额：{{ ordDtl.totalAmount }}</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">运费：{{ ordDtl.expressPrice == '0' ? '0.00' : ordDtl.expressPrice }}</el-col>
-          <el-col :span="6">优惠金额：{{ ordDtl.ordSubPrice == '0' ? '0.00' : ordDtl.ordSubPrice }}</el-col>
-          <el-col :span="6"></el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-      </div>
-
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
-          <el-col :span="24">收货人信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">收货人：{{ ordDtl.recUname }}</el-col>
-          <el-col :span="6">收货地址：{{ ordDtl.recArea }}</el-col>
-          <el-col :span="6">收货人电话：{{ ordDtl.recPhone }}</el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-      </div>
-
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
-          <el-col :span="24">支付及配送信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
-          <el-col :span="6">支付时间：{{ ordDtl.payTime | _formatDate }}</el-col>
-          <el-col :span="6">运费：{{ ordDtl.expressPrice }}</el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-      </div>
-
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
-          <el-col :span="24">物流信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">物流公司：{{ ordDtl.expressName }}</el-col>
-          <el-col :span="6">快递单号：{{ ordDtl.expressNo }}</el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-      </div>
-
-      <div
-        style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;"
-      >
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
-          <el-col :span="24">发票信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6">发票类型：普通发票</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ ordDtl.tax.taxTitle == '1' ? '公司' : '个人' }}
-          </el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ ordDtl.tax.compTaxNo }}</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">{{
-              ordDtl.tax.taxTitle == '1' ? '公司名称' : '姓名'
-            }}：{{ ordDtl.tax.companyName }}
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ ordDtl.tax.email }}</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.phoneNo">手机号码：{{ ordDtl.tax.phoneNo }}</el-col>
-          <el-col :span="6"></el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-      </div>
-
-      <div v-if="ordDtl.ordDtlList[0].goodCustom" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-       padding:10px;margin:10px 0px 10px 0;"
-      >
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
-          <el-col :span="24">定制信息</el-col>
-        </el-row>
-        <el-row :gutter="24" style="line-height:40px;font-size:12px">
-          <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>
-          <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>
-          <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>
-        </el-row>
-      </div>
-
-      <div style="line-height:400px;height:20px">
-        <el-row :gutter="24" style="line-height:40px;font-size:12px">
-          <el-col :span="24">&nbsp;&nbsp;&nbsp;</el-col>
-        </el-row>
-      </div>
-
-    </div>
 
     <el-dialog title="发货" :visible.sync="sendOrder" v-if="sendOrder" @close="closeSendOrderDialog">
       <el-tabs v-model="activeName" type="border-card">
@@ -717,6 +642,176 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <div v-if="showOrdDtl">
+
+      <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        <el-col :span="24">
+          <el-button type="primary" size="mini" icon="el-icon-back" @click="handlerReturnPOrderList">返回列表</el-button>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20" style="line-height:60px;font-size:14px;background-color:#FFFFF0">
+        <el-col :span="6">
+          <div>订单编号:{{ ordDtl.orderNo }}</div>
+        </el-col>
+        <el-col :span="6">
+          <div>状态:{{ ordDtl.status | statuts2Text }}</div>
+        </el-col>
+        <el-col :span="6"></el-col>
+        <el-col :span="6"></el-col>
+      </el-row>
+
+      <!--      line-height:40px;padding:25px 0px;-->
+      <el-row :gutter="20" style="">
+        <el-col :span="24">
+          <el-steps :active="ordStep" align-center v-if="ptStep">
+            <el-step title="待发货"></el-step>
+            <el-step title="待收货"></el-step>
+            <el-step title="待支付"></el-step>
+            <el-step :title="isCancelTitle"></el-step>
+          </el-steps>
+
+          <el-steps :active="ordStep" align-center v-if="lpStep">
+            <el-step title="待支付"></el-step>
+            <el-step title="待发货"></el-step>
+            <el-step title="待收货"></el-step>
+            <el-step title="已完成"></el-step>
+          </el-steps>
+
+          <el-steps :active="ordStep" align-center v-if="dzStep">
+            <el-step title="待沟通"></el-step>
+            <el-step title="待发货"></el-step>
+            <el-step title="待收货"></el-step>
+            <el-step title="待支付"></el-step>
+            <el-step title="已完成"></el-step>
+          </el-steps>
+        </el-col>
+      </el-row>
+
+      <div style="padding:10px;margin:10px 0px 10px 0;">
+        <el-row :gutter="20" style="padding-top:20px;">
+          <el-table
+            :data="ordDtl.supplierList[0].dtlList"
+            style="width: 1180px; margin-bottom: 20px;font-size:12px;height:100%"
+            border
+          >
+            <el-table-column prop="goodImage" label="商品图片" width="140px">
+              <template slot-scope="scope">
+                <img :src="scope.row.goodImage" height="40px" width="40px"/>
+              </template>
+            </el-table-column>
+            <el-table-column prop="goodName" label="商品名称" width="288px"></el-table-column>
+            <el-table-column prop="goodSinglePrice" label="商品单价" width="150px"></el-table-column>
+            <el-table-column prop="goodNum" label="商品数量" width="150px"></el-table-column>
+            <el-table-column prop="goodSinglePrice" label="商品总价" width="150px">
+              <template slot-scope="scope">
+                {{ scope.row.goodSinglePrice * scope.row.goodNum }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="skuInfo" label="规格" width="150px"></el-table-column>
+            <el-table-column prop="goodCode" label="商品货号" width="150px"></el-table-column>
+          </el-table>
+        </el-row>
+      </div>
+
+      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
+        <el-row :gutter="20" style="line-height:40px;" class="main-title">
+          <el-col :span="24">付款信息</el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+          <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
+          <el-col :span="6">订单金额：{{ ordDtl.ordPrice }}</el-col>
+          <el-col :span="6">应付金额：{{ ordDtl.ordPayPrice }}</el-col>
+          <el-col :span="6">实付金额：{{ ordDtl.totalAmount }}</el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+          <el-col :span="6">运费：{{ ordDtl.expressPrice == '0' ? '0.00' : ordDtl.expressPrice }}</el-col>
+          <el-col :span="6">优惠金额：{{ ordDtl.ordSubPrice == '0' ? '0.00' : ordDtl.ordSubPrice }}</el-col>
+          <el-col :span="6"></el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+      </div>
+
+      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
+        <el-row :gutter="20" style="line-height:40px" class="main-title">
+          <el-col :span="24">收货人信息</el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+          <el-col :span="6">收货人：{{ ordDtl.recUname }}</el-col>
+          <el-col :span="6">收货地址：{{ ordDtl.recArea }}</el-col>
+          <el-col :span="6">收货人电话：{{ ordDtl.recPhone }}</el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+      </div>
+
+      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
+        <el-row :gutter="20" style="line-height:40px" class="main-title">
+          <el-col :span="24">支付及配送信息</el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+          <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
+          <el-col :span="6">支付时间：{{ ordDtl.payTime | _formatDate }}</el-col>
+          <el-col :span="6">运费：{{ ordDtl.expressPrice }}</el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+      </div>
+
+      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
+        <el-row :gutter="20" style="line-height:40px" class="main-title">
+          <el-col :span="24">物流信息</el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+          <el-col :span="6">物流公司：{{ ordDtl.expressName }}</el-col>
+          <el-col :span="6">快递单号：{{ ordDtl.expressNo }}</el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+      </div>
+
+      <div
+        style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;"
+      >
+        <el-row :gutter="20" style="line-height:40px" class="main-title">
+          <el-col :span="24">发票信息</el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+          <el-col :span="6">发票类型：普通发票</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ ordDtl.tax.taxTitle == '1' ? '公司' : '个人' }}
+          </el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ ordDtl.tax.compTaxNo }}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">{{
+              ordDtl.tax.taxTitle == '1' ? '公司名称' : '姓名'
+            }}：{{ ordDtl.tax.companyName }}
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ ordDtl.tax.email }}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.phoneNo">手机号码：{{ ordDtl.tax.phoneNo }}</el-col>
+          <el-col :span="6"></el-col>
+          <el-col :span="6"></el-col>
+        </el-row>
+      </div>
+
+      <div v-if="ordDtl.ordDtlList && ordDtl.ordDtlList[0].goodCustom" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+       padding:10px;margin:10px 0px 10px 0;"
+      >
+        <el-row :gutter="20" style="line-height:40px" class="main-title">
+          <el-col :span="24">定制信息</el-col>
+        </el-row>
+        <el-row :gutter="24" style="line-height:40px;font-size:12px">
+          <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>
+          <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>
+          <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>
+        </el-row>
+      </div>
+
+      <div style="line-height:400px;height:20px">
+        <el-row :gutter="24" style="line-height:40px;font-size:12px">
+          <el-col :span="24">&nbsp;&nbsp;&nbsp;</el-col>
+        </el-row>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -1869,32 +1964,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .ly-container {
-  padding: 10px 20px;
   font-size: 14px;
 
   .ly-tool-panel {
-    line-height: "60px";
-    height: "60px";
-    width: 100%;
-    padding: 10px 10px;
-
-    .ly-tool-btn {
-      padding-left: 20px;
-      display: inline;
+    td {
+      white-space: nowrap;
     }
+
+    margin-bottom: 3vh;
   }
 }
-</style>
-<style lang="scss">
-.el-step__title {
-  font-size: 12px;
-}
 
-.main-title {
-  font-size: 14px;
-}
-
-.sub-title {
-  font-size: 12px;
-}
 </style>
