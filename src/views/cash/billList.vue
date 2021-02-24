@@ -57,7 +57,6 @@
           :data="noBillData.list"
           style="width: 100%; margin-bottom: 20px;"
           row-key="pkBillId"
-          @selection-change="handleSelectionChangeReadBill"
         >
           <el-table-column type="selection" width="55"></el-table-column>
           <!-- <el-table-column prop="billNo" label="流水号" min-width="24%"></el-table-column> -->
