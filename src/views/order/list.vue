@@ -312,11 +312,11 @@
       </el-form>
     </el-dialog>
 
-    <div style="padding:40px;width:100%"  v-if="showOrdDtl">
+    <div style="padding:40px;width:100%" v-if="showOrdDtl">
 
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
         <el-col :span="24">
-          <el-button type="success" @click="handlerReturnPOrderList">返回列表</el-button>
+          <el-button type="primary" icon="el-icon-back" @click="handlerReturnPOrderList">返回列表</el-button>
         </el-col>
       </el-row>
 
@@ -447,7 +447,10 @@
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ ordDtl.tax.taxTitle == '1' ? '公司' : '个人' }}
           </el-col>
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.compTaxNo">税号：{{ ordDtl.tax.compTaxNo }}</el-col>
-          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">{{ ordDtl.tax.taxTitle == '1' ? '公司名称' : '姓名' }}：{{ ordDtl.tax.companyName }}</el-col>
+          <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.companyName">{{
+              ordDtl.tax.taxTitle == '1' ? '公司名称' : '姓名'
+            }}：{{ ordDtl.tax.companyName }}
+          </el-col>
         </el-row>
         <el-row :gutter="20" style="line-height:40px;font-size:12px">
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ ordDtl.tax.email }}</el-col>
@@ -1640,7 +1643,7 @@ export default {
         const orderTemplateNo = res.data.map(item => item.orderNo)
         const selectedOrderNo = selectedOrderList.map(item => item.orderNo)
 
-        let noTemplateOrderNo = selectedOrderNo.filter(x => !orderTemplateNo.includes(x));
+        let noTemplateOrderNo = selectedOrderNo.filter(x => !orderTemplateNo.includes(x))
 
         if (noTemplateOrderNo.length > 0) {
           this.$message({
@@ -1648,15 +1651,15 @@ export default {
             type: 'warning'
           })
           let noTemplateOrderRow = selection.filter(item => orderTemplateNo.includes(item.orderNo))
-          mainTable.clearSelection();
+          mainTable.clearSelection()
           console.info(noTemplateOrderRow)
           noTemplateOrderRow.forEach(row => mainTable.toggleRowSelection(row, true))
           loading.close()
           return
         }
 
-        const orderPrintTemplateHtml = res.data.map(item => item.printTemplate).join("</br>")
-        let orderPrintTemplateWindow = window.open("","wildebeast")
+        const orderPrintTemplateHtml = res.data.map(item => item.printTemplate).join('</br>')
+        let orderPrintTemplateWindow = window.open('', 'wildebeast')
         orderPrintTemplateWindow.document.open()
         orderPrintTemplateWindow.document.write(orderPrintTemplateHtml)
         orderPrintTemplateWindow.document.close()

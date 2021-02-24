@@ -211,6 +211,7 @@ export default {
   width: 600px;
 }
 </style>
+
 <style lang="scss">
 .hide .el-upload--picture-card {
   display: none;

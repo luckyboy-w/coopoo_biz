@@ -52,7 +52,13 @@
                         <el-button type="primary" @click="search()">搜索</el-button> -->
         <!--  </el-col>
               </el-row> -->
-        <el-table ref="noBillData" :data="noBillData.list" style="width: 100%; margin-bottom: 20px;" row-key="id">
+        <el-table
+          ref="noBillData"
+          :data="noBillData.list"
+          style="width: 100%; margin-bottom: 20px;"
+          row-key="pkBillId"
+          @selection-change="handleSelectionChangeReadBill"
+        >
           <el-table-column type="selection" width="55"></el-table-column>
           <!-- <el-table-column prop="billNo" label="流水号" min-width="24%"></el-table-column> -->
           <el-table-column prop="orderNo" label="订单号" min-width="24%">
@@ -73,7 +79,7 @@
           <el-table-column prop="pkBillId" label="操作" min-width="24%">
             <template slot-scope="scope">
               <!-- <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link> -->
-<!--              <el-link type="primary" @click="showBillDetail_(scope.row)">订单明细</el-link>-->
+              <!--              <el-link type="primary" @click="showBillDetail_(scope.row)">订单明细</el-link>-->
 
               <el-button size="mini" type="primary" @click="showBillDetail_(scope.row)">订单明细</el-button>
             </template>
@@ -129,7 +135,7 @@
           </el-table-column>
           <el-table-column prop="pkBillId" label="操作" min-width="24%">
             <template slot-scope="scope">
-<!--              <el-link type="primary" @click="showBillDetail(scope.row)"></el-link>-->
+              <!--              <el-link type="primary" @click="showBillDetail(scope.row)"></el-link>-->
               <el-button size="mini" type="primary" @click="showBillDetail(scope.row)">查看明细</el-button>
             </template>
           </el-table-column>
@@ -184,7 +190,7 @@
           </el-table-column>
           <el-table-column prop="pkBillId" label="操作" min-width="24%">
             <template slot-scope="scope">
-<!--              <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>-->
+              <!--              <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>-->
               <el-button size="mini" type="primary" @click="showBillDetail(scope.row)">查看明细</el-button>
             </template>
           </el-table-column>
