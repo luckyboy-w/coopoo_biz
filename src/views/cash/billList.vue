@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <el-tabs v-model="activeName"  @tab-click="handleClick">
+  <div class="bill-tab-list">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
       <!-- <el-row style="line-height:40px;padding:10px 0px ">
                 <el-col v-if="!isCanBill" :span="24" style="color: red">今天不是结算日</el-col>
                 <el-col :span="24">{{billDate}}</el-col>
             </el-row> -->
       <el-tab-pane label="可结算" name="readyBill" style="height:600px">
+        <span slot="label" class="my-tab-label">可结算</span>
         <tr>
           <td>订单号:&nbsp;</td>
           <td>
@@ -72,7 +73,9 @@
           <el-table-column prop="pkBillId" label="操作" min-width="24%">
             <template slot-scope="scope">
               <!-- <el-link v-if="isCanBill" type="primary" @click="singleBill(scope.row)">结算</el-link> -->
-              <el-link type="primary" @click="showBillDetail_(scope.row)">订单明细</el-link>
+<!--              <el-link type="primary" @click="showBillDetail_(scope.row)">订单明细</el-link>-->
+
+              <el-button size="mini" type="primary" @click="showBillDetail_(scope.row)">订单明细</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -81,6 +84,7 @@
         />
       </el-tab-pane>
       <el-tab-pane label="结算中" name="settleFinsh" style="height:600px">
+        <span slot="label" class="my-tab-label">结算中</span>
         <tr>
           <td>订单号:</td>
           <td>
@@ -125,7 +129,8 @@
           </el-table-column>
           <el-table-column prop="pkBillId" label="操作" min-width="24%">
             <template slot-scope="scope">
-              <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>
+<!--              <el-link type="primary" @click="showBillDetail(scope.row)"></el-link>-->
+              <el-button size="mini" type="primary" @click="showBillDetail(scope.row)">查看明细</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -135,6 +140,7 @@
         />
       </el-tab-pane>
       <el-tab-pane label="已结算" name="settleEnd" style="height:600px">
+        <span slot="label" class="my-tab-label">已结算</span>
         <tr>
           <td>订单号:</td>
           <td>
@@ -178,7 +184,8 @@
           </el-table-column>
           <el-table-column prop="pkBillId" label="操作" min-width="24%">
             <template slot-scope="scope">
-              <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>
+<!--              <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>-->
+              <el-button size="mini" type="primary" @click="showBillDetail(scope.row)">查看明细</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -189,7 +196,7 @@
       </el-tab-pane>
 
       <el-tab-pane label="明细" name="dataDtl" v-if="dataDtl" style="height:600px">
-
+        <span slot="label" class="my-tab-label">明细</span>
         <el-row style="line-height:40px;padding:10px 0px ">
           <el-col :span="24" style="padding-left:10px">
             <el-button v-if="!back_" type="primary" icon="el-icon-back" @click="backTo()">
@@ -633,3 +640,55 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "~@/styles/variables.scss";
+
+$table-list-height: 6vh;
+
+.my-tab-label {
+  font-family: PingFang SC;
+  font-weight: 400;
+  line-height: 30px;
+  //color: $fontColor;
+  font-size: 20px;
+}
+
+.bill-tab-list > > > .el-tabs__nav-wrap {
+  overflow: hidden;
+  margin-bottom: -1px;
+  position: relative;
+  background: $lightBGColor;
+}
+
+.bill-tab-list > > > .el-tabs__nav-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0px;
+  z-index: 1;
+}
+
+.bill-tab-list > > > .el-tabs__nav-scroll {
+  overflow: hidden;
+  height: $table-list-height;
+  padding-left: 10px;
+}
+
+.bill-tab-list > > > .el-tabs__item {
+  padding: 0 20px;
+  height: $table-list-height;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: $table-list-height;
+  display: inline-block;
+  list-style: none;
+  font-family: PingFang SC;
+  font-size: 14px;
+  font-weight: 600;
+  //color: #939393;
+  position: relative;
+}
+</style>

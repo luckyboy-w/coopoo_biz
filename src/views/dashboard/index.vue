@@ -550,10 +550,6 @@ export default {
 }
 
 .dashbord-tab-list > > > .el-tabs__item {
-  & el-tab-pane:nth-of-type(2) {
-    background: #ff0000;
-  }
-
   padding: 0 20px;
   height: 30px;
   -webkit-box-sizing: border-box;
