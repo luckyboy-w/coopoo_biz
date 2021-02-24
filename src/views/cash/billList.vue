@@ -651,7 +651,7 @@ $table-list-height: 6vh;
   font-weight: 400;
   line-height: 30px;
   //color: $fontColor;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .bill-tab-list > > > .el-tabs__nav-wrap {
