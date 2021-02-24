@@ -168,7 +168,7 @@
               </template>
             </el-table-column>
             <!-- 订单状态;0:订单被取消;10:已提交,待发货20;已发货,待收货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价; -->
-            <el-table-column fixed="right" prop="id" label="操作" width="250px">
+            <el-table-column fixed="right" prop="id" label="操作" width="260px">
               <template slot-scope="scope">
                 <el-button-group>
                   <template v-if="scope.row.orderType == 1 ">
@@ -289,7 +289,7 @@
                     <!--                    <el-link type="primary" @click="cancelOrd(scope.row)" v-show="scope.row.status == 10 || scope.row.status == 60" >取消订单 </el-link>-->
                     <el-button
                       type="primary" size="mini"
-                      v-show="scope.row.status == 10 || scope.row.status == 60"
+                      v-if="scope.row.status == 10 || scope.row.status == 60"
                       @click="cancelOrd(scope.row)"
                     >
                       取消订单
@@ -632,70 +632,211 @@
 
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
         <el-col :span="24">
-          <el-button type="primary" size="mini" icon="el-icon-back" @click="handlerReturnPOrderList">返回列表</el-button>
+          <el-button type="primary" size="small" icon="el-icon-back" @click="handlerReturnPOrderList">返回列表</el-button>
         </el-col>
-      </el-row>
-
-      <el-row :gutter="20" style="line-height:60px;font-size:14px;background-color:#FFFFF0">
-        <el-col :span="6">
-          <div>订单编号:{{ ordDtl.orderNo }}</div>
-        </el-col>
-        <el-col :span="6">
-          <div>状态:{{ ordDtl.status | statuts2Text }}</div>
-        </el-col>
-        <el-col :span="6"></el-col>
-        <el-col :span="6"></el-col>
       </el-row>
 
       <!--      line-height:40px;padding:25px 0px;-->
-      <el-row :gutter="20" style="">
-        <el-col :span="24">
-          <el-steps :active="ordStep" align-center v-if="ptStep">
-            <el-step title="待发货"></el-step>
-            <el-step title="待收货"></el-step>
-            <el-step title="待支付"></el-step>
-            <el-step :title="isCancelTitle"></el-step>
-          </el-steps>
+      <div class="step-container">
+        <el-steps :active="ordStep" align-center v-if="ptStep">
+          <el-step title="待发货">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <!--          wait / process / finish / error / success-->
+          <el-step title="待收货">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <el-step title="待支付">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <el-step :title="isCancelTitle">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+        </el-steps>
 
-          <el-steps :active="ordStep" align-center v-if="lpStep">
-            <el-step title="待支付"></el-step>
-            <el-step title="待发货"></el-step>
-            <el-step title="待收货"></el-step>
-            <el-step title="已完成"></el-step>
-          </el-steps>
+        <el-steps :active="ordStep" align-center v-if="lpStep">
+          <el-step title="待支付">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <el-step title="待发货">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <el-step title="待收货">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <el-step title="已完成">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+        </el-steps>
 
-          <el-steps :active="ordStep" align-center v-if="dzStep">
-            <el-step title="待沟通"></el-step>
-            <el-step title="待发货"></el-step>
-            <el-step title="待收货"></el-step>
-            <el-step title="待支付"></el-step>
-            <el-step title="已完成"></el-step>
-          </el-steps>
-        </el-col>
-      </el-row>
-
-      <div style="padding:10px;margin:10px 0px 10px 0;">
-        <el-row :gutter="20" style="padding-top:20px;">
+        <el-steps :active="ordStep" align-center v-if="dzStep">
+          <el-step title="待沟通">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span></el-step>
+          <el-step title="待发货">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <el-step title="待收货">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+          <el-step title="待支付">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                >
+                </el-avatar>
+              </span>
+          </el-step>
+          <el-step title="已完成">
+              <span slot="icon">
+                <el-avatar
+                  shape="square" :size="50"
+                  class="step-icon"
+                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                ></el-avatar>
+              </span>
+          </el-step>
+        </el-steps>
+      </div>
+      <div class="notic-container">
+        <div class="avatar">
+          <el-avatar
+            shape="square"
+            :size="80"
+            :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+          ></el-avatar>
+        </div>
+        <span class="title">
+          订单状态: {{ ordDtl.status | statuts2Text }}
+        </span>
+        <br/>
+        <span class="content">
+         订单编号: {{ ordDtl.orderNo }}
+        </span>
+      </div>
+      <!--      style="padding:10px;margin:10px 0px 10px 0;"-->
+      <div>
+        <!--        style="padding-top:20px;"-->
+        <el-row>
+          <!--          style="width: 1180px; margin-bottom: 20px;font-size:12px;height:100%"-->
           <el-table
             :data="ordDtl.supplierList[0].dtlList"
-            style="width: 1180px; margin-bottom: 20px;font-size:12px;height:100%"
             border
           >
-            <el-table-column prop="goodImage" label="商品图片" width="140px">
+            <el-table-column
+              align="center"
+              header-align="center"
+              prop="goodImage" label="商品图片"
+            >
               <template slot-scope="scope">
-                <img :src="scope.row.goodImage" height="40px" width="40px"/>
+                <el-avatar
+                  shape="square"
+                  :size="150"
+                  :src="scope.row.goodImage"
+                ></el-avatar>
               </template>
             </el-table-column>
-            <el-table-column prop="goodName" label="商品名称" width="288px"></el-table-column>
-            <el-table-column prop="goodSinglePrice" label="商品单价" width="150px"></el-table-column>
-            <el-table-column prop="goodNum" label="商品数量" width="150px"></el-table-column>
-            <el-table-column prop="goodSinglePrice" label="商品总价" width="150px">
+            <el-table-column
+              align="center"
+              header-align="center"
+              prop="goodName" label="商品名称"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              header-align="center"
+              prop="goodSinglePrice" label="商品单价"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              header-align="center"
+              prop="goodNum" label="商品数量" width="150px"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              header-align="center"
+              prop="goodSinglePrice" label="商品总价"
+            >
               <template slot-scope="scope">
                 {{ scope.row.goodSinglePrice * scope.row.goodNum }}
               </template>
             </el-table-column>
-            <el-table-column prop="skuInfo" label="规格" width="150px"></el-table-column>
-            <el-table-column prop="goodCode" label="商品货号" width="150px"></el-table-column>
+            <el-table-column
+              align="center"
+              header-align="center"
+              prop="skuInfo" label="规格"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              header-align="center"
+              prop="goodCode" label="商品货号"
+            ></el-table-column>
           </el-table>
         </el-row>
       </div>
@@ -1948,6 +2089,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "~@/styles/variables.scss";
+
 .ly-container {
   font-size: 14px;
 
@@ -1959,5 +2102,49 @@ export default {
     margin-bottom: 3vh;
   }
 }
+
+.step-container {
+  height: 20vh;
+  padding-top: 8vh;
+  //background: #abc;
+
+  .step-icon {
+    padding: 5px;
+    background: $heavyBGColor;
+  }
+}
+
+.notic-container {
+  overflow: hidden;
+  height: 25vh;
+  background: $lightThemeColor;
+  text-align: center;
+  margin-bottom: 5vh;
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    background: #abc;
+    margin: 20px auto;
+  }
+
+  .title {
+    color: #545454;
+    line-height: 42px;
+    font-weight: 600;
+    font-size: 20px;
+    font-family: PingFang SC;
+  }
+
+  .content {
+    margin-top: 20px;
+    color: #545454;
+    line-height: 28px;
+    font-weight: 400;
+    font-size: 20px;
+    display: inline-block;
+  }
+}
+
 
 </style>
