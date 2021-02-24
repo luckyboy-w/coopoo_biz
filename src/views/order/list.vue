@@ -6,19 +6,19 @@
           <tr>
             <td>订单编号:</td>
             <td>
-              <el-input v-model="searchParam.orderNo"/>
+              <el-input v-model="searchParam.orderNo" width="180px"/>
             </td>
             <td>快递单号:</td>
             <td>
-              <el-input v-model="searchParam.expressNo"/>
+              <el-input v-model="searchParam.expressNo" width="180px"/>
             </td>
             <td>买家姓名：</td>
             <td>
-              <el-input v-model="searchParam.recUname"/>
+              <el-input v-model="searchParam.recUname" width="180px"/>
             </td>
             <td>买家电话：</td>
             <td>
-              <el-input v-model="searchParam.recPhone"/>
+              <el-input v-model="searchParam.recPhone" width="180px"/>
             </td>
             <td>
               <el-button icon="el-icon-search" @click="search()">搜索</el-button>
@@ -31,6 +31,7 @@
             <td>下单时间</td>
             <td>
               <el-date-picker
+                style="width:203px"
                 value-format="yyyy-MM-dd"
                 v-model="searchParam.startTime"
                 type="date"
@@ -38,9 +39,10 @@
               >
               </el-date-picker>
             </td>
-            <td>至</td>
+            <td style="padding-left:20px">至</td>
             <td>
               <el-date-picker
+                style="width:195px"
                 value-format="yyyy-MM-dd"
                 v-model="searchParam.endTime"
                 type="date"
@@ -61,30 +63,13 @@
                 <el-option value="60" label="定制信息确认中"></el-option>
               </el-select>
             </td>
-          </tr>
-          <tr>
             <td>是否需要开发票:</td>
             <td>
               <el-select v-model="searchParam.isRequireTaxBill" placeholder="请选择">
                 <el-option value="" label="全部"></el-option>
                 <el-option value="1" label="是"></el-option>
                 <el-option value="0" label="否"></el-option>
-              </el-select>
-            </td>
-            <td>是否打印电子面单:</td>
-            <td>
-              <el-select v-model="searchParam.isPrintedTemplate" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="1" label="是"></el-option>
-                <el-option value="0" label="否"></el-option>
-              </el-select>
-            </td>
-            <td>是否超期未付款:</td>
-            <td>
-              <el-select v-model="searchParam.isOverDuePayment" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="1" label="是"></el-option>
-                <el-option value="0" label="否"></el-option>
+
               </el-select>
             </td>
             <td>
