@@ -841,66 +841,61 @@
         </el-row>
       </div>
 
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px;" class="main-title">
+      <div class="info-container">
+        <span class="main-title">
           <el-col :span="24">付款信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        </span>
+        <el-row :gutter="20" class="main-content">
           <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
           <el-col :span="6">订单金额：{{ ordDtl.ordPrice }}</el-col>
           <el-col :span="6">应付金额：{{ ordDtl.ordPayPrice }}</el-col>
           <el-col :span="6">实付金额：{{ ordDtl.totalAmount }}</el-col>
         </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        <el-row :gutter="20" class="main-content">
           <el-col :span="6">运费：{{ ordDtl.expressPrice == '0' ? '0.00' : ordDtl.expressPrice }}</el-col>
           <el-col :span="6">优惠金额：{{ ordDtl.ordSubPrice == '0' ? '0.00' : ordDtl.ordSubPrice }}</el-col>
           <el-col :span="6"></el-col>
           <el-col :span="6"></el-col>
         </el-row>
-      </div>
 
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
+
+        <!--        收货人信息-->
+        <span class="main-title">
           <el-col :span="24">收货人信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        </span>
+        <el-row :gutter="20" class="main-content">
           <el-col :span="6">收货人：{{ ordDtl.recUname }}</el-col>
           <el-col :span="6">收货地址：{{ ordDtl.recArea }}</el-col>
           <el-col :span="6">收货人电话：{{ ordDtl.recPhone }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
-      </div>
 
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
+        <!--        支付配送信息-->
+        <span class="main-title">
           <el-col :span="24">支付及配送信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        </span>
+        <el-row :gutter="20" class="main-content">
           <el-col :span="6">付款方式：{{ ordDtl.payType | pay2Text }}</el-col>
           <el-col :span="6">支付时间：{{ ordDtl.payTime | _formatDate }}</el-col>
           <el-col :span="6">运费：{{ ordDtl.expressPrice }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
-      </div>
 
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
+        <!--        物流信息-->
+        <span class="main-title">
           <el-col :span="24">物流信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        </span>
+        <el-row :gutter="20" class="main-content">
           <el-col :span="6">物流公司：{{ ordDtl.expressName }}</el-col>
           <el-col :span="6">快递单号：{{ ordDtl.expressNo }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
-      </div>
 
-      <div
-        style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;"
-      >
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
+        <!--        发票信息-->
+        <span class="main-title">
           <el-col :span="24">发票信息</el-col>
-        </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        </span>
+        <el-row :gutter="20" class="main-content">
           <el-col :span="6">发票类型：普通发票</el-col>
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.taxTitle">发票抬头：{{ ordDtl.tax.taxTitle == '1' ? '公司' : '个人' }}
           </el-col>
@@ -910,32 +905,68 @@
             }}：{{ ordDtl.tax.companyName }}
           </el-col>
         </el-row>
-        <el-row :gutter="20" style="line-height:40px;font-size:12px">
+        <el-row :gutter="20" class="main-content">
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.email">邮箱：{{ ordDtl.tax.email }}</el-col>
           <el-col :span="6" v-if="ordDtl.tax && ordDtl.tax.phoneNo">手机号码：{{ ordDtl.tax.phoneNo }}</el-col>
           <el-col :span="6"></el-col>
           <el-col :span="6"></el-col>
         </el-row>
+
+
+        <template v-if="ordDtl.ordDtlList && ordDtl.ordDtlList[0].goodCustom">
+          <span class="main-title">
+            <el-col :span="24">定制信息</el-col>
+          </span>
+          <el-row :gutter="24" class="main-content">
+            <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>
+            <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>
+            <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>
+          </el-row>
+        </template>
+
+        <!--        <div style="line-height:400px;height:20px">-->
+        <!--          <el-row :gutter="24" style="line-height:40px;font-size:12px">-->
+        <!--            <el-col :span="24">&nbsp;&nbsp;&nbsp;111</el-col>-->
+        <!--          </el-row>-->
+        <!--        </div>-->
       </div>
 
-      <div v-if="ordDtl.ordDtlList && ordDtl.ordDtlList[0].goodCustom" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-       padding:10px;margin:10px 0px 10px 0;"
-      >
-        <el-row :gutter="20" style="line-height:40px" class="main-title">
-          <el-col :span="24">定制信息</el-col>
-        </el-row>
-        <el-row :gutter="24" style="line-height:40px;font-size:12px">
-          <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>
-          <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>
-          <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>
-        </el-row>
-      </div>
+      <!--      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">-->
 
-      <div style="line-height:400px;height:20px">
-        <el-row :gutter="24" style="line-height:40px;font-size:12px">
-          <el-col :span="24">&nbsp;&nbsp;&nbsp;</el-col>
-        </el-row>
-      </div>
+      <!--      </div>-->
+
+      <!--      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">-->
+
+      <!--      </div>-->
+
+      <!--      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">-->
+      <!--        -->
+      <!--      </div>-->
+
+      <!--      <div-->
+      <!--        style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;"-->
+      <!--      >-->
+
+      <!--      </div>-->
+
+      <!--      <div v-if="ordDtl.ordDtlList && ordDtl.ordDtlList[0].goodCustom" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);-->
+      <!--       padding:10px;margin:10px 0px 10px 0;"-->
+      <!--      >-->
+      <!--        <el-row :gutter="20" style="line-height:40px" class="main-title">-->
+      <!--          <el-col :span="24">定制信息</el-col>-->
+      <!--        </el-row>-->
+      <!--        <el-row :gutter="24" style="line-height:40px;font-size:12px">-->
+      <!--          <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>-->
+      <!--          <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>-->
+      <!--          <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>-->
+      <!--        </el-row>-->
+      <!--      </div>-->
+
+      <!--      <div style="line-height:400px;height:20px">-->
+      <!--        <el-row :gutter="24" style="line-height:40px;font-size:12px">-->
+      <!--          <el-col :span="24">&nbsp;&nbsp;&nbsp;</el-col>-->
+      <!--        </el-row>-->
+      <!--      </div>-->
 
     </div>
   </div>
@@ -2146,5 +2177,29 @@ export default {
   }
 }
 
+.info-container {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  padding: 20px;
+  margin-top: 5vh;
+
+  .main-title {
+    display: inline-block;
+    width: 100%;
+    margin-top: 3vh;
+    font-size: 19px;
+    font-weight: 600;
+  }
+
+  .main-content {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 40px;
+  }
+}
+
+.step-container > > > .el-step__title.is-process {
+  font-weight: normal;
+  color: #C0C4CC;
+}
 
 </style>
