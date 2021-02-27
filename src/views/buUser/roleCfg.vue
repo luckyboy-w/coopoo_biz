@@ -1,10 +1,10 @@
 <template>
   <div>
-    <table style="padding:20px 20px;0px 20px">
+    <table>
       <tr>
         <td>
           <el-button @click="addRole()" type="primary" v-if="!isEdit">新增角色</el-button>
-          <el-button @click="saveMenuRole()" type="primary" v-if="isEdit">{{saveOrEditText}}</el-button>
+          <el-button @click="saveMenuRole()" type="primary" v-if="isEdit">{{ saveOrEditText }}</el-button>
           <el-button @click="backToList()" plain icon="el-icon-back" v-if="isEdit">返回列表</el-button>
           <!-- <el-button @click="delPermission()">刪除角色</el-button>  -->
         </td>
@@ -23,21 +23,28 @@
             style="width: 100%;margin-bottom: 20px;"
             :row-key="id"
             border
-            default-expand-all>
+            default-expand-all
+          >
             <el-table-column
               prop="roleName"
               label="角色名称"
-              width="230"/>
+              width="230"
+            />
             <el-table-column
               prop="roleDesc"
               label="角色备注"
-              width="230"/>
+              width="230"
+            />
             <el-table-column
               prop="oper"
               label="操作"
-              width="480">
+              width="480"
+            >
               <template slot-scope="scope">
-                <el-link type="primary"  @click="initEditRole(scope.row)" >编辑</el-link>
+                <!--                <el-link type="primary"  @click="initEditRole(scope.row)" >编辑</el-link>-->
+                <el-button-group>
+                  <el-button size="mini" type="primary" @click="initEditRole(scope.row)">编辑</el-button>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -45,19 +52,20 @@
       </tr>
       <tr v-if="isEdit">
         <td colspan="2">
-         <el-form   label-width="80px">
-          <el-form-item label="角色名称">
-            <el-input v-model="roleName"></el-input>
-          </el-form-item>
-           <el-form-item label="备注信息">
+          <el-form label-width="80px">
+            <el-form-item label="角色名称">
+              <el-input v-model="roleName"></el-input>
+            </el-form-item>
+            <el-form-item label="备注信息">
               <el-input
                 type="textarea"
                 :rows="2"
-                v-model="roleDesc">
+                v-model="roleDesc"
+              >
               </el-input>
-          </el-form-item>
-        </el-form>
-        <el-form label-width="80px">
+            </el-form-item>
+          </el-form>
+          <el-form label-width="80px">
             <el-form-item label="访问权限">
               <el-table
                 :data="roleMenuData"
@@ -74,7 +82,8 @@
                 <el-table-column
                   prop="access"
                   label="访问权限"
-                  width="100" >
+                  width="100"
+                >
                   <template slot-scope="scope">
                     <el-switch
                       v-model="scope.row.isSelect"
@@ -88,7 +97,7 @@
                 </el-table-column>
               </el-table>
             </el-form-item>
-        </el-form>
+          </el-form>
         </td>
       </tr>
     </table>
@@ -98,16 +107,17 @@
 <script>
 import { getMethod, postMethod } from '@/api/request'
 import { treeChildToList } from '@/utils/util'
+
 export default {
   data() {
     return {
       id: 'id',
-      isEdit:false,
+      isEdit: false,
       checked: false,
-      rid:'',
+      rid: '',
       roleName: '',
       roleDesc: '',
-      saveOrEditText:'保存',
+      saveOrEditText: '保存',
       expandData: [],
       checkData: [],
       roleData: [],
@@ -121,20 +131,20 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     this.loadRole()
     this.loadMenu()
   },
-  created() { },
+  created() {
+  },
   methods: {
-    backToList(){
+    backToList() {
       this.isEdit = false
       this.loadRole()
       this.loadMenu()
     },
-    initEditRole(row){
+    initEditRole(row) {
       let scope = this
       this.rid = row.pkRoleId
       let param = {
@@ -142,10 +152,10 @@ export default {
       }
 
       getMethod('/bc/menu/getMenuByRole', param).then(res => {
-          scope.roleMenuData = res.data
-          this.roleName = row.roleName
-          this.roleDesc = row.roleDesc
-          this.isEdit = true
+        scope.roleMenuData = res.data
+        this.roleName = row.roleName
+        this.roleDesc = row.roleDesc
+        this.isEdit = true
       })
     },
     loadRole() {
@@ -155,42 +165,42 @@ export default {
         scope.roleData = res.data
       })
     },
-    changeAccess(val,row) {
+    changeAccess(val, row) {
 
-      if(row.parentId != '-1'){
-        if(val == 1){
+      if (row.parentId != '-1') {
+        if (val == 1) {
           //如果是非一級菜單被打開
-          for(let rowIndex in this.roleMenuData){
-            if(this.roleMenuData[rowIndex].id == row.parentId){
-                this.roleMenuData[rowIndex].isSelect = val
-                break;
+          for (let rowIndex in this.roleMenuData) {
+            if (this.roleMenuData[rowIndex].id == row.parentId) {
+              this.roleMenuData[rowIndex].isSelect = val
+              break
             }
           }
-        }else{
+        } else {
 
-          let parentNode = null;
+          let parentNode = null
           //如果是非一級菜單被打開
-          for(let rowIndex in this.roleMenuData){
-            if(this.roleMenuData[rowIndex].id == row.parentId){
-               //找到父节点,跳出去
-               parentNode = this.roleMenuData[rowIndex]
-               break;
+          for (let rowIndex in this.roleMenuData) {
+            if (this.roleMenuData[rowIndex].id == row.parentId) {
+              //找到父节点,跳出去
+              parentNode = this.roleMenuData[rowIndex]
+              break
             }
           }
-          let unSelectCount = false;
-          for(let rowIndex in parentNode.children){
-            if(parentNode.children[rowIndex].isSelect == '1'){
+          let unSelectCount = false
+          for (let rowIndex in parentNode.children) {
+            if (parentNode.children[rowIndex].isSelect == '1') {
               unSelectCount = true
               break
             }
           }
-          parentNode.isSelect = unSelectCount? '1':'0';
+          parentNode.isSelect = unSelectCount ? '1' : '0'
         }
 
-      }else{
+      } else {
         //如果是非一級菜單被打開
-        for(let childObj in row.children){
-           row.children[childObj].isSelect = val;
+        for (let childObj in row.children) {
+          row.children[childObj].isSelect = val
         }
       }
     },
@@ -216,13 +226,13 @@ export default {
       }
     },
     saveMenuRole() {
-      if(this.rid != '' ){
+      if (this.rid != '') {
         this.editRole()
-      }else{
+      } else {
         this.saveRole()
       }
     },
-    saveRole(){
+    saveRole() {
       const selectMenu = []
       const childList = []
       treeChildToList(this.roleMenuData, childList)
@@ -245,17 +255,17 @@ export default {
         roleDesc: this.roleDesc
       }
       postMethod('/bc/menu/saveRoleMenu', param).then(res => {
-          this.$message({
-            type: 'success',
-            message: '保存成功!'
-          })
-          this.loadRole()
-          this.loadMenu()
-          this.isEdit = false
+        this.$message({
+          type: 'success',
+          message: '保存成功!'
+        })
+        this.loadRole()
+        this.loadMenu()
+        this.isEdit = false
       })
-      console.log(this.isEdit,'789787')
+      console.log(this.isEdit, '789787')
     },
-    editRole(){
+    editRole() {
       const selectMenu = []
       const childList = []
       treeChildToList(this.roleMenuData, childList)
@@ -271,32 +281,32 @@ export default {
         }
       }
 
-      if(this.roleName == ''){
-         this.$message({
+      if (this.roleName == '') {
+        this.$message({
           type: 'warning',
           message: '角色名称不能为空!'
         })
-        return '';
+        return ''
       }
       const param = {
         mids: selectMenu.join(','),
         rid: this.rid,
-        roleName:this.roleName,
+        roleName: this.roleName,
         roleDesc: this.roleDesc
       }
       postMethod('/bc/menu/saveRoleMenu', param).then(res => {
-          this.$message({
-            type: 'success',
-            message: '保存成功!'
-          })
-          this.loadRole()
-          this.loadMenu()
-          this.isEdit = false
-          
+        this.$message({
+          type: 'success',
+          message: '保存成功!'
+        })
+        this.loadRole()
+        this.loadMenu()
+        this.isEdit = false
+
       })
     },
     addRole() {
-      let scope = this;
+      let scope = this
       this.isEdit = true
       this.rid = ''
       this.roleName = ''

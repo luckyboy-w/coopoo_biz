@@ -66,29 +66,27 @@
               </template>
             </el-table-column>
 
-            <el-table-column label="操作">
+            <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
-                <el-button
-                  @click.native.prevent="addOrEdit('edit',scope.$index, tableData)"
-                  type="text"
-                  size="small"
-                >编辑
-                </el-button>
-                <el-divider direction="vertical"></el-divider>
-                <el-button
-                  v-if="scope.row.status == 0"
-                  @click.native.prevent="disable(scope.row.id)"
-                  type="text"
-                  size="small"
-                >禁用
-                </el-button>
-                <el-button
-                  v-else-if="scope.row.status == 1"
-                  @click.native.prevent="enable(scope.row.id)"
-                  type="text"
-                  size="small"
-                >启用
-                </el-button>
+                <el-button-group>
+                  <el-button
+                    @click="addOrEdit('edit',scope.$index, tableData)"
+                    size="mini" type="primary"
+                  >编辑
+                  </el-button>
+                  <el-button
+                    v-if="scope.row.status == 0"
+                    @click="disable(scope.row.id)"
+                    size="mini" type="primary"
+                  >禁用
+                  </el-button>
+                  <el-button
+                    v-else-if="scope.row.status == 1"
+                    @click="enable(scope.row.id)"
+                    size="mini" type="primary"
+                  >启用
+                  </el-button>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -230,23 +228,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .ly-container {
-  padding: 10px 20px;
-  font-size: 14px;
-
   .ly-tool-panel {
-    div {
-      display: inline;
-    }
-
-    line-height: "60px";
-    height: "60px";
-    width: 100%;
-    padding: 10px 10px;
-
-    .ly-tool-btn {
-      padding-left: 20px;
-      display: inline;
-    }
+    padding: 10px 0px;
   }
 }
 

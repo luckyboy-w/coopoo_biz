@@ -69,10 +69,16 @@
               </template>
             </el-table-column>
             <!-- 订单状态;0:订单被取消;10:已提交,待发货20;已发货,待收货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价; -->
-            <el-table-column prop="id" label="操作" width="250px">
+            <el-table-column fixed="right" prop="id" label="操作" width="250px">
               <template slot-scope="scope">
-                <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>
-                <el-link type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">确认退货</el-link>
+
+                <el-button-group>
+<!--                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
+<!--                  <el-link type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">确认退货</el-link>-->
+
+                  <el-button size="mini" type="primary" @click="getOrdDtl(scope.row)">查看订单</el-button>
+                  <el-button size="mini" type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">确认退货</el-button>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -235,7 +241,6 @@ export default {
       pushStock: false,
       typeIdList: [],
       typeId2List: [],
-      typeIdList: [],
       goodBrandList: [],
       showPagination: false,
       editData: {},
@@ -355,19 +360,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .ly-container {
-  padding: 10px 20px;
-  font-size: 14px;
-
   .ly-tool-panel {
-    line-height: "60px";
-    height: "60px";
-    width: 100%;
-    padding: 10px 10px;
-
-    .ly-tool-btn {
-      padding-left: 20px;
-      display: inline;
-    }
+    padding: 10px 0px;
   }
 }
 </style>

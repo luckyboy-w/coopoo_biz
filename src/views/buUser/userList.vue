@@ -4,7 +4,7 @@
       <table>
         <tr>
           <td>
-            <el-button @click="addOrEditUser()">新增用戶</el-button>
+            <el-button type="primary" @click="addOrEditUser()">新增用戶</el-button>
           </td>
           <td></td>
           <td></td>
@@ -37,8 +37,14 @@
                 width="280"
               >
                 <template slot-scope="scope">
-                  <el-link type="primary" @click="editSysUser(scope.row)">编辑</el-link>
-                  <el-link type="primary" @click="resetPwd(scope.row)">密码重置</el-link>
+                  <el-button-group>
+                    <!--                  <el-link type="primary" @click="editSysUser(scope.row)">编辑</el-link>-->
+                    <el-button size="mini" type="primary" @click="editSysUser(scope.row)">编辑</el-button>
+
+                    <!--                  <el-link type="primary" @click="resetPwd(scope.row)">密码重置</el-link>-->
+                    <el-button size="mini" type="primary" @click="resetPwd(scope.row)">密码重置</el-button>
+
+                  </el-button-group>
                 </template>
               </el-table-column>
             </el-table>
@@ -93,7 +99,6 @@ export default {
         password: '',
         reppwd: ''
       },
-      resetFrm: {},
       showReset: false,
       showList: true,
       showAddOrEdit: false,
@@ -186,9 +191,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.list-panel {
-  padding: 30px 20px
-}
 
 .el-dialog {
   display: flex;

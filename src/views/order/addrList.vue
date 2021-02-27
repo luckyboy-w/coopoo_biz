@@ -63,19 +63,19 @@
 
             <el-table-column prop="id" label="操作" width="200px">
               <template slot-scope="scope">
-                <el-button
-                  @click.native.prevent="addOrEdit('edit',scope.$index, tableData)"
-                  type="text"
-                  size="small"
-                >编辑
-                </el-button>
-                <el-button
-                  v-if="false"
-                  @click.native.prevent="remove(scope.row.addrId)"
-                  type="text"
-                  size="small"
-                >删除
-                </el-button>
+                <el-button-group>
+                  <el-button
+                    @click="addOrEdit('edit',scope.$index, tableData)"
+                    size="mini" type="primary"
+                  >编辑
+                  </el-button>
+                  <el-button
+                    v-if="false"
+                    @click="remove(scope.row.addrId)"
+                    size="mini" type="primary"
+                  >删除
+                  </el-button>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -263,23 +263,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .ly-container {
-  padding: 10px 20px;
-  font-size: 14px;
-
   .ly-tool-panel {
-    div {
-      display: inline;
-    }
-
-    line-height: "60px";
-    height: "60px";
-    width: 100%;
-    padding: 10px 10px;
-
-    .ly-tool-btn {
-      padding-left: 20px;
-      display: inline;
-    }
+    padding: 10px 0px;
   }
 }
 </style>

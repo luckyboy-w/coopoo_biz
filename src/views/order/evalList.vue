@@ -52,15 +52,16 @@
               </template>
             </el-table-column>
             <el-table-column prop="evalContent" label="评价内容" width="150px"></el-table-column>
-            <el-table-column prop="id" label="操作" width="200px">
+            <el-table-column fixed="right" prop="id" label="操作" width="200px">
               <template slot-scope="scope">
-                <el-button
-                  @click.native.prevent="replyMsg(scope.row)"
-                  v-if="scope.row.replyMsgStatus == 1"
-                  type="text"
-                  size="small"
-                >回复
-                </el-button>
+                <el-button-group>
+                  <el-button
+                    @click="replyMsg(scope.row)"
+                    v-if="scope.row.replyMsgStatus == 1"
+                    size="mini" type="primary"
+                  >回复
+                  </el-button>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -168,8 +169,6 @@ export default {
       },
       dataList: []
     }
-  },
-  created() {
   },
   mounted() {
     // this.$route.params.id
@@ -285,9 +284,6 @@ export default {
       this.loadList()
     },
     initLoad() {
-      this.loadList()
-    },
-    search() {
       this.loadList()
     },
     loadList() {
