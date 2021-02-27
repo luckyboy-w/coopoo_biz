@@ -43,7 +43,7 @@
                 <el-button-group>
                   <el-button
                     @click="addOrEdit('edit',scope.$index, tableData)"
-                    size="small" type="primary"
+                    size="mini" type="primary"
                   >编辑
                   </el-button>
                 </el-button-group>

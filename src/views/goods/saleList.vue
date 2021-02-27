@@ -24,7 +24,6 @@
           <el-table
             ref="mainTable"
             :data="tableData.list"
-            style="width: 100%; margin-bottom: 20px;"
             row-key="id"
             border
             :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
@@ -33,7 +32,6 @@
               <template slot-scope="props">
                 <el-table
                   :data="props.row.skuPriceList"
-                  style="width: 100%; margin-bottom: 20px;"
                   row-key="id"
                   border
                 >
@@ -73,38 +71,38 @@
 
             <el-table-column prop="id" label="操作" width="200px" v-if="showOp">
               <template slot-scope="scope">
-                <el-button v-if="scope.row.verifyStatus == 10 || scope.row.verifyStatus == 20 "
-                           type="text" size="small" @click="addOrEdit('edit',scope.$index, tableData, true)"
-                >查看详情
-                </el-button>
-                <!--5:在仓库;10:待审核;20:已通过;30:被驳回;40:违规下架;-->
-                <!--isSale;-->
-                <el-button v-if="scope.row.verifyStatus == 20" type="text" size="small"
-                           @click.native.prevent="addStock(scope.row)"
-                >补货
-                </el-button>
-                <el-button v-if="scope.row.verifyStatus == 5" type="text" size="small"
-                           @click="modityGood(scope.row,'verifyStatus','10')"
-                >提交审核
-                </el-button>
-                <el-button v-if="scope.row.verifyStatus == 10" type="text" size="small"
-                           @click="modityGood(scope.row,'verifyStatus','5')"
-                >取消审核
-                </el-button>
-                <el-button v-if="scope.row.verifyStatus == 30 || scope.row.verifyStatus == 5 || scope.row.isSale == 3 "
-                           type="text" size="small" @click="addOrEdit('edit',scope.$index, tableData)"
-                >编辑
-                </el-button>
-                <!-- <el-button v-if="scope.row.verifyStatus == 20 && scope.row.isSale == 2 " type="text" size="small" @click="modityGood(scope.row,'isSale','1')">上架</el-button> -->
-                <!-- <el-button v-if="scope.row.verifyStatus == 20 && scope.row.isSale == 2 " type="text" size="small" @click="modityGood(scope.row,'verifyStatus','10')">提交审核</el-button> -->
-                <el-button v-if="scope.row.verifyStatus == 20 && scope.row.isSale == 1 " type="text" size="small"
-                           @click="offLine(scope.row,'3')"
-                >下架
-                </el-button>
-                <el-button v-if="scope.row.isSale == 3"
-                           type="text" size="small" @click="deleteRow(scope.$index,tableData)"
-                >删除
-                </el-button>
+                <el-button-group>
+                  <el-button v-if="scope.row.verifyStatus == 10 || scope.row.verifyStatus == 20 "
+                             type="text" size="small" @click="addOrEdit('edit',scope.$index, tableData, true)"
+                  >查看详情
+                  </el-button>
+                  <!--5:在仓库;10:待审核;20:已通过;30:被驳回;40:违规下架;-->
+                  <el-button v-if="scope.row.verifyStatus == 20" type="primary" size="mini"
+                             @click.native.prevent="addStock(scope.row)"
+                  >补货
+                  </el-button>
+                  <el-button v-if="scope.row.verifyStatus == 5" type="primary" size="mini"
+                             @click="modityGood(scope.row,'verifyStatus','10')"
+                  >提交审核
+                  </el-button>
+                  <el-button v-if="scope.row.verifyStatus == 10" type="primary" size="mini"
+                             @click="modityGood(scope.row,'verifyStatus','5')"
+                  >取消审核
+                  </el-button>
+                  <el-button
+                    v-if="scope.row.verifyStatus == 30 || scope.row.verifyStatus == 5 || scope.row.isSale == 3 "
+                    type="primary" size="mini" @click="addOrEdit('edit',scope.$index, tableData)"
+                  >编辑
+                  </el-button>
+                  <el-button v-if="scope.row.verifyStatus == 20 && scope.row.isSale == 1 " type="primary" size="mini"
+                             @click="offLine(scope.row,'3')"
+                  >下架
+                  </el-button>
+                  <el-button v-if="scope.row.isSale == 3"
+                             type="primary" size="mini" @click="deleteRow(scope.$index,tableData)"
+                  >删除
+                  </el-button>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -493,23 +491,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .ly-container {
-  padding: 10px 20px;
-  font-size: 14px;
-
   .ly-tool-panel {
-    div {
-      display: inline;
-    }
+    padding: 10px 0px;
 
-    line-height: "60px";
-    height: "60px";
-    width: 100%;
-    padding: 10px 10px;
-
-    .ly-tool-btn {
-      padding-left: 20px;
-      display: inline;
-    }
   }
 }
 </style>
