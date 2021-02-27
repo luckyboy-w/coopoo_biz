@@ -81,16 +81,16 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
+    if (res.message === undefined) {
+      res.message = res.msg
+    }
+
     // if the custom code is not 20000, it is judged as an error.
     if (res.code != 200) {
-      if (res.msg == undefined || res.msg == null || res.msg == '') {
+      if (res.message == undefined || res.message == null || res.message == '') {
         return
       }
-      /*Message({
-        message: res.msg || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })*/
+
       if (res.code == '500') {
         Message({
           message: res.message,
@@ -98,7 +98,7 @@ service.interceptors.response.use(
           duration: 3000
         })
       }
-      if (res.msg == '登录超时，请重新登录') {
+      if (res.message == '登录超时，请重新登录') {
         Message({
           message: '登录超时，请重新登录',
           type: 'error',
@@ -117,7 +117,7 @@ service.interceptors.response.use(
 
       if (res.code == 1100) {
         Message({
-          message: res.msg,
+          message: res.message,
           type: 'error',
           duration: 2 * 1000
         })

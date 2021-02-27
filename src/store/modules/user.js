@@ -159,10 +159,10 @@ const actions = {
 
   // get user info
   async getUserInfo({ commit, state }) {
+    commit('SET_SUPPLIER_AVATAR', require('@/icons/avatar-default.png'))
     const { data } = await getUserInfo()
 
     commit('SET_SUPPLIER_NAME', data.bizName)
-    commit('SET_SUPPLIER_AVATAR', require('@/icons/avatar-default.png'))
   }
 }
 
