@@ -46,6 +46,11 @@ export default {
     }),
     ...mapState({})
   },
+  watch: {
+    chartsData() {
+      this.chartSetData()
+    }
+  },
   mounted() {
     this.initChart()
   },
@@ -62,7 +67,6 @@ export default {
       this.chartSetData()
     },
     handlerChartsData() {
-
       if (this.chartsData.length === 0) {
         return [
           {

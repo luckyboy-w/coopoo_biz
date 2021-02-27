@@ -217,7 +217,7 @@
           </el-tab-pane>
           <el-tab-pane label="收藏量TOP10" name="startsNum">
             <div>
-              <!--              <div class="analysis-title">收藏量TOP10</div>-->
+              <!--<div class="analysis-title">收藏量TOP10</div>-->
               <div>
                 <el-table
                   ref="settleEndData"
