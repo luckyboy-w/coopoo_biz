@@ -54,12 +54,12 @@
               </el-table-column>
               <el-table-column prop="salePrice" label="建议零售价" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.salePrice"  :disabled="isHiddenEditGood"/>
+                  <el-input v-model="scope.row.salePrice" :disabled="isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column prop="saleMemPrice" label="建议会员价" width="150px">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.saleMemPrice"  :disabled="isHiddenEditGood"/>
+                  <el-input v-model="scope.row.saleMemPrice" :disabled="isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column prop="skuImg" label="SKU展示图" width="150px">
@@ -632,9 +632,10 @@ export default {
       const res = await getMethod('/bu/good/findAllSaleList')
 
       this.goodSaleDescList = res.data
-      // for (let i = 0; i < this.goodSaleDescList.length; i++) {
-      //   this.showImgMask[this.goodSaleDescList[i].id] = false
-      // }
+
+      if (this.dataForm.afterSaleId == '' && this.goodSaleDescList.length > 0) {
+        this.dataForm.afterSaleId = this.goodSaleDescList[0].id
+      }
     },
     loadtypeId2List(typeId2) {
       const scope = this

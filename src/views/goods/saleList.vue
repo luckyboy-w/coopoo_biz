@@ -73,7 +73,7 @@
               <template slot-scope="scope">
                 <el-button-group>
                   <el-button v-if="scope.row.verifyStatus == 10 || scope.row.verifyStatus == 20 "
-                             type="text" size="small" @click="addOrEdit('edit',scope.$index, tableData, true)"
+                             type="primary" size="mini" @click="addOrEdit('edit',scope.$index, tableData, true)"
                   >查看详情
                   </el-button>
                   <!--5:在仓库;10:待审核;20:已通过;30:被驳回;40:违规下架;-->
