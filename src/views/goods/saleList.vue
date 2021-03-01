@@ -69,7 +69,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="id" label="操作" width="200px" v-if="showOp">
+            <el-table-column prop="id" label="操作" width="260px" v-if="showOp">
               <template slot-scope="scope">
                 <el-button-group>
                   <el-button v-if="scope.row.verifyStatus == 10 || scope.row.verifyStatus == 20 "
