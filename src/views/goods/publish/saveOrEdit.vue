@@ -4,9 +4,13 @@
       <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
 
         <el-form ref="dataForm" :model="dataForm" label-width="100px" label-position="left">
-          <el-form-item label="商品名称">
-            <el-input v-model="dataForm.goodName" style="width:260px" placeholder="请输入商品名称"
-                      :disabled="isHiddenEditGood"
+          <el-form-item label="商品名称123">
+            <el-input
+              v-model="dataForm.goodName" style="width:260px"
+              placeholder="请输入商品名称"
+              :disabled="isHiddenEditGood"
+              maxlength="30"
+              show-word-limit
             />
           </el-form-item>
           <el-form-item label="所属分类">
@@ -187,7 +191,11 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="商品卖点">
-            <el-input v-model="dataForm.goodMerit" style="width:260px" placeholder="请输入卖点"
+            <el-input v-model="dataForm.goodMerit"
+                      style="width:260px"
+                      placeholder="请输入卖点"
+                      maxlength="20"
+                      show-word-limit
                       :disabled="isHiddenEditGood"
             />
           </el-form-item>
@@ -1064,6 +1072,23 @@ export default {
   width: 60px;
   height: 60px;
   display: block;
+}
+
+
+// input 字数限制样式调整
+.card-panel-col > > > .el-input__count {
+  height: 100%;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  color: #D0D0D0;
+  font-size: 12px;
+
+  position: absolute;
+  transform: translate(-100%, 50%);
 }
 </style>
 <style lang="scss">
