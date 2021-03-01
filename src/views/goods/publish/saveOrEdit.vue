@@ -4,7 +4,7 @@
       <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
 
         <el-form ref="dataForm" :model="dataForm" label-width="100px" label-position="left">
-          <el-form-item label="商品名称123">
+          <el-form-item label="商品名称">
             <el-input
               v-model="dataForm.goodName" style="width:260px"
               placeholder="请输入商品名称"
