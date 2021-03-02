@@ -25,7 +25,7 @@
                 :value="item.id"
               />
             </el-select>
-            <el-select v-model="dataForm.typeId2" placeholder="请选择" @change="loadSkuCompose()"
+            <el-select v-model="dataForm.typeId2" placeholder="请选择" @change="loadSkuAttr()"
                        :disabled="isHiddenEditGood"
             >
               <el-option
@@ -38,42 +38,61 @@
             </el-select>
           </el-form-item>
           <el-form-item label="属性选择">
-
-            <div v-for="(v, i) in list" :key="i" class="mt-20">
-              <b>{{ v.name }}：</b>
-              <el-checkbox-group v-model="checkList[i].list" @change="handleClick" :disabled="isHiddenEditGood">
-                <el-checkbox v-for="k in v.list" :key="k.skuId" :label="k.skuId">{{ k.skuText }}</el-checkbox>
-              </el-checkbox-group>
+            <div v-for="(item, index) in dbAttrList" :key="index" class="mt-20">
+              <b>{{ item.specName }}：</b>
+              <el-checkbox
+                v-for="valItem in item.skuObj"
+                :key="valItem.skuId"
+                :label="valItem.skuId"
+                :checked="valItem.isChecked"
+                @change="changeAttrList(valItem)"
+              >
+                {{ valItem.skuText }}
+              </el-checkbox>
             </div>
-
           </el-form-item>
-          <el-form-item label="SKU配置">
-            <el-table ref="skuTable" :data="skuList" style="width: 100%; margin-bottom: 20px;">
-
-              <el-table-column prop="skuText" label="SKU" width="220px"/>
-              <el-table-column prop="stock" label="库存" width="150px">
+          <el-form-item label="新SKU配置">
+            <el-table
+              style="width: 100%; margin-bottom: 20px;"
+              :data="tableList"
+              :span-method="objectSpanMethod"
+              border
+            >
+              <el-table-column
+                align="center"
+                v-for="(item,index) in columnList"
+                :key="index"
+                :label="item"
+                width=""
+              >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>
+                  {{ scope.row.tdList[index].value }}
+                  <!--{{ `打印坐标 ${index} , ${scope.$index}` }}-->
                 </template>
               </el-table-column>
-              <el-table-column prop="salePrice" label="建议零售价" width="150px">
+              <el-table-column align="center" prop="stock" label="库存">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.salePrice" :disabled="isHiddenEditGood"/>
+                  <!--<el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>-->
                 </template>
               </el-table-column>
-              <el-table-column prop="saleMemPrice" label="建议会员价" width="150px">
+              <el-table-column align="center" prop="salePrice" label="建议零售价">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.saleMemPrice" :disabled="isHiddenEditGood"/>
+                  <!--                  <el-input v-model="scope.row.salePrice" :disabled="isHiddenEditGood"/>-->
                 </template>
               </el-table-column>
-              <el-table-column prop="skuImg" label="SKU展示图" width="150px">
+              <el-table-column align="center" prop="saleMemPrice" label="建议会员价">
                 <template slot-scope="scope">
-                  <img :src="scope.row.skuImg" width="60px" height="60px"
-                       onerror="this.src='https://bluemobi-lanyu.oss-cn-shanghai.aliyuncs.com/static/black_bg.png' "
-                  >
+                  <!--                  <el-input v-model="scope.row.saleMemPrice" :disabled="isHiddenEditGood"/>-->
                 </template>
               </el-table-column>
-              <el-table-column prop="id" label="上传图片" width="150px">
+              <el-table-column align="center" prop="skuImg" label="SKU展示图">
+                <!--                <template slot-scope="scope">-->
+                <!--                  <img :src="scope.row.skuImg" width="60px" height="60px"-->
+                <!--                       onerror="this.src='https://bluemobi-lanyu.oss-cn-shanghai.aliyuncs.com/static/black_bg.png' "-->
+                <!--                  >-->
+                <!--                </template>-->
+              </el-table-column>
+              <el-table-column align="center" prop="id" label="上传图片">
                 <template slot-scope="scope">
                   <el-upload
                     :disabled="isHiddenEditGood"
@@ -348,8 +367,6 @@ export default {
       dialogImageUrl: '',
       loading: false,
       addFrontCls: 'el-icon-plus',
-      stockCls: '',
-      showSku: false,
       styleList: ['新品上架', '七星睡眠'],
       goodStyleList: [],
       buServiceList: ['正品保证', '全场包邮', '无理由退货', '超时赔偿'],
@@ -408,31 +425,18 @@ export default {
       skuArray: [], //已选择sku Id数组
       skuList: [], // good value sku配置（选完规格值之后生成的）
       skuIdToText: {}, //key 规格值ID（skuId） {//规格值文本  //规格名称}
-      skuIdList: [] // 点击checkbox后选择的skuId
+      skuIdList: [], // 点击checkbox后选择的skuId
+
+      // 数据库返回的属性列表
+      dbAttrList: [],
+      attrList: [],
+      columnList: [],
+      tableList: []
     }
   },
   computed: {},
   mounted() {
-    this.loadtypeIdList()
-    this.loadGoodSaleDescList()
     this.initLoad()
-    this.loadGoodBrandList()
-    this.buildGoodImageGroupId()
-    this.buildGoodFrontImageGroupId()
-    this.$nextTick(function() {
-      if (this.editData.id) {
-        this.goodStyleList = this.editData.goodStyle.split(',')
-        this.serviceRuleList = this.editData.serviceRule.split(',')
-        this.dataForm = this.editData
-        this.detail = this.editData.detail
-        this.initLoad()
-        this.initDefaultImage()
-        this.loadtypeId2List(this.dataForm.typeId2)
-        this.$refs['refEditor'].setContent(this.detail.detailContent)
-        this.$refs['refEditor1'].setContent(this.detail.postSale)
-        this.$refs['refEditor2'].setContent(this.detail.listDetail)
-      }
-    })
   },
   created() {
   },
@@ -495,9 +499,6 @@ export default {
     beforeUploadSkuImg(file, row) {
       this.loading = true
     },
-    initLoad() {
-      const scope = this
-    },
     changeListDetailContent(val) {
       this.detail.listDetail = val
     },
@@ -506,62 +507,6 @@ export default {
     },
     changeContent(val) {
       this.detail.detailContent = val
-    },
-    loadSkuCompose() {
-      const scope = this
-      this.list = []
-      this.checkList = []
-
-      const param = {
-        id: this.dataForm.typeId2
-      }
-      getMethod('/bu/good/findTypeBySpec', param).then(res => {
-        const list = res.data
-
-        const allPriceList = []
-        let allPriceText = ''
-        this.dataForm.skuPriceList.forEach(priceObj => {
-          allPriceList.push(priceObj.skuText)
-        })
-
-        allPriceText = allPriceList.join(';')
-
-        scope.skuIdToText = {}
-        list.forEach(o => {
-          const existsList = o['skuObj'] //规格对应的所有规格值列表
-
-          for (let i = 0; i < o['skuObj'].length; i++) {
-            const skuObject = o['skuObj'][i]
-            scope.skuIdToText[skuObject.skuId] = {
-              skuText: skuObject.skuText, //规格值
-              typeName: skuObject.typeName //规格名称
-            }
-          }
-
-          this.list.push({
-            name: o['specName'],
-            list: o['skuObj']
-          })
-
-          this.checkList.push({
-            name: o['specName'],
-            list: []
-          })
-
-          if (this.editData.id) {
-            this.$nextTick(function() {
-              this.checkList.forEach(checkObj => {
-                existsList.forEach(o => {
-                  if (checkObj.name == o.typeName && allPriceText.indexOf(checkObj.name + ':' + o.skuText) != -1) {
-                    checkObj.list.push(o.skuId)
-                  }
-                })
-              })
-              this.skuList = this.dataForm.skuPriceList
-            })
-          }
-        })
-      })
     },
     handleClick(value) {
       // 先清空数据，保证连续点击按钮，数据不会重复
@@ -644,22 +589,6 @@ export default {
       if (this.dataForm.afterSaleId == '' && this.goodSaleDescList.length > 0) {
         this.dataForm.afterSaleId = this.goodSaleDescList[0].id
       }
-    },
-    loadtypeId2List(typeId2) {
-      const scope = this
-      this.dataForm.typeId2 = typeId2 || ''
-      const param = {
-        parentId: this.dataForm.typeId
-      }
-      getMethod('/bu/good/findType', param).then(res => {
-        scope.typeId2List = res.data
-
-        if (scope.editData.id) {
-          scope.$nextTick(function() {
-            scope.loadSkuCompose()
-          })
-        }
-      })
     },
     loadGoodBrandList() {
       const scope = this
@@ -1037,6 +966,157 @@ export default {
     },
     submitUpdate() {
       this.saveObject()
+    },
+
+    // 初始化加载
+    initLoad() {
+      this.loadGoodBrandList()
+      this.buildGoodImageGroupId()
+      this.buildGoodFrontImageGroupId()
+      this.loadtypeIdList()
+      this.loadGoodSaleDescList()
+
+      this.loadSkuAttr()
+
+      this.loadEditData()
+    },
+    // 装配编辑数据
+    loadEditData() {
+      if (this.editData.id) {
+        this.goodStyleList = this.editData.goodStyle.split(',')
+        this.serviceRuleList = this.editData.serviceRule.split(',')
+        this.dataForm = this.editData
+        this.detail = this.editData.detail
+        this.initDefaultImage()
+        this.loadtypeId2List(this.dataForm.typeId2)
+        this.$refs['refEditor'].setContent(this.detail.detailContent)
+        this.$refs['refEditor1'].setContent(this.detail.postSale)
+        this.$refs['refEditor2'].setContent(this.detail.listDetail)
+      }
+    },
+    // 按分类加载Sku属性
+    async loadtypeId2List(typeId2) {
+      this.dataForm.typeId2 = typeId2 || ''
+      const { data } = await getMethod('/bu/good/findType', { parentId: this.dataForm.typeId })
+      this.typeId2List = data
+
+      if (this.editData.id) {
+        // this.$nextTick(function() {
+        //   // this.loadSkuCompose()
+        // })
+        this.loadSkuAttr()
+      }
+    },
+
+    // 加载 Sku 的属性列表
+    async loadSkuAttr() {
+      const { data } = await getMethod('/bu/good/findTypeBySpec', { id: this.dataForm.typeId2 })
+
+      this.dbAttrList = data
+      // TODO:此处 如果有数据回来了 要判断哪些需选中
+    },
+
+    // 修改选中属性，生成拼装输入框数据
+    changeAttrList(valItem) {
+      valItem.isChecked = valItem.isChecked == true ? true : false
+      valItem.isChecked = !valItem.isChecked
+      if (valItem.isChecked) {
+        this.addAttrList(valItem.typeName, valItem.skuText)
+      } else {
+        this.removeAttrList(valItem.typeName, valItem.skuText)
+      }
+      this.generatorSkuList()
+    },
+    // 添加选中数据
+    addAttrList(name, val) {
+
+      for (let i = 0; i < this.attrList.length; i++) {
+        if (this.attrList[i].specName === name) {
+          this.attrList[i].specValue.push(val)
+          return
+        }
+      }
+      this.attrList.push({
+        specName: name,
+        specValue: [val]
+      })
+    },
+    // 移除选中数据
+    removeAttrList(name, val) {
+      for (let i = 0; i < this.attrList.length; i++) {
+        if (this.attrList[i].specName === name) {
+          this.attrList[i].specValue.splice(this.attrList[i].specValue.indexOf(val), 1)
+          if (this.attrList[i].specValue.length === 0) {
+            this.attrList.splice(i, 1)
+          }
+          return
+        }
+      }
+    },
+    // 生成SKU列表
+    generatorSkuList() {
+      this.columnList = []
+      this.tableList = []
+      for (let i = 0; i < this.attrList.length; i++) {
+        this.tableList = this.addColumn(this.tableList, this.attrList[i].specName, this.attrList[i].specValue)
+      }
+
+      // TODO: 此处需生成对应系统的数据字段,暂时还未更改
+    },
+    // 添加列
+    addColumn(dataList, specName, specValue) {
+      this.columnList = [specName, ...this.columnList]
+      let newDataList = []
+      for (let i = 0; i < specValue.length; i++) {
+        if (dataList.length === 0) {
+          newDataList.push({
+            tdList: [{ name: specName, value: specValue[i], rowSpan: 1, rowSpanShow: true }],
+            stock: 0,
+            price: 200,
+            salesVolume: 300
+          })
+          continue
+        }
+        for (let j = 0; j < dataList.length; j++) {
+          newDataList.push({
+            tdList: [{
+              name: specName,
+              value: specValue[i],
+              rowSpan: dataList.length,
+              rowSpanShow: j === 0 ? true : false
+            }, ...dataList[j].tdList],
+            stock: dataList[j].stock,
+            price: dataList[j].price,
+            salesVolume: dataList[j].salesVolume
+          })
+        }
+      }
+      return newDataList
+    },
+
+    // 控制合并表格的行和列
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (this.tableList[rowIndex].tdList[columnIndex] === undefined) {
+        // 超出了 tdList 的长度 不属于动态列的范围 正常显示
+        return {
+          rowspan: 1,
+          colspan: 1
+        }
+      }
+
+      // 如果不展示 则把此单元格合并到0 即消掉 不显示
+      if (!this.tableList[rowIndex].tdList[columnIndex].rowSpanShow) {
+        return {
+          rowspan: 0,
+          colspan: 1
+        }
+      }
+
+      // 否则 按照计算好的行数来合并
+      return {
+        rowspan: this.tableList[rowIndex].tdList[columnIndex].rowSpan,
+        colspan: 1
+      }
     }
   }
 }
