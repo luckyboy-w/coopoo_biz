@@ -436,7 +436,15 @@ export default {
   },
   computed: {},
   mounted() {
-    this.initLoad()
+    this.loadGoodBrandList()
+    this.buildGoodImageGroupId()
+    this.buildGoodFrontImageGroupId()
+    this.loadtypeIdList()
+    this.loadGoodSaleDescList()
+
+    this.loadSkuAttr()
+
+    this.loadEditData()
   },
   created() {
   },
@@ -968,18 +976,6 @@ export default {
       this.saveObject()
     },
 
-    // 初始化加载
-    initLoad() {
-      this.loadGoodBrandList()
-      this.buildGoodImageGroupId()
-      this.buildGoodFrontImageGroupId()
-      this.loadtypeIdList()
-      this.loadGoodSaleDescList()
-
-      this.loadSkuAttr()
-
-      this.loadEditData()
-    },
     // 装配编辑数据
     loadEditData() {
       if (this.editData.id) {
@@ -994,6 +990,7 @@ export default {
         this.$refs['refEditor2'].setContent(this.detail.listDetail)
       }
     },
+
     // 按分类加载Sku属性
     async loadtypeId2List(typeId2) {
       this.dataForm.typeId2 = typeId2 || ''
