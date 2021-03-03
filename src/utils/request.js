@@ -82,7 +82,16 @@ service.interceptors.response.use(
     const res = response.data
 
     if (res.message === undefined) {
-      res.message = res.msg
+      res.message = res.msg || '未知错误'
+    }
+
+    // HTTP 200 也会返回1100 其他情况 慢慢改吧
+    if (res.code == 1100) {
+      Message({
+        message: res.message,
+        type: 'error',
+        duration: 2 * 1000
+      })
     }
 
     // if the custom code is not 20000, it is judged as an error.
@@ -113,14 +122,6 @@ service.interceptors.response.use(
           duration: 5 * 1000
         })
         location.href = process.env.NODE_ENV === 'production' ? '/' : '/biz'
-      }
-
-      if (res.code == 1100) {
-        Message({
-          message: res.message,
-          type: 'error',
-          duration: 2 * 1000
-        })
       }
 
       if (errCode[res.code] != undefined) {

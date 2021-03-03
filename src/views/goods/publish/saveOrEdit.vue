@@ -52,10 +52,10 @@
             </div>
           </el-form-item>
           <el-form-item label="新SKU配置">
+            <!--            :span-method="objectSpanMethod"-->
             <el-table
               style="width: 100%; margin-bottom: 20px;"
               :data="tableList"
-              :span-method="objectSpanMethod"
               border
             >
               <el-table-column
@@ -72,25 +72,25 @@
               </el-table-column>
               <el-table-column align="center" prop="stock" label="库存">
                 <template slot-scope="scope">
-                  <!--<el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>-->
+                  <el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="salePrice" label="建议零售价">
                 <template slot-scope="scope">
-                  <!--                  <el-input v-model="scope.row.salePrice" :disabled="isHiddenEditGood"/>-->
+                  <el-input v-model="scope.row.salePrice" :disabled="isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="saleMemPrice" label="建议会员价">
                 <template slot-scope="scope">
-                  <!--                  <el-input v-model="scope.row.saleMemPrice" :disabled="isHiddenEditGood"/>-->
+                  <el-input v-model="scope.row.saleMemPrice" :disabled="isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="skuImg" label="SKU展示图">
-                <!--                <template slot-scope="scope">-->
-                <!--                  <img :src="scope.row.skuImg" width="60px" height="60px"-->
-                <!--                       onerror="this.src='https://bluemobi-lanyu.oss-cn-shanghai.aliyuncs.com/static/black_bg.png' "-->
-                <!--                  >-->
-                <!--                </template>-->
+                <template slot-scope="scope">
+                  <img :src="scope.row.skuImg" width="60px" height="60px"
+                       onerror="this.src='https://bluemobi-lanyu.oss-cn-shanghai.aliyuncs.com/static/black_bg.png' "
+                  >
+                </template>
               </el-table-column>
               <el-table-column align="center" prop="id" label="上传图片">
                 <template slot-scope="scope">
@@ -501,7 +501,7 @@ export default {
       this.rowIndex = row.$index
     },
     handleSuccessSkuImg(res, file) {
-      this.skuList[this.rowIndex].skuImg = res.data.url
+      this.tableList[this.rowIndex].skuImg = res.data.url
       this.loading = false
     },
     beforeUploadSkuImg(file, row) {
@@ -775,8 +775,7 @@ export default {
       // }
       // return true;
     },
-    saveObject() {
-      const scope = this
+    async saveObject() {
       let errorMsg = ''
 
       if (this.uploadGoodImageList.length == 0) {
@@ -791,29 +790,23 @@ export default {
         errorMsg = '请上传商品详情'
       }
 
-      if (this.skuList.length == 0) {
+      if (this.tableList.length == 0) {
         errorMsg = '请选择SKU'
       }
 
       if (errorMsg != '') {
-        this.$message({
-          message: errorMsg,
-          type: 'warning'
-        })
+        this.$message.warning(errorMsg)
         return
       }
 
       let feeMsg = ''
-      for (let i = 0; i < this.skuList.length; i++) {
-        const rowObj = this.skuList[i]
+      for (let i = 0; i < this.tableList.length; i++) {
+        const rowObj = this.tableList[i]
         feeMsg = this.isMoney(rowObj.salePrice, '零售价', '')
         feeMsg = this.isMoney(rowObj.saleMemPrice, '会员价', feeMsg)
 
         if (feeMsg != '') {
-          this.$message({
-            message: feeMsg,
-            type: 'warning'
-          })
+          this.$message.warning(feeMsg)
           return
         }
 
@@ -835,10 +828,7 @@ export default {
       }
 
       if (errorMsg.trim() != '') {
-        this.$message({
-          message: errorMsg,
-          type: 'warning'
-        })
+        this.$message.warning(errorMsg)
         return
       }
 
@@ -874,10 +864,7 @@ export default {
       // }
 
       if (feeMsg != '') {
-        this.$message({
-          message: feeMsg,
-          type: 'warning'
-        })
+        this.$message.warning(feeMsg)
         return
       }
 
@@ -892,36 +879,43 @@ export default {
         this.dataForm.fileJsonStr = JSON.stringify(fileList)
         this.dataForm.files = []
         this.dataForm.detailStr = JSON.stringify(this.detail)
-        this.dataForm.skuJsonStr = JSON.stringify(this.skuList)
+        this.dataForm.skuJsonStr = JSON.stringify(this.tableList)
         this.dataForm.goodStyle = this.goodStyleList.join(',')
         this.dataForm.serviceRule = this.serviceRuleList.join(',')
         // 把ID转换成Text
         // [{"name":"颜色","list":["1298268253058621441","1298268253058621441"]},{"name":"尺寸","list":["1298268035080642561"]}]
-        const textList = []
-        for (let i = 0; i < this.checkList.length; i++) {
-          const valueList = this.checkList[i].list
-          const valueText = []
-          for (let k = 0; k < valueList.length; k++) {
-            valueText.push(this.skuIdToText[valueList[k]].skuText)
-          }
 
+        // for (let i = 0; i < this.checkList.length; i++) {
+        //   const valueList = this.checkList[i].list
+        //   const valueText = []
+        //   for (let k = 0; k < valueList.length; k++) {
+        //     valueText.push(this.skuIdToText[valueList[k]].skuText)
+        //   }
+        //
+        //   textList.push({
+        //     'name': this.checkList[i]['name'],
+        //     'list': valueText
+        //   })
+        // }
+        const textList = []
+        for (let i = 0; i < this.attrList.length; i++) {
           textList.push({
-            'name': this.checkList[i]['name'],
-            'list': valueText
+            'name': this.attrList[i]['specName'],
+            'list': this.attrList[i]['specValue']
           })
         }
         this.dataForm.checkRuleStr = JSON.stringify(textList)
+
         this.dataForm.isGift = this.isGift
         const param = JSON.stringify(this.dataForm)
-        postMethod('/bu/good/update', param).then(res => {
-          scope.typeList = res.data
-          this.detail = {}
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          })
-          this.$emit('showListPanel', true)
-        })
+
+        // console.log(param)
+
+        const { data } = await postMethod('/bu/good/update', param)
+        this.typeList = data
+        this.detail = {}
+        this.$message.success('操作成功')
+        this.$emit('showListPanel', true)
       }
     },
     validate() {
@@ -1011,6 +1005,43 @@ export default {
 
       this.dbAttrList = data
       // TODO:此处 如果有数据回来了 要判断哪些需选中
+
+      console.log(this.dataForm.skuPriceList)
+      const dbSkuList = this.dataForm.skuPriceList
+      let checkAttrList = {}
+      for (let i = 0; i < dbSkuList.length; i++) {
+        const attrName2ValueList = dbSkuList[i].skuText.split(';')
+        for (let j = 0; j < attrName2ValueList.length; j++) {
+          const [specName, specValue] = attrName2ValueList[j].split(':')
+          // checkAttrList.push({ specName, specValue })
+          if (!checkAttrList[specName]) {
+            checkAttrList[specName] = [specValue]
+          } else {
+            checkAttrList[specName] = Array.from(new Set([...checkAttrList[specName], specValue]))
+          }
+        }
+      }
+
+      console.log(JSON.stringify(checkAttrList))
+      // const allPriceList = []
+      // let allPriceText = ''
+      // this.dataForm.skuPriceList.forEach(priceObj => {
+      //   allPriceList.push(priceObj.skuText)
+      // })
+      //
+      // allPriceText = allPriceList.join(';')
+      // console.log(this.dataForm.skuPriceList)
+      //
+      // if (this.editData.id) {
+      //   this.checkList.forEach(checkObj => {
+      //     existsList.forEach(o => {
+      //       if (checkObj.name == o.typeName && allPriceText.indexOf(checkObj.name + ':' + o.skuText) != -1) {
+      //         checkObj.list.push(o.skuId)
+      //       }
+      //     })
+      //   })
+      //   this.skuList = this.dataForm.skuPriceList
+      // }
     },
 
     // 修改选中属性，生成拼装输入框数据
@@ -1054,23 +1085,50 @@ export default {
     generatorSkuList() {
       this.columnList = []
       this.tableList = []
-      for (let i = 0; i < this.attrList.length; i++) {
-        this.tableList = this.addColumn(this.tableList, this.attrList[i].specName, this.attrList[i].specValue)
+
+      console.log(this.dbAttrList)
+      // for (let i = 0; i < this.attrList.length; i++) {
+      //   this.tableList = this.addColumn(this.tableList, this.attrList[i].specName, this.attrList[i].specValue)
+      // }
+      for (let i = this.dbAttrList.length - 1; i >= 0; i--) {
+        this.tableList = this.addColumn(this.tableList, this.dbAttrList[i].specName, this.dbAttrList[i].skuObj)
       }
 
-      // TODO: 此处需生成对应系统的数据字段,暂时还未更改
+      // 如果是全局库存
+      // if (this.dataForm.stockType == 1) {
+      //   stockSingle = this.dataForm.stockNum
+      // }
+      //
+      // // sku字段
+      // let column = {
+      //   skuText: '',
+      //   skuCompareText: '',
+      //   skuCompareId: '',
+      //   stock: '',
+      //   salePrice: '',
+      //   saleMemPrice: '',
+      //   supplyPrice: '',
+      //   skuImg: ''
+      // }
     },
     // 添加列
     addColumn(dataList, specName, specValue) {
       this.columnList = [specName, ...this.columnList]
+      // TODO: 暂时还未更改  skuCompareId
       let newDataList = []
       for (let i = 0; i < specValue.length; i++) {
         if (dataList.length === 0) {
+
           newDataList.push({
             tdList: [{ name: specName, value: specValue[i], rowSpan: 1, rowSpanShow: true }],
-            stock: 0,
-            price: 200,
-            salesVolume: 300
+            skuText: `${specName}:${specValue[i]}`,
+            skuCompareText: specValue[i],
+            skuCompareId: '',
+            stock: '',
+            salePrice: '',
+            saleMemPrice: '',
+            supplyPrice: '',
+            skuImg: ''
           })
           continue
         }
@@ -1082,9 +1140,15 @@ export default {
               rowSpan: dataList.length,
               rowSpanShow: j === 0 ? true : false
             }, ...dataList[j].tdList],
+            // 注意拼接顺序同上 之前的后拼
+            skuText: `${specName}:${specValue[i]};${dataList[j].skuText}`,
+            skuCompareText: `${specValue[i]}:${dataList[j].skuCompareText}`,
+            skuCompareId: dataList[j].skuCompareId,
             stock: dataList[j].stock,
-            price: dataList[j].price,
-            salesVolume: dataList[j].salesVolume
+            salePrice: dataList[j].salePrice,
+            saleMemPrice: dataList[j].saleMemPrice,
+            supplyPrice: dataList[j].supplyPrice,
+            skuImg: dataList[j].skuImg
           })
         }
       }
