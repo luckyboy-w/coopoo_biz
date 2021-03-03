@@ -1000,6 +1000,7 @@ export default {
           }
 
           // 原理 本列上一行的值一样 合并行
+          // 因为线上已经有老结构数据 所以新结构无法存储数据库 更加无法回显 出此下策
           let thisRowSpan = 1
           let thisRowSpanShow = true
 
