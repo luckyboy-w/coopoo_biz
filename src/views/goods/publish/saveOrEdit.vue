@@ -47,15 +47,16 @@
                 :checked="valItem.isChecked"
                 @change="changeAttrList(valItem)"
               >
+                <!--                @change="changeAttrList(valItem)"-->
                 {{ valItem.skuText }}
               </el-checkbox>
             </div>
           </el-form-item>
           <el-form-item label="新SKU配置">
-            <!--            :span-method="objectSpanMethod"-->
             <el-table
               style="width: 100%; margin-bottom: 20px;"
               :data="tableList"
+              :span-method="objectSpanMethod"
               border
             >
               <el-table-column
@@ -1086,7 +1087,7 @@ export default {
       this.columnList = []
       this.tableList = []
 
-      console.log(this.dbAttrList)
+      // console.log(this.dbAttrList)
       // for (let i = 0; i < this.attrList.length; i++) {
       //   this.tableList = this.addColumn(this.tableList, this.attrList[i].specName, this.attrList[i].specValue)
       // }
@@ -1113,16 +1114,26 @@ export default {
     },
     // 添加列
     addColumn(dataList, specName, specValue) {
-      this.columnList = [specName, ...this.columnList]
+
+      // 此属性规格是否有选中值 有的话 添加到动态列中
+      let isAddColume = false
+
       // TODO: 暂时还未更改  skuCompareId
       let newDataList = []
       for (let i = 0; i < specValue.length; i++) {
-        if (dataList.length === 0) {
+        // 当前规格未选中
+        if (!specValue[i].isChecked) {
+          continue
+        }
 
+        isAddColume = true
+
+        // 初始化数组
+        if (dataList.length === 0) {
           newDataList.push({
-            tdList: [{ name: specName, value: specValue[i], rowSpan: 1, rowSpanShow: true }],
-            skuText: `${specName}:${specValue[i]}`,
-            skuCompareText: specValue[i],
+            tdList: [{ name: specName, value: specValue[i].skuText, rowSpan: 1, rowSpanShow: true }],
+            skuText: `${specName}:${specValue[i].skuText}`,
+            skuCompareText: specValue[i].skuText,
             skuCompareId: '',
             stock: '',
             salePrice: '',
@@ -1132,17 +1143,19 @@ export default {
           })
           continue
         }
+
+        // 进行乘积
         for (let j = 0; j < dataList.length; j++) {
           newDataList.push({
             tdList: [{
               name: specName,
-              value: specValue[i],
+              value: specValue[i].skuText,
               rowSpan: dataList.length,
               rowSpanShow: j === 0 ? true : false
             }, ...dataList[j].tdList],
             // 注意拼接顺序同上 之前的后拼
-            skuText: `${specName}:${specValue[i]};${dataList[j].skuText}`,
-            skuCompareText: `${specValue[i]}:${dataList[j].skuCompareText}`,
+            skuText: `${specName}:${specValue[i].skuText};${dataList[j].skuText}`,
+            skuCompareText: `${specValue[i].skuText}:${dataList[j].skuCompareText}`,
             skuCompareId: dataList[j].skuCompareId,
             stock: dataList[j].stock,
             salePrice: dataList[j].salePrice,
@@ -1152,7 +1165,15 @@ export default {
           })
         }
       }
-      return newDataList
+
+      // 当前属性有规格被选中 添加动态列
+      if (isAddColume) {
+        this.columnList = [specName, ...this.columnList]
+      }
+
+      // 拼装过了 返回拼装的新结构
+      // 没拼装过 返回老数据结构
+      return newDataList.length > 0 ? newDataList : dataList
     },
 
     // 控制合并表格的行和列
