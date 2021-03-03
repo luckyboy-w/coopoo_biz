@@ -430,7 +430,6 @@ export default {
 
       // 数据库返回的属性列表
       dbAttrList: [],
-      attrList: [],
       columnList: [],
       tableList: []
     }
@@ -887,13 +886,6 @@ export default {
         // [{"name":"颜色","list":["1298268253058621441","1298268253058621441"]},{"name":"尺寸","list":["1298268035080642561"]}]
 
         const textList = []
-        // for (let i = 0; i < this.attrList.length; i++) {
-        //   textList.push({
-        //     'name': this.attrList[i]['specName'],
-        //     'list': this.attrList[i]['specValue']
-        //   })
-        // }
-
         for (let i = 0; i < this.dbAttrList.length; i++) {
           let pushData = {
             name: '',
