@@ -44,7 +44,6 @@
                 v-for="valItem in item.skuObj"
                 :key="valItem.skuId"
                 :label="valItem.skuId"
-
                 @change="changeAttrList(valItem)"
               >
                 <!--                @change="changeAttrList(valItem)"-->
