@@ -999,20 +999,21 @@ export default {
             this.columnList.push(specName)
           }
 
-          // 上一行 有值
-          // 本行的值和上一行的值一样 合并行
+          // 原理 本列上一行的值一样 合并行
           let thisRowSpan = 1
           let thisRowSpanShow = true
-          //
+
           if (i > 0) {
             let tempIndex = i - 1
             let preData = tempTableList[tempIndex].tdList[j]
-            if (preData.value === specValue) {
 
+            // 本行和同列上一行的值相等
+            if (preData.value === specValue) {
+              // 找到最近的上级节点
               while (tempIndex >= 0) {
-                // 找到最近的上级节点 更改他的行数
                 preData = tempTableList[tempIndex].tdList[j]
                 if (preData.rowSpanShow) {
+                  // 更改他的行数
                   preData.rowSpan++
                   break
                 }
@@ -1033,6 +1034,7 @@ export default {
           })
         }
       }
+
       this.tableList = tempTableList
     },
     // 按分类加载Sku属性
