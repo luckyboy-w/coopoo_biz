@@ -67,7 +67,7 @@
               >
                 <template slot-scope="scope">
                   {{ scope.row.tdList[index].value }}
-                  <!--{{ `打印坐标 ${index} , ${scope.$index}` }}-->
+                  <!--                  {{ `${index} , ${scope.$index}` }}-->
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="stock" label="库存">
@@ -334,6 +334,7 @@
 </template>
 
 <script>
+import { deepCopy } from '@/utils/util'
 import { getMethod, postMethod, getUploadUrl } from '@/api/request'
 import { isInteger } from '@/utils/validate'
 import qEditor from '@/components/RichText/quill-editor'
@@ -440,8 +441,6 @@ export default {
     this.buildGoodFrontImageGroupId()
     this.loadtypeIdList()
     this.loadGoodSaleDescList()
-
-    this.loadSkuAttr()
 
     this.loadEditData()
   },
@@ -980,9 +979,62 @@ export default {
         this.$refs['refEditor'].setContent(this.detail.detailContent)
         this.$refs['refEditor1'].setContent(this.detail.postSale)
         this.$refs['refEditor2'].setContent(this.detail.listDetail)
+        this.loadTableList()
       }
     },
 
+    // 加载SKU表格的数据
+    loadTableList() {
+      let tempTableList = []
+      for (let i = 0; i < this.dataForm.skuPriceList.length; i++) {
+        tempTableList[i] = deepCopy(this.dataForm.skuPriceList[i])
+        tempTableList[i].tdList = []
+
+        const attrName2ValueList = tempTableList[i].skuText.split(';')
+
+        for (let j = 0; j < attrName2ValueList.length; j++) {
+          const [specName, specValue] = attrName2ValueList[j].split(':')
+          // 填充一次动态列
+          if (i === 0) {
+            this.columnList.push(specName)
+          }
+
+          // 上一行 有值
+          // 本行的值和上一行的值一样 合并行
+          let thisRowSpan = 1
+          let thisRowSpanShow = true
+          //
+          if (i > 0) {
+            let tempIndex = i - 1
+            let preData = tempTableList[tempIndex].tdList[j]
+            if (preData.value === specValue) {
+
+              while (tempIndex >= 0) {
+                // 找到最近的上级节点 更改他的行数
+                preData = tempTableList[tempIndex].tdList[j]
+                if (preData.rowSpanShow) {
+                  preData.rowSpan++
+                  break
+                }
+
+                tempIndex--
+              }
+
+              thisRowSpan = 1
+              thisRowSpanShow = false
+            }
+          }
+
+          tempTableList[i].tdList.push({
+            name: specName,
+            value: specValue,
+            rowSpan: thisRowSpan,
+            rowSpanShow: thisRowSpanShow
+          })
+        }
+      }
+      this.tableList = tempTableList
+    },
     // 按分类加载Sku属性
     async loadtypeId2List(typeId2) {
       this.dataForm.typeId2 = typeId2 || ''
@@ -990,9 +1042,6 @@ export default {
       this.typeId2List = data
 
       if (this.editData.id) {
-        // this.$nextTick(function() {
-        //   // this.loadSkuCompose()
-        // })
         this.loadSkuAttr()
       }
     },
@@ -1003,43 +1052,6 @@ export default {
 
       this.dbAttrList = data
       // TODO:此处 如果有数据回来了 要判断哪些需选中
-
-      console.log(this.dataForm.skuPriceList)
-      const dbSkuList = this.dataForm.skuPriceList
-      let checkAttrList = {}
-      for (let i = 0; i < dbSkuList.length; i++) {
-        const attrName2ValueList = dbSkuList[i].skuText.split(';')
-        for (let j = 0; j < attrName2ValueList.length; j++) {
-          const [specName, specValue] = attrName2ValueList[j].split(':')
-          // checkAttrList.push({ specName, specValue })
-          if (!checkAttrList[specName]) {
-            checkAttrList[specName] = [specValue]
-          } else {
-            checkAttrList[specName] = Array.from(new Set([...checkAttrList[specName], specValue]))
-          }
-        }
-      }
-
-      console.log(JSON.stringify(checkAttrList))
-      // const allPriceList = []
-      // let allPriceText = ''
-      // this.dataForm.skuPriceList.forEach(priceObj => {
-      //   allPriceList.push(priceObj.skuText)
-      // })
-      //
-      // allPriceText = allPriceList.join(';')
-      // console.log(this.dataForm.skuPriceList)
-      //
-      // if (this.editData.id) {
-      //   this.checkList.forEach(checkObj => {
-      //     existsList.forEach(o => {
-      //       if (checkObj.name == o.typeName && allPriceText.indexOf(checkObj.name + ':' + o.skuText) != -1) {
-      //         checkObj.list.push(o.skuId)
-      //       }
-      //     })
-      //   })
-      //   this.skuList = this.dataForm.skuPriceList
-      // }
     },
 
     // 修改选中属性，生成拼装输入框数据
