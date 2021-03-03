@@ -44,6 +44,7 @@
                 v-for="valItem in item.skuObj"
                 :key="valItem.skuId"
                 :label="valItem.skuId"
+                :checked="valItem.isChecked"
                 @change="changeAttrList(valItem)"
               >
                 <!--                @change="changeAttrList(valItem)"-->
@@ -513,25 +514,6 @@ export default {
     },
     changeContent(val) {
       this.detail.detailContent = val
-    },
-    handleClick(value) {
-      // 先清空数据，保证连续点击按钮，数据不会重复
-      this.skuArray = []
-      this.skuList = []
-      this.skuIdList = []
-
-      // this.checkList=[]
-      // 将选中的规格组合成一个大数组 [[1, 2], [a, b]...]
-      this.checkList.forEach(element => {
-        element.list.length > 0 ? this.skuArray.push(element.list) : ''
-      })
-      // 勾选了规格，才调用方法
-
-      if (this.skuArray.length > 0) {
-        this.getSkuData([], 0, this.skuArray)
-      } else {
-        this.$message.error('请先勾选规格')
-      }
     },
     // 递归获取每条SKU数据
     getSkuData(skuArr = [], i, list) {
@@ -1045,16 +1027,36 @@ export default {
       this.typeId2List = data
 
       if (this.editData.id) {
-        this.loadSkuAttr()
+        this.loadSkuAttr(true)
       }
     },
 
     // 加载 Sku 的属性列表
-    async loadSkuAttr() {
+    async loadSkuAttr(autoChecked) {
       const { data } = await getMethod('/bu/good/findTypeBySpec', { id: this.dataForm.typeId2 })
 
       this.dbAttrList = data
-      // TODO:此处 如果有数据回来了 要判断哪些需选中
+      autoChecked && this.loadAttrChecked(autoChecked)
+
+    },
+    // 回显已选中的属性
+    loadAttrChecked() {
+      const allPriceList = []
+      let allPriceText = ''
+      this.dataForm.skuPriceList.forEach(priceObj => {
+        allPriceList.push(priceObj.skuText)
+      })
+
+      allPriceText = allPriceList.join(';')
+
+      for (let i = 0; i < this.dbAttrList.length; i++) {
+        let dbSkuList = this.dbAttrList[i].skuObj
+        for (let j = 0; j < dbSkuList.length; j++) {
+          if (allPriceText.indexOf(dbSkuList[j].typeName + ':' + dbSkuList[j].skuText) != -1) {
+            dbSkuList[j].isChecked = true
+          }
+        }
+      }
     },
 
     // 修改选中属性，生成拼装输入框数据
