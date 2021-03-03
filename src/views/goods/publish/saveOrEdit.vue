@@ -886,25 +886,31 @@ export default {
         // 把ID转换成Text
         // [{"name":"颜色","list":["1298268253058621441","1298268253058621441"]},{"name":"尺寸","list":["1298268035080642561"]}]
 
-        // for (let i = 0; i < this.checkList.length; i++) {
-        //   const valueList = this.checkList[i].list
-        //   const valueText = []
-        //   for (let k = 0; k < valueList.length; k++) {
-        //     valueText.push(this.skuIdToText[valueList[k]].skuText)
-        //   }
-        //
+        const textList = []
+        // for (let i = 0; i < this.attrList.length; i++) {
         //   textList.push({
-        //     'name': this.checkList[i]['name'],
-        //     'list': valueText
+        //     'name': this.attrList[i]['specName'],
+        //     'list': this.attrList[i]['specValue']
         //   })
         // }
-        const textList = []
-        for (let i = 0; i < this.attrList.length; i++) {
-          textList.push({
-            'name': this.attrList[i]['specName'],
-            'list': this.attrList[i]['specValue']
-          })
+
+        for (let i = 0; i < this.dbAttrList.length; i++) {
+          let pushData = {
+            name: '',
+            list: []
+          }
+
+          let dbSkuList = this.dbAttrList[i].skuObj
+          for (let j = 0; j < dbSkuList.length; j++) {
+            if (dbSkuList[j].isChecked) {
+              pushData.list.push(dbSkuList[j].skuText)
+            }
+          }
+
+          pushData.name = this.dbAttrList[i].specName
+          textList.push(pushData)
         }
+
         this.dataForm.checkRuleStr = JSON.stringify(textList)
 
         this.dataForm.isGift = this.isGift
@@ -1049,48 +1055,13 @@ export default {
     changeAttrList(valItem) {
       valItem.isChecked = valItem.isChecked == true ? true : false
       valItem.isChecked = !valItem.isChecked
-      if (valItem.isChecked) {
-        this.addAttrList(valItem.typeName, valItem.skuText)
-      } else {
-        this.removeAttrList(valItem.typeName, valItem.skuText)
-      }
       this.generatorSkuList()
-    },
-    // 添加选中数据
-    addAttrList(name, val) {
-
-      for (let i = 0; i < this.attrList.length; i++) {
-        if (this.attrList[i].specName === name) {
-          this.attrList[i].specValue.push(val)
-          return
-        }
-      }
-      this.attrList.push({
-        specName: name,
-        specValue: [val]
-      })
-    },
-    // 移除选中数据
-    removeAttrList(name, val) {
-      for (let i = 0; i < this.attrList.length; i++) {
-        if (this.attrList[i].specName === name) {
-          this.attrList[i].specValue.splice(this.attrList[i].specValue.indexOf(val), 1)
-          if (this.attrList[i].specValue.length === 0) {
-            this.attrList.splice(i, 1)
-          }
-          return
-        }
-      }
     },
     // 生成SKU列表
     generatorSkuList() {
       this.columnList = []
       this.tableList = []
 
-      // console.log(this.dbAttrList)
-      // for (let i = 0; i < this.attrList.length; i++) {
-      //   this.tableList = this.addColumn(this.tableList, this.attrList[i].specName, this.attrList[i].specValue)
-      // }
       for (let i = this.dbAttrList.length - 1; i >= 0; i--) {
         this.tableList = this.addColumn(this.tableList, this.dbAttrList[i].specName, this.dbAttrList[i].skuObj)
       }
