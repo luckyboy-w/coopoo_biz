@@ -1071,23 +1071,6 @@ export default {
       for (let i = this.dbAttrList.length - 1; i >= 0; i--) {
         this.tableList = this.addColumn(this.tableList, this.dbAttrList[i].specName, this.dbAttrList[i].skuObj)
       }
-
-      // 如果是全局库存
-      // if (this.dataForm.stockType == 1) {
-      //   stockSingle = this.dataForm.stockNum
-      // }
-      //
-      // // sku字段
-      // let column = {
-      //   skuText: '',
-      //   skuCompareText: '',
-      //   skuCompareId: '',
-      //   stock: '',
-      //   salePrice: '',
-      //   saleMemPrice: '',
-      //   supplyPrice: '',
-      //   skuImg: ''
-      // }
     },
     // 添加列
     addColumn(dataList, specName, specValue) {
