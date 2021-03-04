@@ -57,18 +57,18 @@
                 </el-table>
               </template>
             </el-table-column>
-            <el-table-column prop="goodName" label="商品名称" />
-            <el-table-column prop="goodMerit" label="商品分类" >
+            <el-table-column prop="goodName" label="商品名称"/>
+            <el-table-column prop="goodMerit" label="商品分类">
               <template slot-scope="scope">
                 {{ scope.row.typeName }} -> {{ scope.row.typeName2 }}
               </template>
             </el-table-column>
-            <el-table-column prop="goodBrand" label="是否推荐" >
+            <el-table-column prop="goodBrand" label="是否推荐">
               <template slot-scope="scope">
                 {{ scope.row.recommend == '0' ? '未推荐' : '已推荐' }}
               </template>
             </el-table-column>
-            <el-table-column prop="verifyStatus" label="状态" >
+            <el-table-column prop="verifyStatus" label="状态">
               <template slot-scope="scope">
                 {{ scope.row | parseStatus }}
               </template>
@@ -77,7 +77,7 @@
               0
             </el-table-column>
 
-            <el-table-column prop="createTime" label="创建时间" >
+            <el-table-column prop="createTime" label="创建时间">
               <template slot-scope="scope">
                 {{ scope.row.createTime | _formatDate }}
               </template>
@@ -137,7 +137,7 @@
     </div>
 
     <el-dialog title="补货"
-               :visible.sync="pushStockBatch" v-if="pushStockBatch" width="800px"
+               :visible.sync="pushStockBatch" v-if="pushStockBatch" width="1200px"
     >
       <el-row :gutter="20" style="line-height:40px;font-size:14px;padding:0px 0px 20px 0px" v-if="stockType == 1">
         <el-col :span="4">
@@ -150,20 +150,29 @@
       </el-row>
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
         <el-table
-          :data="addStockList"
-
-          style="width:1200px; margin-bottom: 20px;"
-          row-key="id"
+          :data="addStocktableList"
+          :span-method="objectSpanMethod"
           border
         >
-          <el-table-column prop="skuText" label="SKU属性" width="260px"></el-table-column>
-          <el-table-column prop="stock" label="库存" width="120px">
+          <el-table-column
+            align="center"
+            v-for="(item,index) in addStockcolumnList"
+            :key="index"
+            :label="item"
+            width=""
+          >
+            <template slot-scope="scope">
+              {{ scope.row.tdList[index].value }}
+              <!--                  {{ `${index} , ${scope.$index}` }}-->
+            </template>
+          </el-table-column>
+          <el-table-column prop="stock" label="库存">
             <template slot-scope="scope">
               <el-input v-model="scope.row.stock" :disabled="stockType == 1"></el-input>
             </template>
           </el-table-column>
-          <el-table-column prop="salePrice" label="零售价" width="120px"></el-table-column>
-          <el-table-column prop="saleMemPrice" label="会员价" width="120px"></el-table-column>
+          <el-table-column prop="salePrice" label="零售价"></el-table-column>
+          <el-table-column prop="saleMemPrice" label="会员价"></el-table-column>
         </el-table>
       </el-row>
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
@@ -220,7 +229,6 @@ export default {
       typeIdList: [],
       typeId2List: [],
       goodBrandList: [],
-      addStockList: [],
       showPagination: false,
       editData: {},
       isGift: '1',
@@ -238,8 +246,9 @@ export default {
         list: []
       },
 
-      columnList: [],
-      tableList: []
+      addStockList: [],
+      addStockcolumnList: [],
+      addStocktableList: []
     }
   },
   props: {
@@ -295,74 +304,51 @@ export default {
   methods: {
     syncStockNum() {
       if (isNaN(this.stockNum)) {
-        this.$message({
-          message: '库存数量输入有误',
-          type: 'warning'
-        })
+        this.$message.warning('库存数量输入有误')
         return
       }
 
       if (this.stockNum < 0) {
-        this.$message({
-          message: '库存不能为负数',
-          type: 'warning'
-        })
+        this.$message.warning('库存不能为负数')
         return
       }
 
       for (let i = 0; i < this.addStockList.length; i++) {
-        let skuObj = this.addStockList[i]
-        skuObj.stock = this.stockNum
+        this.addStockList[i].stock = this.stockNum
       }
     },
-    submitStock() {
-      let scope = this
+    async submitStock() {
       let param = {
         stockType: this.stockType,
-        skuPriceList: this.addStockList
+        skuPriceList: this.addStocktableList
       }
-      for (let i = 0; i < this.addStockList.length; i++) {
-        let rowObj = this.addStockList[i]
+      for (let i = 0; i < this.addStocktableList.length; i++) {
+        let rowObj = this.addStocktableList[i]
         if (rowObj.stock == '') {
-          this.$message({
-            message: '库存不能为空',
-            type: 'warning'
-          })
+          this.$message.warning('库存不能为空')
           return
         }
         if (isNaN(rowObj.stock)) {
-          this.$message({
-            message: '库存输入有误',
-            type: 'warning'
-          })
+          this.$message.warning('库存输入有误')
           return
         }
 
         if (rowObj.stock < 0) {
-          this.$message({
-            message: '库存不能为负数',
-            type: 'warning'
-          })
+          this.$message.warning('库存不能为负数')
           return
         }
 
         if ((rowObj.stock + '').indexOf('.') != -1) {
-          this.$message({
-            message: '库存不能是小数',
-            type: 'warning'
-          })
+          this.$message.warning('库存不能是小数')
           return
         }
       }
 
-      postMethod('/bu/good/modityGoodStock', param).then(res => {
-        this.$message({
-          message: '补货成功',
-          type: 'success'
-        })
-        scope.cancelStock()
-        scope.loadList()
-      })
+      await postMethod('/bu/good/modityGoodStock', param)
+
+      this.$message.success('补货成功')
+      this.cancelStock()
+      this.loadList()
     },
     cancelStock() {
       this.pushStockBatch = false
@@ -371,6 +357,9 @@ export default {
     addStock(row, rowIndex) {
       this.stockType = row.stockType
       this.addStockList = row.skuPriceList
+      this.addStocktableList = row.tableList
+      this.addStockcolumnList = row.columnList
+
       //1:全局配置;2:局部配置
       this.pushStockBatch = true
     },
