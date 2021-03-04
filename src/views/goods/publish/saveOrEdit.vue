@@ -52,7 +52,7 @@
                   type="primary" size="mini"
                   @click="saveAttrData(item)"
                   :disabled="isHiddenEditGood"
-                >新建
+                >添加
                 </el-button>
               </div>
 
