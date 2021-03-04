@@ -29,17 +29,31 @@
             :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
           >
             <el-table-column type="expand">
+              <!--              row-key="id"-->
+              <!--              :data="props.row.skuPriceList"-->
+
               <template slot-scope="props">
                 <el-table
-                  :data="props.row.skuPriceList"
-                  row-key="id"
+                  :data="props.row.tableList"
+                  :span-method="objectSpanMethod"
                   border
                 >
-                  <el-table-column prop="skuText" label="SKU属性" width="260px"></el-table-column>
-                  <el-table-column prop="stock" label="库存" width="150px"></el-table-column>
-                  <el-table-column prop="salePrice" label="零售价" width="150px"></el-table-column>
-                  <el-table-column prop="saleMemPrice" label="会员价" width="150px"></el-table-column>
-                  <el-table-column prop="saleCount" label="销量" width="150px"></el-table-column>
+                  <el-table-column
+                    align="center"
+                    v-for="(item,index) in props.row.columnList"
+                    :key="index"
+                    :label="item"
+                    width=""
+                  >
+                    <template slot-scope="scope">
+                      {{ scope.row.tdList[index].value }}
+                      <!--                  {{ `${index} , ${scope.$index}` }}-->
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="stock" label="库存"></el-table-column>
+                  <el-table-column prop="salePrice" label="零售价"></el-table-column>
+                  <el-table-column prop="saleMemPrice" label="会员价"></el-table-column>
+                  <el-table-column prop="saleCount" label="销量"></el-table-column>
                 </el-table>
               </template>
             </el-table-column>
@@ -187,6 +201,7 @@
 import saveOrEdit from './publish/saveOrEdit'
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
+import { deepCopy } from '@/utils/util'
 
 export default {
   components: {
@@ -222,7 +237,9 @@ export default {
       tableData: {
         list: []
       },
-      dataList: []
+
+      columnList: [],
+      tableList: []
     }
   },
   props: {
@@ -292,8 +309,6 @@ export default {
         })
         return
       }
-
-      debugger
 
       for (let i = 0; i < this.addStockList.length; i++) {
         let skuObj = this.addStockList[i]
@@ -479,12 +494,103 @@ export default {
     initLoad() {
       this.loadList()
     },
-    loadList() {
-      const scope = this
-      getMethod('/bu/good/findPage?isGift=' + this.isGift, this.searchParam).then(res => {
-        scope.tableData = res.data
-        scope.showPagination = scope.tableData.total == 0
-      })
+    async loadList() {
+      const { data } = await getMethod('/bu/good/findPage?isGift=' + this.isGift, this.searchParam)
+
+      this.tableData = data
+      this.showPagination = this.tableData.total == 0
+
+      for (let i = 0; i < this.tableData.list.length; i++) {
+        const { tableList, columnList } = this.loadTableList(this.tableData.list[i].skuPriceList)
+        this.tableData.list[i].tableList = tableList
+        this.tableData.list[i].columnList = columnList
+      }
+
+    },
+
+    // 加载SKU表格的数据
+    loadTableList(skuPriceList) {
+      let tempTableList = []
+      let columnList = []
+      for (let i = 0; i < skuPriceList.length; i++) {
+        tempTableList[i] = deepCopy(skuPriceList[i])
+        tempTableList[i].tdList = []
+
+        const attrName2ValueList = tempTableList[i].skuText.split(';')
+
+        for (let j = 0; j < attrName2ValueList.length; j++) {
+          const [specName, specValue] = attrName2ValueList[j].split(':')
+          // 填充一次动态列
+          if (i === 0) {
+            columnList.push(specName)
+          }
+
+          // 原理 本列上一行的值一样 合并行
+          // 因为线上已经有老结构数据 所以新结构无法存储数据库 更加无法回显 出此下策
+          let thisRowSpan = 1
+          let thisRowSpanShow = true
+
+          if (i > 0) {
+            let tempIndex = i - 1
+            let preData = tempTableList[tempIndex].tdList[j]
+
+            // 本行和同列上一行的值相等
+            if (preData.value === specValue) {
+              // 找到最近的上级节点
+              while (tempIndex >= 0) {
+                preData = tempTableList[tempIndex].tdList[j]
+                if (preData.rowSpanShow) {
+                  // 更改他的行数
+                  preData.rowSpan++
+                  break
+                }
+
+                tempIndex--
+              }
+
+              thisRowSpan = 1
+              thisRowSpanShow = false
+            }
+          }
+
+          tempTableList[i].tdList.push({
+            name: specName,
+            value: specValue,
+            rowSpan: thisRowSpan,
+            rowSpanShow: thisRowSpanShow
+          })
+        }
+      }
+
+      return {
+        tableList: tempTableList,
+        columnList: columnList
+      }
+    },
+
+    // 控制合并表格的行和列
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (row.tdList[columnIndex] === undefined) {
+        // 超出了 tdList 的长度 不属于动态列的范围 正常显示
+        return {
+          rowspan: 1,
+          colspan: 1
+        }
+      }
+
+      // 如果不展示 则把此单元格合并到0 即消掉 不显示
+      if (!row.tdList[columnIndex].rowSpanShow) {
+        return {
+          rowspan: 0,
+          colspan: 1
+        }
+      }
+
+      // 否则 按照计算好的行数来合并
+      return {
+        rowspan: row.tdList[columnIndex].rowSpan,
+        colspan: 1
+      }
     }
   }
 }
