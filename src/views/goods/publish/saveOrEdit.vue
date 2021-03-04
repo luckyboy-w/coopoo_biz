@@ -41,8 +41,19 @@
             <div v-for="(item, index) in dbAttrList" :key="index">
               <div class="attr-title">{{ item.specName }}:</div>
               <div class="attr-save">
-                <el-input size="mini" style="width:200px;margin-right: 30px" :disabled="isHiddenEditGood"/>
-                <el-button type="primary" size="mini">新建</el-button>
+                <el-input
+                  size="mini"
+                  style="width:200px;margin-right: 30px"
+                  :disabled="isHiddenEditGood"
+                  placeholder="请输入自定义值"
+                  v-model="item.newAttrValue"
+                />
+                <el-button
+                  type="primary" size="mini"
+                  @click="saveAttrData(item)"
+                  :disabled="isHiddenEditGood"
+                >新建
+                </el-button>
               </div>
 
               <div class="attr-content">
@@ -52,6 +63,7 @@
                   :label="valItem.skuId"
                   :checked="valItem.isChecked"
                   @change="changeAttrList(valItem)"
+                  :disabled="isHiddenEditGood"
                 >
                   {{ valItem.skuText }}
                 </el-checkbox>
@@ -445,17 +457,21 @@ export default {
   },
   computed: {},
   mounted() {
-    this.loadGoodBrandList()
-    this.buildGoodImageGroupId()
-    this.buildGoodFrontImageGroupId()
-    this.loadtypeIdList()
-    this.loadGoodSaleDescList()
-
-    this.loadEditData()
+    this.initData()
   },
   created() {
   },
   methods: {
+    // 初始化整个页面数据
+    initData() {
+      this.loadGoodBrandList()
+      this.buildGoodImageGroupId()
+      this.buildGoodFrontImageGroupId()
+      this.loadtypeIdList()
+      this.loadGoodSaleDescList()
+
+      this.loadEditData()
+    },
     changeImgMask(index, flag) {
       this.$refs.imgMask[index].style = flag ? 'display:block' : 'display:none'
     },
@@ -975,6 +991,8 @@ export default {
 
     // 加载SKU表格的数据
     loadTableList() {
+      this.columnList = []
+
       let tempTableList = []
       for (let i = 0; i < this.dataForm.skuPriceList.length; i++) {
         tempTableList[i] = deepCopy(this.dataForm.skuPriceList[i])
@@ -1169,6 +1187,43 @@ export default {
         rowspan: this.tableList[rowIndex].tdList[columnIndex].rowSpan,
         colspan: 1
       }
+    },
+
+    // 保存属性数据
+    async saveAttrData(item) {
+
+      let handleParam = {
+        id: item.skuObj[0].typeId,
+        typeDataStr: item.id,
+        specName: item.specName,
+        skuList: []
+      }
+
+      for (let i = 0; i < item.skuObj.length; i++) {
+        handleParam.skuList.push({
+          sort: i,
+          skuText: item.skuObj[i].skuText,
+          type: 'spec'
+        })
+      }
+
+      handleParam.skuList = [
+        ...handleParam.skuList,
+        {
+          sort: item.skuObj.length,
+          skuText: item.newAttrValue,
+          type: 'spec'
+        }
+      ]
+
+      let param = {
+        jsonParam: JSON.stringify(handleParam)
+      }
+      const { data } = await postMethod('/bu/goodSpec/update', param)
+
+      this.$message.success('操作成功')
+
+      this.initData()
     }
   }
 }
