@@ -38,18 +38,26 @@
             </el-select>
           </el-form-item>
           <el-form-item label="属性选择">
-            <div v-for="(item, index) in dbAttrList" :key="index" class="mt-20">
-              <b>{{ item.specName }}：</b>
-              <el-checkbox
-                v-for="valItem in item.skuObj"
-                :key="valItem.skuId"
-                :label="valItem.skuId"
-                :checked="valItem.isChecked"
-                @change="changeAttrList(valItem)"
-              >
-                <!--                @change="changeAttrList(valItem)"-->
-                {{ valItem.skuText }}
-              </el-checkbox>
+            <div v-for="(item, index) in dbAttrList" :key="index">
+              <div class="attr-title">{{ item.specName }}:</div>
+              <div class="attr-save">
+                <el-input size="mini" style="width:200px;margin-right: 30px" :disabled="isHiddenEditGood"/>
+                <el-button type="primary" size="mini">新建</el-button>
+              </div>
+
+              <div class="attr-content">
+                <el-checkbox
+                  v-for="valItem in item.skuObj"
+                  :key="valItem.skuId"
+                  :label="valItem.skuId"
+                  :checked="valItem.isChecked"
+                  @change="changeAttrList(valItem)"
+                >
+                  {{ valItem.skuText }}
+                </el-checkbox>
+              </div>
+
+
             </div>
           </el-form-item>
           <el-form-item label="新SKU配置">
@@ -1196,6 +1204,34 @@ export default {
   width: 60px;
   height: 60px;
   display: block;
+}
+
+$attrTitleWidth: 3vw;
+$attrContentWidth: 60vw;
+
+.attr-title {
+  display: inline-block;
+  overflow: hidden;
+  font-size: 17px;
+  font-weight: 500;
+
+
+  width: $attrTitleWidth;
+  //background: #2ac06d;
+}
+
+.attr-save {
+  display: inline-block;
+  overflow: hidden;
+  width: $attrContentWidth;
+}
+
+.attr-content {
+  display: flex;
+  flex-wrap: wrap;
+  width: $attrContentWidth;
+  margin-left: calc(#{$attrTitleWidth} + 4px);
+  margin-bottom: 3vh;
 }
 
 
