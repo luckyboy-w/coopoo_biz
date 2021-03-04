@@ -214,7 +214,7 @@
             <el-input v-model="dataForm.goodMerit"
                       style="width:260px"
                       placeholder="请输入卖点"
-                      maxlength="20"
+                      maxlength="50"
                       show-word-limit
                       :disabled="isHiddenEditGood"
             />
