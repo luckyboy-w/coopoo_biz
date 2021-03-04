@@ -57,27 +57,27 @@
                 </el-table>
               </template>
             </el-table-column>
-            <el-table-column prop="goodName" label="商品名称" width="350px"/>
-            <el-table-column prop="goodMerit" label="商品分类" width="150px">
+            <el-table-column prop="goodName" label="商品名称" />
+            <el-table-column prop="goodMerit" label="商品分类" >
               <template slot-scope="scope">
                 {{ scope.row.typeName }} -> {{ scope.row.typeName2 }}
               </template>
             </el-table-column>
-            <el-table-column prop="goodBrand" label="是否推荐" width="150px">
+            <el-table-column prop="goodBrand" label="是否推荐" >
               <template slot-scope="scope">
                 {{ scope.row.recommend == '0' ? '未推荐' : '已推荐' }}
               </template>
             </el-table-column>
-            <el-table-column prop="verifyStatus" label="状态" width="150px">
+            <el-table-column prop="verifyStatus" label="状态" >
               <template slot-scope="scope">
                 {{ scope.row | parseStatus }}
               </template>
             </el-table-column>
-            <el-table-column prop="stock" label="总销量" width="80px">
+            <el-table-column prop="stock" label="总销量">
               0
             </el-table-column>
 
-            <el-table-column prop="createTime" label="创建时间" width="120px">
+            <el-table-column prop="createTime" label="创建时间" >
               <template slot-scope="scope">
                 {{ scope.row.createTime | _formatDate }}
               </template>
