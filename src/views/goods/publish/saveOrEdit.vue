@@ -67,50 +67,52 @@
                 </el-checkbox>
               </div>
             </template>
-            <!--            <div>-->
-            <!--              <div class="attr-title">自定义规格:</div>-->
-            <!--              <div class="attr-save">-->
-            <!--                <el-button @click="addAttrNameInput" type="primary" :disabled="isHiddenEditGood">添加</el-button>-->
-            <!--                <el-button @click="handleSaveAttrData">先行保存</el-button>-->
-            <!--              </div>-->
+            <template>
+              <div class="attr-title">自定义规格:</div>
+              <div class="attr-save">
+                <el-button @click="addAttrNameInput" type="primary" :disabled="isHiddenEditGood">添加</el-button>
+                <el-button @click="handleSaveAttrData">先行保存</el-button>
+              </div>
 
-            <!--              <template v-for="(attrItem,index) in addAttrParam">-->
-            <!--                <div class="attr-content">-->
-            <!--                  <el-input-->
-            <!--                    style="width:200px;margin-right: 30px"-->
-            <!--                    :disabled="isHiddenEditGood"-->
-            <!--                    placeholder="请输入规格名称"-->
-            <!--                    v-model="attrItem.specName"-->
-            <!--                  />-->
-            <!--                  <el-button-->
-            <!--                    type="danger"-->
-            <!--                    @click="deleteAttrNameInput(index)"-->
-            <!--                    :disabled="isHiddenEditGood"-->
-            <!--                    icon="el-icon-delete"-->
-            <!--                  >删除-->
-            <!--                  </el-button>-->
-            <!--                </div>-->
+              <template v-for="(attrItem,index) in addAttrParam">
+                <div class="attr-content">
+                  <el-input
+                    style="width:200px;margin-right: 30px"
+                    :disabled="isHiddenEditGood"
+                    placeholder="请输入规格名称"
+                    v-model="attrItem.specName"
+                  />
+                  <el-button
+                    type="danger"
+                    @click="deleteAttrNameInput(index)"
+                    :disabled="isHiddenEditGood"
+                    icon="el-icon-delete"
+                  >删除
+                  </el-button>
+                </div>
 
-            <!--                &lt;!&ndash;属性值&ndash;&gt;-->
-            <!--                <div class="attr-content">-->
-            <!--                  <el-input-->
-            <!--                    v-for="(attrValueItem,i) in attrItem.skuList" :key="i"-->
-            <!--                    style="width:200px;margin-right: 30px;margin-bottom: 3vh"-->
-            <!--                    :disabled="isHiddenEditGood"-->
-            <!--                    placeholder="请输入规格值"-->
-            <!--                    v-model="attrValueItem.skuText"-->
-            <!--                    @focus="addAttrValueInput(attrItem.skuList,i)"-->
-            <!--                  >-->
-            <!--                    <el-button-->
-            <!--                      :disabled="isHiddenEditGood || attrItem.skuList.length === 1"-->
-            <!--                      @click="deleteAttrValueInput(attrItem.skuList,i)"-->
-            <!--                      type="text" slot="suffix"-->
-            <!--                      icon="el-icon-delete"-->
-            <!--                    ></el-button>-->
-            <!--                  </el-input>-->
-            <!--                </div>-->
-            <!--              </template>-->
-            <!--            </div>-->
+                <!--属性值-->
+                <div class="attr-content">
+                  <el-input
+                    v-for="(attrValueItem,i) in attrItem.skuList" :key="i"
+                    style="width:200px;margin-right: 30px;margin-bottom: 3vh"
+                    :disabled="isHiddenEditGood"
+                    placeholder="请输入规格值"
+                    v-model="attrValueItem.skuText"
+                    @blur="addAttrValueInput(attrItem.skuList,i)"
+                  >
+
+                    <!--                    @focus="addAttrValueInput(attrItem.skuList,i)"-->
+                    <el-button
+                      :disabled="isHiddenEditGood || attrItem.skuList.length === 1"
+                      @click="deleteAttrValueInput(attrItem.skuList,i)"
+                      type="text" slot="suffix"
+                      icon="el-icon-delete"
+                    ></el-button>
+                  </el-input>
+                </div>
+              </template>
+            </template>
           </el-form-item>
           <el-form-item label="新SKU配置">
             <el-table
@@ -238,9 +240,6 @@
               <img width="100%" :src="imageUrl" alt>
             </el-dialog>
           </el-form-item>
-          <el-dialog center :visible.sync="goodSaleDescImgVisible">
-            <img width="100%" :src="goodSaleDescImgUrl" alt>
-          </el-dialog>
           <el-form-item label="售后说明图片">
             <el-radio-group v-model="dataForm.afterSaleId" :disabled="isHiddenEditGood">
               <el-radio
@@ -388,6 +387,10 @@
         </el-form>
       </el-col>
     </el-row>
+
+    <el-dialog center :visible.sync="goodSaleDescImgVisible">
+      <img width="100%" :src="goodSaleDescImgUrl" alt>
+    </el-dialog>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
@@ -1034,6 +1037,9 @@ export default {
     loadEditData() {
       if (this.editData.id) {
         this.addAttrParam = []
+        this.uploadGoodFrontImageList = []
+        this.uploadGoodImageList = []
+
         this.goodStyleList = this.editData.goodStyle.split(',')
         this.serviceRuleList = this.editData.serviceRule.split(',')
         this.dataForm = this.editData
@@ -1247,6 +1253,11 @@ export default {
     },
 
     handlerAttrData(item) {
+      if (item.newAttrValue === undefined || item.newAttrValue === '') {
+        this.$message.warning('请输入后重试')
+        return
+      }
+
       let handleParam = {
         id: item.skuObj[0].typeId,
         typeDataStr: item.id,
@@ -1308,13 +1319,25 @@ export default {
     },
     // 添加属性值
     addAttrValueInput(attrSkuList, index) {
-      if (attrSkuList.length - 1 !== index) return
+      this.removeNullAttrValueInput(attrSkuList)
+
+      // if (attrSkuList.length - 1 !== index) return
 
       attrSkuList.push({
         sort: 0,
         skuText: '',
         type: 'spec'
       })
+    },
+    // 自动移除空属性值的输入框
+    removeNullAttrValueInput(attrSkuList) {
+      let length = attrSkuList.length
+      for (var i = 0; i < attrSkuList.length; i++) {
+        if (attrSkuList[i].skuText === '') {
+          attrSkuList.splice(i, 1)
+          i--
+        }
+      }
     },
     // 删除属性值
     deleteAttrValueInput(attrSkuList, index) {
