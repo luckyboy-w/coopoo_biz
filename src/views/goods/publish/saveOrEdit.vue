@@ -99,7 +99,7 @@
                     :disabled="isHiddenEditGood"
                     placeholder="请输入规格值"
                     v-model="attrValueItem.skuText"
-                    @blur="addAttrValueInput(attrItem.skuList,i)"
+                    @input="addAttrValueInput(attrItem.skuList,i)"
                   >
 
                     <!--                    @focus="addAttrValueInput(attrItem.skuList,i)"-->
