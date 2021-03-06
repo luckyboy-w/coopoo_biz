@@ -99,10 +99,8 @@
                     :disabled="isHiddenEditGood"
                     placeholder="请输入规格值"
                     v-model="attrValueItem.skuText"
-                    @input="addAttrValueInput(attrItem.skuList,i)"
+                    @input="addAttrValueInput(attrItem.skuList,i,attrItem.specName)"
                   >
-
-                    <!--                    @focus="addAttrValueInput(attrItem.skuList,i)"-->
                     <el-button
                       :disabled="isHiddenEditGood || attrItem.skuList.length === 1"
                       @click="deleteAttrValueInput(attrItem.skuList,i)"
@@ -1318,9 +1316,12 @@ export default {
       this.addAttrParam.splice(index, 1)
     },
     // 添加属性值
-    addAttrValueInput(attrSkuList, index) {
+    addAttrValueInput(attrSkuList, index, specName) {
       this.removeNullAttrValueInput(attrSkuList)
 
+      // TODO: 添加校验
+      // TODO: 维护dbAttrList 调用generatorSkuList
+      this.pushDbAttrList(specName)
       // if (attrSkuList.length - 1 !== index) return
 
       attrSkuList.push({
@@ -1353,6 +1354,33 @@ export default {
         let handleParam = deepCopy(this.addAttrParam[i])
         handleParam.skuList.pop()
         this.saveAttrData(handleParam)
+      }
+    },
+
+    // 推送新产生的数据到属性备选池
+    pushDbAttrList(specName) {
+
+      for (let i = 0; i < this.addAttrParam.length; i++) {
+        // 空值跳过
+        if (this.addAttrParam[i].specName === '') continue
+
+        // let tempAttrData = deepCopy(this.addAttrParam[i])
+        let tempAttrData = this.addAttrParam[i]
+
+        let dbAttr = {
+          specName: specName,
+          skuObj: []
+        }
+
+        for (let j = 0; j < tempAttrData.length; j++) {
+          dbAttr.skuObj.push({
+            isChecked: true,
+            skuText: tempAttrData[i].skuText,
+            typeName: specName
+          })
+        }
+
+        this.dbAttrList.push(dbAttr)
       }
     }
 
