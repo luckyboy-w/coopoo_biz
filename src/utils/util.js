@@ -22,7 +22,7 @@ export function deepCopy(target) {
       result = [] // 将result赋值为一个数组，并且执行遍历
       for (let i in target) {
         // 递归克隆数组中的每一项
-        result.push(deepClone(target[i]))
+        result.push(deepCopy(target[i]))
       }
       // 判断如果当前的值是null的话；直接赋值为null
     } else if (target === null) {

@@ -38,27 +38,25 @@
             </el-select>
           </el-form-item>
           <el-form-item label="属性选择">
-            <div v-for="(item, index) in dbAttrList" :key="index">
+            <template v-for="item in dbAttrList">
               <div class="attr-title">{{ item.specName }}:</div>
               <div class="attr-save">
                 <el-input
-                  size="mini"
                   style="width:200px;margin-right: 30px"
                   :disabled="isHiddenEditGood"
                   placeholder="请输入自定义值"
                   v-model="item.newAttrValue"
                 />
                 <el-button
-                  type="primary" size="mini"
-                  @click="saveAttrData(item)"
+                  type="primary"
+                  @click="handlerAttrData(item)"
                   :disabled="isHiddenEditGood"
                 >添加
                 </el-button>
               </div>
-
               <div class="attr-content">
                 <el-checkbox
-                  v-for="valItem in item.skuObj"
+                  v-for="(valItem,index) in item.skuObj"
                   :key="valItem.skuId"
                   :label="valItem.skuId"
                   :checked="valItem.isChecked"
@@ -68,9 +66,51 @@
                   {{ valItem.skuText }}
                 </el-checkbox>
               </div>
+            </template>
+            <!--            <div>-->
+            <!--              <div class="attr-title">自定义规格:</div>-->
+            <!--              <div class="attr-save">-->
+            <!--                <el-button @click="addAttrNameInput" type="primary" :disabled="isHiddenEditGood">添加</el-button>-->
+            <!--                <el-button @click="handleSaveAttrData">先行保存</el-button>-->
+            <!--              </div>-->
 
+            <!--              <template v-for="(attrItem,index) in addAttrParam">-->
+            <!--                <div class="attr-content">-->
+            <!--                  <el-input-->
+            <!--                    style="width:200px;margin-right: 30px"-->
+            <!--                    :disabled="isHiddenEditGood"-->
+            <!--                    placeholder="请输入规格名称"-->
+            <!--                    v-model="attrItem.specName"-->
+            <!--                  />-->
+            <!--                  <el-button-->
+            <!--                    type="danger"-->
+            <!--                    @click="deleteAttrNameInput(index)"-->
+            <!--                    :disabled="isHiddenEditGood"-->
+            <!--                    icon="el-icon-delete"-->
+            <!--                  >删除-->
+            <!--                  </el-button>-->
+            <!--                </div>-->
 
-            </div>
+            <!--                &lt;!&ndash;属性值&ndash;&gt;-->
+            <!--                <div class="attr-content">-->
+            <!--                  <el-input-->
+            <!--                    v-for="(attrValueItem,i) in attrItem.skuList" :key="i"-->
+            <!--                    style="width:200px;margin-right: 30px;margin-bottom: 3vh"-->
+            <!--                    :disabled="isHiddenEditGood"-->
+            <!--                    placeholder="请输入规格值"-->
+            <!--                    v-model="attrValueItem.skuText"-->
+            <!--                    @focus="addAttrValueInput(attrItem.skuList,i)"-->
+            <!--                  >-->
+            <!--                    <el-button-->
+            <!--                      :disabled="isHiddenEditGood || attrItem.skuList.length === 1"-->
+            <!--                      @click="deleteAttrValueInput(attrItem.skuList,i)"-->
+            <!--                      type="text" slot="suffix"-->
+            <!--                      icon="el-icon-delete"-->
+            <!--                    ></el-button>-->
+            <!--                  </el-input>-->
+            <!--                </div>-->
+            <!--              </template>-->
+            <!--            </div>-->
           </el-form-item>
           <el-form-item label="新SKU配置">
             <el-table
@@ -452,7 +492,24 @@ export default {
       // 数据库返回的属性列表
       dbAttrList: [],
       columnList: [],
-      tableList: []
+      tableList: [],
+
+      // 属性区域
+
+      // 添加属性的参数
+      addAttrParam: [
+        // {
+        //   // 各个属性 id为空表示新增
+        //   // id: '',
+        //   typeDataStr: '',
+        //   specName: '',
+        //   skuList: [
+        //     { skuText: '' }
+        //   ]
+        // }
+      ],
+      testTextName: '',
+      testTextValue: ''
     }
   },
   computed: {},
@@ -976,6 +1033,7 @@ export default {
     // 装配编辑数据
     loadEditData() {
       if (this.editData.id) {
+        this.addAttrParam = []
         this.goodStyleList = this.editData.goodStyle.split(',')
         this.serviceRuleList = this.editData.serviceRule.split(',')
         this.dataForm = this.editData
@@ -1106,7 +1164,6 @@ export default {
       // 此属性规格是否有选中值 有的话 添加到动态列中
       let isAddColume = false
 
-      // TODO: 暂时还未更改  skuCompareId
       let newDataList = []
       for (let i = 0; i < specValue.length; i++) {
         // 当前规格未选中
@@ -1189,9 +1246,7 @@ export default {
       }
     },
 
-    // 保存属性数据
-    async saveAttrData(item) {
-
+    handlerAttrData(item) {
       let handleParam = {
         id: item.skuObj[0].typeId,
         typeDataStr: item.id,
@@ -1216,6 +1271,11 @@ export default {
         }
       ]
 
+      this.saveAttrData(handleParam)
+    },
+
+    // 保存属性数据
+    async saveAttrData(handleParam) {
       let param = {
         jsonParam: JSON.stringify(handleParam)
       }
@@ -1224,7 +1284,55 @@ export default {
       this.$message.success('操作成功')
 
       this.initData()
+    },
+
+    // 添加属性名
+    addAttrNameInput() {
+      this.addAttrParam.push({
+        // 各个属性 id为空表示新增
+        // id: '',
+        typeDataStr: this.dataForm.typeId2,
+        specName: '',
+        skuList: [
+          {
+            sort: 0,
+            skuText: '',
+            type: 'spec'
+          }
+        ]
+      })
+    },
+    // 删除属性名
+    deleteAttrNameInput(index) {
+      this.addAttrParam.splice(index, 1)
+    },
+    // 添加属性值
+    addAttrValueInput(attrSkuList, index) {
+      if (attrSkuList.length - 1 !== index) return
+
+      attrSkuList.push({
+        sort: 0,
+        skuText: '',
+        type: 'spec'
+      })
+    },
+    // 删除属性值
+    deleteAttrValueInput(attrSkuList, index) {
+      attrSkuList.splice(index, 1)
+    },
+
+    // 保存属性值
+    handleSaveAttrData() {
+      let handleParam = []
+      for (let i = 0; i < this.addAttrParam.length; i++) {
+        if (this.addAttrParam[i].skuList.length <= 1) continue
+
+        let handleParam = deepCopy(this.addAttrParam[i])
+        handleParam.skuList.pop()
+        this.saveAttrData(handleParam)
+      }
     }
+
   }
 }
 </script>
@@ -1261,14 +1369,17 @@ export default {
   display: block;
 }
 
-$attrTitleWidth: 3vw;
+$attrTitleWidth: 5vw;
 $attrContentWidth: 60vw;
 
 .attr-title {
   display: inline-block;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 17px;
   font-weight: 500;
+  //text-align: center;
 
 
   width: $attrTitleWidth;
