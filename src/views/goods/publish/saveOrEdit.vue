@@ -1510,13 +1510,6 @@ export default {
         // 不属于自己的不操作
         if (this.addAttrParam[i].specName !== specName) continue
 
-        // if (this.addAttrParam[i].id === undefined) continue
-
-        // this.dbAttrList.forEach(item => {
-        //   if (item.specName !== this.addAttrParam[i].specName) return
-        //   item.skuObj = []
-        // })
-
         // 属于自己的操作 需要还原场地
         for (let j = 0; j < this.dbAttrList.length; j++) {
           if (this.dbAttrList[j].specName !== this.addAttrParam[i].specName) continue
