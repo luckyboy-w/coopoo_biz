@@ -44,3 +44,28 @@ export function deepCopy(target) {
   // 返回最终结果
   return result
 }
+
+// 数组中按照对象的某属性 去重
+export function uniqueObjByAttr(array, property) {
+  // 标记是否加过的map
+  const map = new Map()
+  return array.filter(item => !map.has(item[property]) && map.set(item[property], '任意占位值'))
+}
+
+/*
+ * 根据数组对象属性删除对应项
+ * @param {Array} arr - 数组对象
+ * @param {String} attr - 属性
+ * @param {} value - 属性值
+ * @return void
+ */
+export function removeByValue(arr, attr, value) {
+  var index = 0
+  for (var i in arr) {
+    if (arr[i][attr] == value) {
+      index = i
+      break
+    }
+  }
+  arr.splice(index, 1)
+}

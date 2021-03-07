@@ -84,7 +84,7 @@
                   />
                   <el-button
                     type="danger"
-                    @click="deleteAttrNameInput(index)"
+                    @click="deleteAttrNameInput(attrItem.specName,index)"
                     :disabled="isHiddenEditGood"
                     icon="el-icon-delete"
                   >删除
@@ -103,7 +103,7 @@
                   >
                     <el-button
                       :disabled="isHiddenEditGood || attrItem.skuList.length === 1"
-                      @click="deleteAttrValueInput(attrItem.skuList,i)"
+                      @click="deleteAttrValueInput(attrItem.specName,attrItem.skuList,i)"
                       type="text" slot="suffix"
                       icon="el-icon-delete"
                     ></el-button>
@@ -396,7 +396,7 @@
 </template>
 
 <script>
-import { deepCopy } from '@/utils/util'
+import { deepCopy, removeByValue } from '@/utils/util'
 import { getMethod, postMethod, getUploadUrl } from '@/api/request'
 import { isInteger } from '@/utils/validate'
 import qEditor from '@/components/RichText/quill-editor'
@@ -496,6 +496,8 @@ export default {
       tableList: [],
 
       // 属性区域
+      // 自定义属性的值 累加至此 与dbAttrList 一起组合渲染
+      dbAttrListAppend: [],
 
       // 添加属性的参数
       addAttrParam: [
@@ -508,9 +510,7 @@ export default {
         //     { skuText: '' }
         //   ]
         // }
-      ],
-      testTextName: '',
-      testTextValue: ''
+      ]
     }
   },
   computed: {},
@@ -1312,8 +1312,20 @@ export default {
       })
     },
     // 删除属性名
-    deleteAttrNameInput(index) {
+    deleteAttrNameInput(specName, index) {
+
+      // 删除DBList中的属性渲染
+      for (let i = 0; i < this.dbAttrList.length; i++) {
+        if (this.dbAttrList[i].specName !== specName) continue
+        this.dbAttrList.splice(i, 1)
+        i--
+      }
+
+      // 删除属性名展示栏位
       this.addAttrParam.splice(index, 1)
+
+      // 重新生成sku表格
+      this.generatorSkuList()
     },
     // 添加属性值
     addAttrValueInput(attrSkuList, index, specName) {
@@ -1322,6 +1334,7 @@ export default {
       // TODO: 添加校验
       // TODO: 维护dbAttrList 调用generatorSkuList
       this.pushDbAttrList(specName)
+      this.generatorSkuList()
       // if (attrSkuList.length - 1 !== index) return
 
       attrSkuList.push({
@@ -1335,14 +1348,20 @@ export default {
       let length = attrSkuList.length
       for (var i = 0; i < attrSkuList.length; i++) {
         if (attrSkuList[i].skuText === '') {
-          attrSkuList.splice(i, 1)
+          this.deleteAttrValueInput(attrSkuList[i].specName, attrSkuList, i)
           i--
         }
       }
     },
     // 删除属性值
-    deleteAttrValueInput(attrSkuList, index) {
+    deleteAttrValueInput(specName, attrSkuList, index) {
+      // 删除Sku表格的值
+      this.removeAttrList(specName, attrSkuList[index].skuText)
+
+      // 删除输入框的值
       attrSkuList.splice(index, 1)
+
+      this.generatorSkuList()
     },
 
     // 保存属性值
@@ -1363,24 +1382,69 @@ export default {
       for (let i = 0; i < this.addAttrParam.length; i++) {
         // 空值跳过
         if (this.addAttrParam[i].specName === '') continue
+        // 不属于自己的不操作
+        if (this.addAttrParam[i].specName !== specName) continue
 
-        // let tempAttrData = deepCopy(this.addAttrParam[i])
-        let tempAttrData = this.addAttrParam[i]
+        // 属于自己的操作 需要还原场地
+        this.dbAttrList.forEach(item => {
+          if (item.specName !== this.addAttrParam[i].specName) return
+          item.skuObj = []
+        })
 
-        let dbAttr = {
-          specName: specName,
-          skuObj: []
+        let attrSkuList = this.addAttrParam[i].skuList
+
+        for (let j = 0; j < attrSkuList.length; j++) {
+          if (attrSkuList[j].skuText === '') continue
+
+          this.addDbAttrAppendList(specName, attrSkuList[j].skuText)
         }
+      }
+    },
 
-        for (let j = 0; j < tempAttrData.length; j++) {
-          dbAttr.skuObj.push({
+    // 添加选中数据
+    addDbAttrAppendList(specName, specValue) {
+      for (let i = 0; i < this.dbAttrList.length; i++) {
+        if (this.dbAttrList[i].specName === specName) {
+          let isExists = false
+          this.dbAttrList[i].skuObj.forEach(item => {
+            if (item.skuText === specValue) {
+              isExists = true
+            }
+          })
+
+          if (isExists) return
+
+          this.dbAttrList[i].skuObj.push({
             isChecked: true,
-            skuText: tempAttrData[i].skuText,
+            skuText: specValue,
             typeName: specName
           })
+          return
         }
+      }
 
-        this.dbAttrList.push(dbAttr)
+      this.dbAttrList.push({
+        specName: specName,
+        skuObj: [
+          {
+            isChecked: true,
+            skuText: specValue,
+            typeName: specName
+          }
+        ]
+      })
+    },
+
+    // 移除选中数据
+    removeAttrList(specName, specValue) {
+      for (let i = 0; i < this.dbAttrList.length; i++) {
+        if (this.dbAttrList[i].specName !== specName) continue
+
+        removeByValue(this.dbAttrList[i].skuObj, 'skuText', specValue)
+
+        if (this.dbAttrList[i].skuObj.length !== 0) continue
+
+        this.dbAttrList.splice(i, 1)
       }
     }
 
