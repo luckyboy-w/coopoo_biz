@@ -530,7 +530,8 @@ export default {
         let flushSkuList = false
         this.dbAttrList.forEach(item => {
           for (let i = 0; i < oldValue.length; i++) {
-            if (item.specName !== oldValue[i].specName || oldValue[i] === undefined || newValue[i] === undefined) continue
+            // || oldValue[i] === undefined || newValue[i] === undefined
+            if (item.specName !== oldValue[i].specName) continue
             if (newValue[i].specName === oldValue[i].specName) continue
             item.specName = newValue[i].specName
             flushSkuList = true
@@ -998,7 +999,6 @@ export default {
         try {
 
           await this.handleSaveAttrData()
-          console.log('出来了 准备更新数据')
 
           const { data } = await postMethod('/bu/good/update', param)
           this.typeList = data
@@ -1006,7 +1006,7 @@ export default {
           this.$message.success('操作成功')
           this.$emit('showListPanel', true)
         } catch (ex) {
-
+          console.log(ex)
         }
 
       }
@@ -1313,20 +1313,22 @@ export default {
       ]
 
       this.saveAttrData(handleParam)
+
+      this.$message.success('操作成功')
+      this.initData()
     },
 
     // 保存属性数据
     async saveAttrData(handleParam) {
 
       if (!this.checkSpecValueUnique(handleParam.skuList)) return
+
       let param = {
         jsonParam: JSON.stringify(handleParam)
       }
       const { data } = await postMethod('/bu/goodSpec/update', param)
 
-      this.$message.success('操作成功')
-
-      this.initData()
+      // this.initData()
     },
 
     // 添加属性名
@@ -1411,12 +1413,26 @@ export default {
 
     // 保存属性值
     async handleSaveAttrData() {
-      let handleParam = []
+      // 校验参数
+      for (let i = 0; i < this.addAttrParam.length; i++) {
+        if (this.addAttrParam[i].skuList.length <= 1) continue
+
+        let checkParam = deepCopy(this.addAttrParam[i])
+        checkParam.skuList.pop()
+
+        if (!this.checkSpecValueUnique(checkParam.skuList)) {
+          throw new Error('操作失败')
+        }
+      }
+
+      console.log(this.addAttrParam)
+
       for (let i = 0; i < this.addAttrParam.length; i++) {
         if (this.addAttrParam[i].skuList.length <= 1) continue
 
         let handleParam = deepCopy(this.addAttrParam[i])
         handleParam.skuList.pop()
+        console.log('添加次数')
         await this.saveAttrData(handleParam)
       }
     },
