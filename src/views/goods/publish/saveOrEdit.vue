@@ -527,17 +527,11 @@ export default {
     // 监听添加参数
     addAttrParamData: {
       handler: function(newValue, oldValue) {
-        // console.log(JSON.stringify(oldValue))
-        // console.log(JSON.stringify(newValue))
-        // console.log('===============')
-
         let flushSkuList = false
         this.dbAttrList.forEach(item => {
           for (let i = 0; i < oldValue.length; i++) {
             if (item.specName !== oldValue[i].specName) continue
-
             if (newValue[i].specName === oldValue[i].specName) continue
-
             item.specName = newValue[i].specName
             flushSkuList = true
           }
@@ -1001,6 +995,9 @@ export default {
         const param = JSON.stringify(this.dataForm)
 
         // console.log(param)
+        await this.handleSaveAttrData()
+
+        console.log('保存全局数据完成')
 
         const { data } = await postMethod('/bu/good/update', param)
         this.typeList = data
@@ -1315,14 +1312,16 @@ export default {
 
     // 保存属性数据
     async saveAttrData(handleParam) {
+
       let param = {
         jsonParam: JSON.stringify(handleParam)
       }
       const { data } = await postMethod('/bu/goodSpec/update', param)
 
       this.$message.success('操作成功')
+      console.log('保存属性值完成')
 
-      this.initData()
+      // this.initData()
     },
 
     // 添加属性名
@@ -1395,14 +1394,14 @@ export default {
     },
 
     // 保存属性值
-    handleSaveAttrData() {
+    async handleSaveAttrData() {
       let handleParam = []
       for (let i = 0; i < this.addAttrParam.length; i++) {
         if (this.addAttrParam[i].skuList.length <= 1) continue
 
         let handleParam = deepCopy(this.addAttrParam[i])
         handleParam.skuList.pop()
-        this.saveAttrData(handleParam)
+        await this.saveAttrData(handleParam)
       }
     },
 
