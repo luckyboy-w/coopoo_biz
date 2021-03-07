@@ -513,11 +513,41 @@ export default {
       ]
     }
   },
-  computed: {},
+  computed: {
+    addAttrParamData() {
+      return deepCopy(this.addAttrParam)
+    }
+  },
   mounted() {
     this.initData()
   },
   created() {
+  },
+  watch: {
+    // 监听添加参数
+    addAttrParamData: {
+      handler: function(newValue, oldValue) {
+        // console.log(JSON.stringify(oldValue))
+        // console.log(JSON.stringify(newValue))
+        // console.log('===============')
+
+        let flushSkuList = false
+        this.dbAttrList.forEach(item => {
+          for (let i = 0; i < oldValue.length; i++) {
+            if (item.specName !== oldValue[i].specName) continue
+
+            if (newValue[i].specName === oldValue[i].specName) continue
+
+            item.specName = newValue[i].specName
+            flushSkuList = true
+          }
+        })
+
+        flushSkuList && this.generatorSkuList()
+
+      },
+      deep: true
+    }
   },
   methods: {
     // 初始化整个页面数据
@@ -1332,7 +1362,6 @@ export default {
       this.removeNullAttrValueInput(attrSkuList)
 
       // TODO: 添加校验
-      // TODO: 维护dbAttrList 调用generatorSkuList
       this.pushDbAttrList(specName)
       this.generatorSkuList()
       // if (attrSkuList.length - 1 !== index) return
@@ -1343,9 +1372,9 @@ export default {
         type: 'spec'
       })
     },
+
     // 自动移除空属性值的输入框
     removeNullAttrValueInput(attrSkuList) {
-      let length = attrSkuList.length
       for (var i = 0; i < attrSkuList.length; i++) {
         if (attrSkuList[i].skuText === '') {
           this.deleteAttrValueInput(attrSkuList[i].specName, attrSkuList, i)
@@ -1353,6 +1382,7 @@ export default {
         }
       }
     },
+
     // 删除属性值
     deleteAttrValueInput(specName, attrSkuList, index) {
       // 删除Sku表格的值
