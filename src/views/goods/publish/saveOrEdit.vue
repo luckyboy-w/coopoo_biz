@@ -1522,7 +1522,7 @@ export default {
           if (this.dbAttrList[j].specName !== this.addAttrParam[i].specName) continue
           // 不属于后追加的数据 不恢复现场
           if (this.dbAttrList[j].id !== undefined) {
-            alert('无法添加已存在的规格名')
+            this.$message.warning("无法添加已存在的规格名")
             return
           }
 
