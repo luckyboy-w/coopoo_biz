@@ -89,6 +89,7 @@
                     icon="el-icon-delete"
                   >删除
                   </el-button>
+                  <span class="warning-text">{{ attrItem.specValueWarningStr }}</span>
                 </div>
 
                 <!--属性值-->
@@ -99,7 +100,8 @@
                     :disabled="isHiddenEditGood"
                     placeholder="请输入规格值"
                     v-model="attrValueItem.skuText"
-                    @input="addAttrValueInput(attrItem.skuList,i,attrItem.specName)"
+                    @blur="addAttrValueInput(attrItem,i)"
+                    @input="checkUniqueAndWarning(attrItem,i)"
                   >
                     <el-button
                       :disabled="isHiddenEditGood || attrItem.skuList.length === 1"
@@ -1373,8 +1375,12 @@ export default {
       this.generatorSkuList()
     },
     // 添加属性值
-    addAttrValueInput(attrSkuList, index, specName) {
+    addAttrValueInput(attrItem, index) {
+      let attrSkuList = attrItem.skuList
+      let specName = attrItem.specName
+
       this.removeNullAttrValueInput(attrSkuList)
+      this.removeUniqueAttrValueInput(attrItem, index)
 
       this.pushDbAttrList(specName)
       this.generatorSkuList()
@@ -1422,6 +1428,45 @@ export default {
       }
     },
 
+    // 当前值与之前的值有重复 移除当前值不添加
+    removeUniqueAttrValueInput(attrItem, index) {
+      let attrSkuList = attrItem.skuList
+      if (attrSkuList[index] === undefined) return
+      let checkText = attrSkuList[index].skuText
+      let deleteIndex = -1
+      for (var i = 0; i < attrSkuList.length; i++) {
+        if (index != i && attrSkuList[i].skuText === checkText) {
+          deleteIndex = i
+          break
+        }
+      }
+
+      // 删除输入框的值
+      deleteIndex >= 0 && attrSkuList.splice(deleteIndex, 1)
+      attrItem.specValueWarningStr = ''
+    },
+
+    // 校验重复值并给予提示
+    checkUniqueAndWarning(attrItem, index) {
+      let attrSkuList = attrItem.skuList
+      if (attrSkuList[index] === undefined) return
+      let checkText = attrSkuList[index].skuText
+
+      let isShow = false
+      for (var i = 0; i < attrSkuList.length; i++) {
+        if (index != i && attrSkuList[i].skuText === checkText) {
+          isShow = true
+          break
+        }
+      }
+
+      attrItem.specValueWarningStr = ''
+
+      if (checkText === '') return
+      isShow && (attrItem.specValueWarningStr = `属性值 ${checkText} 重复`)
+
+    },
+
     // 删除属性值
     deleteAttrValueInput(specName, attrSkuList, index) {
       // 删除Sku表格的值
@@ -1447,7 +1492,6 @@ export default {
         }
       }
 
-
       for (let i = 0; i < this.addAttrParam.length; i++) {
         if (this.addAttrParam[i].skuList.length <= 1) continue
 
@@ -1459,7 +1503,6 @@ export default {
 
     // 推送新产生的数据到属性备选池
     pushDbAttrList(specName) {
-
       for (let i = 0; i < this.addAttrParam.length; i++) {
 
         // 空值跳过
@@ -1478,7 +1521,10 @@ export default {
         for (let j = 0; j < this.dbAttrList.length; j++) {
           if (this.dbAttrList[j].specName !== this.addAttrParam[i].specName) continue
           // 不属于后追加的数据 不恢复现场
-          if (this.dbAttrList[j].id !== undefined) return
+          if (this.dbAttrList[j].id !== undefined) {
+            alert('无法添加已存在的规格名')
+            return
+          }
 
           this.dbAttrList[j].skuObj = []
         }
@@ -1622,6 +1668,12 @@ $attrContentWidth: 60vw;
   width: $attrContentWidth;
   margin-left: calc(#{$attrTitleWidth} + 4px);
   margin-bottom: 3vh;
+
+  .warning-text {
+    font-size: 16px;
+    color: red;
+    margin-left: 1vw;
+  }
 }
 
 
