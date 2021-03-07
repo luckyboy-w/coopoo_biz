@@ -43,11 +43,12 @@
               <div class="attr-save">
                 <el-input
                   style="width:200px;margin-right: 30px"
-                  :disabled="isHiddenEditGood"
+                  :disabled="isHiddenEditGood || item.id === undefined"
                   placeholder="请输入自定义值"
                   v-model="item.newAttrValue"
                 />
                 <el-button
+                  v-if="item.id !== undefined"
                   type="primary"
                   @click="handlerAttrData(item)"
                   :disabled="isHiddenEditGood"
@@ -80,7 +81,6 @@
                     :disabled="isHiddenEditGood"
                     placeholder="请输入规格名称"
                     v-model="attrItem.specName"
-                    @blur="checkUniqueSpecName(attrItem.specName)"
                   />
                   <el-button
                     type="danger"
@@ -530,9 +530,18 @@ export default {
         let flushSkuList = false
         this.dbAttrList.forEach(item => {
           for (let i = 0; i < oldValue.length; i++) {
-            // || oldValue[i] === undefined || newValue[i] === undefined
+            // 空指针判断
+            if (oldValue[i] === undefined || newValue[i] === undefined) continue
+
+            // 非此规格名 不处理
             if (item.specName !== oldValue[i].specName) continue
+
+            // 非后追加数据 不处理
+
+            if (item.id !== undefined) continue
+            // 新老值相同 不处理
             if (newValue[i].specName === oldValue[i].specName) continue
+
             item.specName = newValue[i].specName
             flushSkuList = true
           }
@@ -1312,6 +1321,8 @@ export default {
         }
       ]
 
+      if (!this.checkSpecValueUnique(handleParam.skuList)) return
+
       this.saveAttrData(handleParam)
 
       this.$message.success('操作成功')
@@ -1321,14 +1332,10 @@ export default {
     // 保存属性数据
     async saveAttrData(handleParam) {
 
-      if (!this.checkSpecValueUnique(handleParam.skuList)) return
-
       let param = {
         jsonParam: JSON.stringify(handleParam)
       }
       const { data } = await postMethod('/bu/goodSpec/update', param)
-
-      // this.initData()
     },
 
     // 添加属性名
@@ -1353,6 +1360,8 @@ export default {
       // 删除DBList中的属性渲染
       for (let i = 0; i < this.dbAttrList.length; i++) {
         if (this.dbAttrList[i].specName !== specName) continue
+        // 不属于后追加的数据 不处理
+        if (this.dbAttrList[i].id !== undefined) continue
         this.dbAttrList.splice(i, 1)
         i--
       }
@@ -1385,6 +1394,19 @@ export default {
       )
       if (isDuplicate) {
         this.$message.warning('规格值不能重复')
+        return false
+      }
+      return true
+    },
+
+    // 判断规格名是否有重复
+    checkSpecNameUnique(attrList) {
+      var attrTextArray = attrList.map(item => item.specName)
+      var isDuplicate = attrTextArray.some((item, idx) =>
+        attrTextArray.indexOf(item) != idx
+      )
+      if (isDuplicate) {
+        this.$message.warning('规格名称不能重复')
         return false
       }
       return true
@@ -1425,14 +1447,12 @@ export default {
         }
       }
 
-      console.log(this.addAttrParam)
 
       for (let i = 0; i < this.addAttrParam.length; i++) {
         if (this.addAttrParam[i].skuList.length <= 1) continue
 
         let handleParam = deepCopy(this.addAttrParam[i])
         handleParam.skuList.pop()
-        console.log('添加次数')
         await this.saveAttrData(handleParam)
       }
     },
@@ -1442,19 +1462,28 @@ export default {
 
       for (let i = 0; i < this.addAttrParam.length; i++) {
 
-        let attrSkuList = this.addAttrParam[i].skuList
-
         // 空值跳过
         if (this.addAttrParam[i].specName === '') continue
         // 不属于自己的不操作
         if (this.addAttrParam[i].specName !== specName) continue
 
-        // 属于自己的操作 需要还原场地
-        this.dbAttrList.forEach(item => {
-          if (item.specName !== this.addAttrParam[i].specName) return
-          item.skuObj = []
-        })
+        // if (this.addAttrParam[i].id === undefined) continue
 
+        // this.dbAttrList.forEach(item => {
+        //   if (item.specName !== this.addAttrParam[i].specName) return
+        //   item.skuObj = []
+        // })
+
+        // 属于自己的操作 需要还原场地
+        for (let j = 0; j < this.dbAttrList.length; j++) {
+          if (this.dbAttrList[j].specName !== this.addAttrParam[i].specName) continue
+          // 不属于后追加的数据 不恢复现场
+          if (this.dbAttrList[j].id !== undefined) return
+
+          this.dbAttrList[j].skuObj = []
+        }
+
+        let attrSkuList = this.addAttrParam[i].skuList
         for (let j = 0; j < attrSkuList.length; j++) {
           if (attrSkuList[j].skuText === '') continue
 
