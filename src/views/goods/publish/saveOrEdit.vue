@@ -71,7 +71,6 @@
               <div class="attr-title">自定义规格:</div>
               <div class="attr-save">
                 <el-button @click="addAttrNameInput" type="primary" :disabled="isHiddenEditGood">添加</el-button>
-                <el-button @click="handleSaveAttrData">先行保存</el-button>
               </div>
 
               <template v-for="(attrItem,index) in addAttrParam">
