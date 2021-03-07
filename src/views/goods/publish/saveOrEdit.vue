@@ -80,6 +80,7 @@
                     :disabled="isHiddenEditGood"
                     placeholder="请输入规格名称"
                     v-model="attrItem.specName"
+                    @blur="checkUniqueSpecName(attrItem.specName)"
                   />
                   <el-button
                     type="danger"
@@ -529,7 +530,7 @@ export default {
         let flushSkuList = false
         this.dbAttrList.forEach(item => {
           for (let i = 0; i < oldValue.length; i++) {
-            if (item.specName !== oldValue[i].specName) continue
+            if (item.specName !== oldValue[i].specName || oldValue[i] === undefined || newValue[i] === undefined) continue
             if (newValue[i].specName === oldValue[i].specName) continue
             item.specName = newValue[i].specName
             flushSkuList = true
@@ -994,15 +995,20 @@ export default {
         const param = JSON.stringify(this.dataForm)
 
         // console.log(param)
-        await this.handleSaveAttrData()
+        try {
 
-        console.log('保存全局数据完成')
+          await this.handleSaveAttrData()
+          console.log('出来了 准备更新数据')
 
-        const { data } = await postMethod('/bu/good/update', param)
-        this.typeList = data
-        this.detail = {}
-        this.$message.success('操作成功')
-        this.$emit('showListPanel', true)
+          const { data } = await postMethod('/bu/good/update', param)
+          this.typeList = data
+          this.detail = {}
+          this.$message.success('操作成功')
+          this.$emit('showListPanel', true)
+        } catch (ex) {
+
+        }
+
       }
     },
     validate() {
@@ -1312,15 +1318,15 @@ export default {
     // 保存属性数据
     async saveAttrData(handleParam) {
 
+      if (!this.checkSpecValueUnique(handleParam.skuList)) return
       let param = {
         jsonParam: JSON.stringify(handleParam)
       }
       const { data } = await postMethod('/bu/goodSpec/update', param)
 
       this.$message.success('操作成功')
-      console.log('保存属性值完成')
 
-      // this.initData()
+      this.initData()
     },
 
     // 添加属性名
@@ -1359,16 +1365,27 @@ export default {
     addAttrValueInput(attrSkuList, index, specName) {
       this.removeNullAttrValueInput(attrSkuList)
 
-      // TODO: 添加校验
       this.pushDbAttrList(specName)
       this.generatorSkuList()
-      // if (attrSkuList.length - 1 !== index) return
 
       attrSkuList.push({
         sort: 0,
         skuText: '',
         type: 'spec'
       })
+    },
+
+    // 判断规格值是否有重复
+    checkSpecValueUnique(attrSkuList) {
+      var skuTextArray = attrSkuList.map(item => item.skuText)
+      var isDuplicate = skuTextArray.some((item, idx) =>
+        skuTextArray.indexOf(item) != idx
+      )
+      if (isDuplicate) {
+        this.$message.warning('规格值不能重复')
+        return false
+      }
+      return true
     },
 
     // 自动移除空属性值的输入框
@@ -1408,6 +1425,9 @@ export default {
     pushDbAttrList(specName) {
 
       for (let i = 0; i < this.addAttrParam.length; i++) {
+
+        let attrSkuList = this.addAttrParam[i].skuList
+
         // 空值跳过
         if (this.addAttrParam[i].specName === '') continue
         // 不属于自己的不操作
@@ -1418,8 +1438,6 @@ export default {
           if (item.specName !== this.addAttrParam[i].specName) return
           item.skuObj = []
         })
-
-        let attrSkuList = this.addAttrParam[i].skuList
 
         for (let j = 0; j < attrSkuList.length; j++) {
           if (attrSkuList[j].skuText === '') continue
@@ -1474,6 +1492,24 @@ export default {
 
         this.dbAttrList.splice(i, 1)
       }
+    },
+
+    // 校验添加的规格名是否合格
+    checkUniqueSpecName(specName) {
+      let countNum = 0
+      for (let i = 0; i < this.dbAttrList.length; i++) {
+        if (this.dbAttrList[i].specName !== specName) continue
+        countNum++
+      }
+
+      if (countNum > 1) {
+        // 校验不通过
+        console.log('校验不通过')
+        return false
+      }
+      // 无重复 校验通过
+      console.log('校验通过')
+      return true
     }
 
   }
