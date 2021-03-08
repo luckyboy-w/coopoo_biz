@@ -19,8 +19,8 @@ export default {
     const vnodes = []
 
     if (icon) {
-      // vnodes.push(<svg-icon icon-class={icon}/>)
-      vnodes.push(<svg-icon icon-class="test"/>)
+      vnodes.push(<svg-icon icon-class={icon}/>)
+      // vnodes.push(<svg-icon icon-class="test"/>)
 
       // vnodes.push(h('img', {
       //   class: 'svg-icon',
