@@ -111,7 +111,7 @@ export default {
         })
       })
     },
-    batchDeleteRow(rowIndex, data) {
+    async batchDeleteRow(rowIndex, data) {
       let selectList = this.$refs.mainTable.selection
       let idArr = []
       for (let i = 0; i < selectList.length; i++) {
@@ -120,14 +120,11 @@ export default {
       let param = {
         id: idArr.join(',')
       }
-      postMethod('/bu/goodSpec/delete', param).then(res => {
-        scope.editData = res.data[0]
-        this.showList = false
-        this.showAddOrEdit = true
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
+
+      await postMethod('/bu/goodSpec/delete', param)
+      this.$message({
+        message: '操作成功',
+        type: 'success'
       })
       this.searchParam.pageSize = 10
       this.searchParam.pageNum = 0
