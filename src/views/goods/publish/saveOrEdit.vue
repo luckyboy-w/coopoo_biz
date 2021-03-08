@@ -78,9 +78,10 @@
                 <div class="attr-content">
                   <el-input
                     style="width:200px;margin-right: 30px"
-                    :disabled="isHiddenEditGood"
+                    :disabled="attrItem.disabled"
                     placeholder="请输入规格名称"
                     v-model="attrItem.specName"
+                    @blur="disableSpecNameInput(attrItem,index)"
                   />
                   <el-button
                     type="danger"
@@ -517,6 +518,7 @@ export default {
   },
   computed: {
     addAttrParamData() {
+      // 用于watch引用类型的数据 返回不同的内存指针 做的深拷贝
       return deepCopy(this.addAttrParam)
     }
   },
@@ -525,36 +527,36 @@ export default {
   },
   created() {
   },
-  watch: {
-    // 监听添加参数
-    addAttrParamData: {
-      handler: function(newValue, oldValue) {
-        let flushSkuList = false
-        this.dbAttrList.forEach(item => {
-          for (let i = 0; i < oldValue.length; i++) {
-            // 空指针判断
-            if (oldValue[i] === undefined || newValue[i] === undefined) continue
-
-            // 非此规格名 不处理
-            if (item.specName !== oldValue[i].specName) continue
-
-            // 非后追加数据 不处理
-
-            if (item.id !== undefined) continue
-            // 新老值相同 不处理
-            if (newValue[i].specName === oldValue[i].specName) continue
-
-            item.specName = newValue[i].specName
-            flushSkuList = true
-          }
-        })
-
-        flushSkuList && this.generatorSkuList()
-
-      },
-      deep: true
-    }
-  },
+  // watch: {
+  //   // 监听添加参数
+  //   addAttrParamData: {
+  //     handler: function(newValue, oldValue) {
+  //       let flushSkuList = false
+  //       this.dbAttrList.forEach(item => {
+  //         for (let i = 0; i < oldValue.length; i++) {
+  //           // 空指针判断
+  //           if (oldValue[i] === undefined || newValue[i] === undefined) continue
+  //
+  //           // 非此规格名 不处理
+  //           if (item.specName !== oldValue[i].specName) continue
+  //
+  //           // 非后追加数据 不处理
+  //
+  //           if (item.id !== undefined) continue
+  //           // 新老值相同 不处理
+  //           if (newValue[i].specName === oldValue[i].specName) continue
+  //
+  //           item.specName = newValue[i].specName
+  //           flushSkuList = true
+  //         }
+  //       })
+  //
+  //       flushSkuList && this.generatorSkuList()
+  //
+  //     },
+  //     deep: true
+  //   }
+  // },
   methods: {
     // 初始化整个页面数据
     initData() {
@@ -1347,6 +1349,8 @@ export default {
         // id: '',
         typeDataStr: this.dataForm.typeId2,
         specName: '',
+        specValueWarningStr: '',
+        disabled: false,
         skuList: [
           {
             sort: 0,
@@ -1501,6 +1505,23 @@ export default {
       }
     },
 
+    disableSpecNameInput(attrItem, index) {
+
+      let specName = attrItem.specName
+
+      if (specName === '') return
+
+      for (let i = 0; i < this.addAttrParam.length; i++) {
+        if (i !== index && this.addAttrParam[i].specName === specName) {
+          this.addAttrParam.splice(index, 1)
+          this.$message.warning('无法添加已存在的规格名')
+          return
+        }
+      }
+
+      attrItem.disabled = true
+
+    },
     // 推送新产生的数据到属性备选池
     pushDbAttrList(specName) {
       for (let i = 0; i < this.addAttrParam.length; i++) {
@@ -1515,7 +1536,9 @@ export default {
           if (this.dbAttrList[j].specName !== this.addAttrParam[i].specName) continue
           // 不属于后追加的数据 不恢复现场
           if (this.dbAttrList[j].id !== undefined) {
-            this.$message.warning("无法添加已存在的规格名")
+            this.$message.warning('无法添加已存在的规格名')
+            this.addAttrParam.splice(i, 1)
+
             return
           }
 
