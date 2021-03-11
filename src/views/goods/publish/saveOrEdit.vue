@@ -1077,7 +1077,7 @@ export default {
     },
 
     // 装配编辑数据
-    loadEditData() {
+    async loadEditData() {
       if (this.editData.id) {
         this.addAttrParam = []
         this.uploadGoodFrontImageList = []
@@ -1088,10 +1088,11 @@ export default {
         this.dataForm = this.editData
         this.detail = this.editData.detail
         this.initDefaultImage()
-        this.loadtypeId2List(this.dataForm.typeId2)
         this.$refs['refEditor'].setContent(this.detail.detailContent)
         this.$refs['refEditor1'].setContent(this.detail.postSale)
         this.$refs['refEditor2'].setContent(this.detail.listDetail)
+
+        await this.loadtypeId2List(this.dataForm.typeId2)
         this.loadTableList()
       }
     },
@@ -1155,6 +1156,9 @@ export default {
     },
     // 按分类加载Sku属性
     async loadtypeId2List(typeId2) {
+      this.tableList = []
+      this.columnList = []
+      this.addAttrParam = []
       this.dataForm.typeId2 = typeId2 || ''
       const { data } = await getMethod('/bu/good/findType', { parentId: this.dataForm.typeId })
       this.typeId2List = data
@@ -1166,10 +1170,14 @@ export default {
 
     // 加载 Sku 的属性列表
     async loadSkuAttr(autoChecked) {
+      this.tableList = []
+      this.columnList = []
+      this.addAttrParam = []
+
       const { data } = await getMethod('/bu/good/findTypeBySpec', { id: this.dataForm.typeId2 })
 
       this.dbAttrList = data
-      autoChecked && this.loadAttrChecked(autoChecked)
+      autoChecked && this.loadAttrChecked()
 
     },
     // 回显已选中的属性
@@ -1295,7 +1303,7 @@ export default {
       }
     },
 
-    handlerAttrData(item) {
+    async handlerAttrData(item) {
       if (item.newAttrValue === undefined || item.newAttrValue === '') {
         this.$message.warning('请输入后重试')
         return
@@ -1327,7 +1335,7 @@ export default {
 
       if (!this.checkSpecValueUnique(handleParam.skuList)) return
 
-      this.saveAttrData(handleParam)
+      await this.saveAttrData(handleParam)
 
       this.$message.success('操作成功')
       this.initData()

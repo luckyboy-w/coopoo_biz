@@ -128,11 +128,6 @@ export default {
     deleteRow(rowIndex, rowObj) {
       let scope = this
       if (rowObj.id != undefined) {
-        let delParam = {
-          id: rowObj.id
-        }
-        postMethod('/backend/goodSku/delete', delParam).then(res => {
-        })
         scope.removeSku(rowIndex)
       }
     },
@@ -157,10 +152,6 @@ export default {
     },
     removeSku(rowIndex) {
       this.dataForm.skuList.splice(rowIndex, 1)
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
     },
     appendSku() {
       if (this.dataForm.skuList == undefined) {
