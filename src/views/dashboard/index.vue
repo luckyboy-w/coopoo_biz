@@ -129,7 +129,7 @@
         >
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-people">
-              <svg-icon icon-class="reject-good" class-name="card-panel-icon"/>
+              <svg-icon icon-class="business-num" class-name="card-panel-icon"/>
             </div>
             <div class="card-panel-description">
               <div class="card-panel-text">
@@ -426,9 +426,11 @@ export default {
     background: #fff;
     border-color: rgba(0, 0, 0, .05);
     transition: .2s;
+    border-radius: 10px;
+    box-shadow: 0px 2px 3px #ccc;
 
     &:hover {
-      box-shadow: 0px 4px 10px #ccc;
+      box-shadow: 0px 4px 15px #ccc;
     }
 
     .icon-people {
@@ -462,7 +464,7 @@ export default {
 
     .card-panel-description {
       font-weight: bold;
-      margin-top: 26px;
+      margin-top: 16px;
       padding-left: 20px;
       margin-left: 0px;
 
@@ -515,6 +517,7 @@ export default {
   padding: 5vh 2vw 5vh 2vw;
   transition: .2s;
 
+
   &:hover {
     box-shadow: 0px 4px 10px #ccc;
   }
@@ -525,7 +528,7 @@ export default {
   display: block;
   height: 1px;
   width: 100%;
-  margin: 14px 0;
+  margin: 30px 0px 10px 0px;
 }
 
 .el-table > > > th.is-leaf, .el-table > > > td {
