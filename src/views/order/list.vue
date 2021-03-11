@@ -1924,6 +1924,8 @@ export default {
         orderPrintTemplateWindow.document.write(orderPrintTemplateHtml)
         orderPrintTemplateWindow.document.close()
         loading.close()
+      }).catch(err => {
+        loading.close()
       })
 
     },
@@ -1995,6 +1997,8 @@ export default {
         this.loadList()
         this.showOnlineOrderList = false
         this.closeSendOrderDialog()
+        loading.close()
+      }).catch(err => {
         loading.close()
       })
     },
