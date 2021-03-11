@@ -646,13 +646,16 @@
 
       <!--      line-height:40px;padding:25px 0px;-->
       <div class="step-container">
+        <!--        ordStep-->
+        <!--        :src="ordStep >= 1 ? waitDeliverPng : waitDeliverPngGrey "-->
+
         <el-steps :active="ordStep" align-center v-if="ptStep">
           <el-step title="待发货">
               <span slot="icon">
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="waitPng"
+                  :src="ordStep >= 1 ? waitDeliverPng : waitDeliverPngGrey "
                 ></el-avatar>
               </span>
           </el-step>
@@ -662,7 +665,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 2 ?waitReceivePng:waitReceivePngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -671,7 +674,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 3 ?waitPaymentPng:waitPaymentPngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -680,7 +683,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 4?isCancelIconImg:isCancelIconImgGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -692,7 +695,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 1?waitPaymentPng:waitPaymentPngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -701,7 +704,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 2?waitDeliverPng:waitDeliverPngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -710,7 +713,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 3?waitReceivePng:waitReceivePngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -719,7 +722,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 4?completePng:completePngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -731,7 +734,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 1?waitConfirmPng:waitConfirmPngGrey"
                 ></el-avatar>
               </span></el-step>
           <el-step title="待发货">
@@ -739,7 +742,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 2?waitDeliverPng:waitDeliverPngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -748,7 +751,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 3?waitReceivePng:waitReceivePngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -757,7 +760,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 4?waitPaymentPng:waitPaymentPngGrey"
                 >
                 </el-avatar>
               </span>
@@ -767,7 +770,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="ordStep >= 5?completePng:completePngGrey"
                 ></el-avatar>
               </span>
           </el-step>
@@ -778,7 +781,7 @@
           <el-avatar
             shape="square"
             :size="80"
-            :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+            :src="noticContainerImg"
           ></el-avatar>
         </div>
         <span class="title">
@@ -789,7 +792,6 @@
          订单编号: {{ ordDtl.orderNo }}
         </span>
       </div>
-      <!--      style="padding:10px;margin:10px 0px 10px 0;"-->
       <div>
         <!--        style="padding-top:20px;"-->
         <el-row>
@@ -939,49 +941,11 @@
         <!--        </div>-->
       </div>
 
-      <!--      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">-->
-
-      <!--      </div>-->
-
-      <!--      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">-->
-
-      <!--      </div>-->
-
-      <!--      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">-->
-      <!--        -->
-      <!--      </div>-->
-
-      <!--      <div-->
-      <!--        style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px 10px 0;"-->
-      <!--      >-->
-
-      <!--      </div>-->
-
-      <!--      <div v-if="ordDtl.ordDtlList && ordDtl.ordDtlList[0].goodCustom" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);-->
-      <!--       padding:10px;margin:10px 0px 10px 0;"-->
-      <!--      >-->
-      <!--        <el-row :gutter="20" style="line-height:40px" class="main-title">-->
-      <!--          <el-col :span="24">定制信息</el-col>-->
-      <!--        </el-row>-->
-      <!--        <el-row :gutter="24" style="line-height:40px;font-size:12px">-->
-      <!--          <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>-->
-      <!--          <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>-->
-      <!--          <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>-->
-      <!--        </el-row>-->
-      <!--      </div>-->
-
-      <!--      <div style="line-height:400px;height:20px">-->
-      <!--        <el-row :gutter="24" style="line-height:40px;font-size:12px">-->
-      <!--          <el-col :span="24">&nbsp;&nbsp;&nbsp;</el-col>-->
-      <!--        </el-row>-->
-      <!--      </div>-->
-
     </div>
   </div>
 </template>
 
 <script>
-import waitPng from '@/assets/order-status/待确认@2x.png'
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
 import { getToken } from '@/utils/auth.js'
@@ -1101,7 +1065,7 @@ export default {
       } else if (status == '30') {
         statusText = '待支付'
       } else if (status == '40') {
-        statusText = '已退货'
+        statusText = '已退货'//--
       } else if (status == '41') {
         statusText = '退货中'
       } else if (status == '60') {
@@ -1140,6 +1104,27 @@ export default {
       }
     }
     return {
+      waitConfirmPng: require('@/assets/order-status/waitConfirmPng.png'),
+      waitConfirmPngGrey: require('@/assets/order-status/waitConfirmPngGrey.png'),
+
+      waitDeliverPng: require('@/assets/order-status/waitDeliverPng.png'),
+      waitDeliverPngGrey: require('@/assets/order-status/waitDeliverPngGrey.png'),
+
+      waitReceivePng: require('@/assets/order-status/waitReceivePng.png'),
+      waitReceivePngGrey: require('@/assets/order-status/waitReceivePngGrey.png'),
+
+      waitPaymentPng: require('@/assets/order-status/waitPaymentPng.png'),
+      waitPaymentPngGrey: require('@/assets/order-status/waitPaymentPngGrey.png'),
+
+      cancelPng: require('@/assets/order-status/cancelPng.png'),
+      cancelPngGrey: require('@/assets/order-status/cancelPngGrey.png'),
+
+      returningPng: require('@/assets/order-status/returningPng.png'),
+      returningPngGrey: require('@/assets/order-status/returningPngGrey.png'),
+
+      completePng: require('@/assets/order-status/completePng.png'),
+      completePngGrey: require('@/assets/order-status/completePngGrey.png'),
+
       logisticsCompanyList: [],
       logisticsCompany: null,
       logisticsCompanyTypeList: [],
@@ -1161,6 +1146,8 @@ export default {
       lpStep: false,
       dzStep: false,
       isCancelTitle: '已完成',
+      isCancelIconImg: require('@/assets/order-status/completePng.png'),
+      isCancelIconImgGrey: require('@/assets/order-status/completePngGrey.png'),
       dealPriceFrm: {
         orderNo: '',
         orderId: '',
@@ -1273,7 +1260,50 @@ export default {
       fromRoutePath: ''
     }
   },
-  computed: {},
+  computed: {
+    noticContainerImg: function() {
+      // 订单状态;
+      // 0:订单被取消;
+      // 10:已提交,待发货;
+      // 20;已发货,待收货;
+      // 30:已收货;待支付;
+      // 40:退货完成;
+      // 41:退货中;
+      // 43/拒绝退货;
+      // 50:交易完成/未评价;
+      // 51:交易完成/已评价;
+      // 60:定制订单/待沟通;
+      // 订单状态;0:订单被取消;10:已提交,待发货20;已付款,待发货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价;
+      // 52:交易完成/退货
+      let statusImg = 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'
+      if (this.ordDtl.status == '0') {
+        // statusImg = '已取消'
+        statusImg = require('@/assets/order-status/cancelPngBlack.png')
+      } else if (this.ordDtl.status == '10') {
+        // statusImg = '待发货'
+        statusImg = require('@/assets/order-status/waitDeliveryPngBlack.png')
+      } else if (this.ordDtl.status == '20') {
+        // statusImg = '待收货'
+        statusImg = require('@/assets/order-status/waitReceivePngBlack.png')
+      } else if (this.ordDtl.status == '30') {
+        // statusImg = '待支付'
+        statusImg = require('@/assets/order-status/waitPaymentPngBlack.png')
+      } else if (this.ordDtl.status == '40') {
+        statusImg = '已退货'//--
+      } else if (this.ordDtl.status == '41') {
+        // statusImg = '退货中'
+        statusImg = require('@/assets/order-status/returningPngBlack.png')
+      } else if (this.ordDtl.status == '60') {
+        // statusImg = '定制信息确认中'
+        statusImg = require('@/assets/order-status/waitConfirmPngBlack.png')
+      } else if (this.ordDtl.status == '50' || status == '51' || status == '52') {
+        // statusImg = '交易完成'
+        statusImg = require('@/assets/order-status/completePngBlack.png')
+      }
+      return statusImg
+
+    }
+  },
   props: {
     orderStatus: {
       type: Object,
@@ -1464,8 +1494,14 @@ export default {
 
           if (scope.ordDtl.status >= 40 && scope.ordDtl.status < 50) {
             scope.isCancelTitle = '退货中'
+            scope.isCancelIconImg = scope.returningPng
+            scope.isCancelIconImgGrey = scope.returningPngGrey
+            // scope.
           } else if (scope.ordDtl.status == 0) {
             scope.isCancelTitle = '已取消'
+
+            scope.isCancelIconImg = scope.cancelPng
+            scope.isCancelIconImgGrey = scope.cancelPngGrey
           }
 
         } else if (scope.ordDtl.orderType == 2) {
@@ -1526,8 +1562,14 @@ export default {
 
           if (scope.ordDtl.status >= 40 && scope.ordDtl.status < 50) {
             scope.isCancelTitle = '退货中'
+
+            scope.isCancelIconImg = scope.returningPng
+            scope.isCancelIconImgGrey = scope.returningPngGrey
           } else if (scope.ordDtl.status == 0) {
             scope.isCancelTitle = '已取消'
+
+            scope.isCancelIconImg = scope.cancelPng
+            scope.isCancelIconImgGrey = scope.cancelPngGrey
           }
 
         } else if (scope.ordDtl.orderType == 2) {
@@ -2168,7 +2210,6 @@ export default {
   .avatar {
     width: 80px;
     height: 80px;
-    background: #abc;
     margin: 20px auto;
   }
 
@@ -2229,6 +2270,20 @@ export default {
   color: #606266;
   min-width: 30px;
   border-radius: 2px;
+}
+
+.el-avatar {
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: hidden;
+  color: #fff;
+  background: transparent;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
 }
 
 </style>
