@@ -1,34 +1,37 @@
 <template>
   <div>
-    <orderListDom :goodStatus="goodStatus" :dataSource='dataSource' :replyMsgStatusParent='replyMsgStatusParent'/>
+    <!--    :goodStatus="goodStatus"-->
+    <orderListDom :dataSource="dataSource" :replyMsgStatusParent="replyMsgStatusParent"/>
   </div>
 </template>
 
 <script>
-  import orderListDom from './evalList'
+import orderListDom from './evalList'
 
-  export default {
-    name:'',
-    props:[''],
-    data () {
-      return {
-          replyMsgStatusParent:'1',
-          dataSource:'ready-list'
-      };
-    },
-    components: {orderListDom},
-    computed: {},
-    beforeMount() {},
+export default {
+  name: '',
+  props: [''],
+  data() {
+    return {
+      replyMsgStatusParent: '1',
+      dataSource: 'ready-list'
+    }
+  },
+  components: { orderListDom },
+  computed: {},
+  beforeMount() {
+  },
 
-    mounted() {},
+  mounted() {
+  },
 
-    methods: {},
+  methods: {},
 
-    watch: {}
+  watch: {}
 
-  }
+}
 
 </script>
-<style lang='' scoped>
+<style lang="" scoped>
 
 </style>

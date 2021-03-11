@@ -1,6 +1,7 @@
 <template>
   <div>
-    <orderListDom :goodStatus="goodStatus" :dataSource='dataSource' :orderStatus='orderStatus'/>
+<!--    :goodStatus="goodStatus"-->
+    <orderListDom  :dataSource='dataSource' :orderStatus='orderStatus'/>
   </div>
 </template>
 

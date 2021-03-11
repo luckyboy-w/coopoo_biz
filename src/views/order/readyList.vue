@@ -1,36 +1,39 @@
 <template>
   <div>
-    <orderListDom :goodStatus="goodStatus" :dataSource='dataSource' :orderStatus='orderStatus'/>
+    <!--    :goodStatus="goodStatus"-->
+    <orderListDom :dataSource="dataSource" :orderStatus="orderStatus"/>
   </div>
 </template>
 
 <script>
-  import orderListDom from './list'
+import orderListDom from './list'
 
-  export default {
-    name:'',
-    props:[''],
-    data () {
-      return {
-          orderStatus:{
-            status: "10"
-          },
-          dataSource:'ready-list'
-      };
-    },
-    components: {orderListDom},
-    computed: {},
-    beforeMount() {},
+export default {
+  name: '',
+  props: [''],
+  data() {
+    return {
+      orderStatus: {
+        status: '10'
+      },
+      dataSource: 'ready-list'
+    }
+  },
+  components: { orderListDom },
+  computed: {},
+  beforeMount() {
+  },
 
-    mounted() {},
+  mounted() {
+  },
 
-    methods: {},
+  methods: {},
 
-    watch: {}
+  watch: {}
 
-  }
+}
 
 </script>
-<style lang='' scoped>
+<style lang="" scoped>
 
 </style>
