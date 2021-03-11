@@ -588,7 +588,25 @@ export default {
 .ly-container {
   .ly-tool-panel {
     padding: 10px 0px;
-
   }
+
+  .ly-data-pagination {
+    margin-top: 20px;
+  }
+}
+
+.el-pagination {
+  white-space: nowrap;
+  padding: 2px 0px;
+  color: #303133;
+  font-weight: bold;
+}
+
+.el-pagination > > > .btn-prev {
+  margin: 0 5px 0 0;
+  background-color: #f4f4f5;
+  color: #606266;
+  min-width: 30px;
+  border-radius: 2px;
 }
 </style>
