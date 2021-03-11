@@ -7,6 +7,7 @@
     position: relative;
     background: $lightBGColor;
     padding: 6vh 3vw 5vh 3vw;
+    font-family: "PingFang SC";
   }
 
   .sidebar-container {
@@ -60,6 +61,7 @@
       display: inline-block;
       width: 100%;
       overflow: hidden;
+      word-break: initial;
     }
 
     .svg-icon {

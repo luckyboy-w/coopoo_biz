@@ -192,7 +192,6 @@ export default {
       color: $fontColor;
       font-weight: 500;
       font-size: 14px;
-      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }
 
