@@ -5,6 +5,9 @@
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+<!--          {{onlyOneChild.meta.icon}}-->
+<!--          {{item.meta}}-->
+<!--          {{item.meta.icon}}-->
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
                 :title="generateTitle(onlyOneChild.meta.title)"
           />

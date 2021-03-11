@@ -644,7 +644,7 @@
                 <el-avatar
                   shape="square" :size="50"
                   class="step-icon"
-                  :src="'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'"
+                  :src="waitPng"
                 ></el-avatar>
               </span>
           </el-step>
@@ -973,6 +973,7 @@
 </template>
 
 <script>
+import waitPng from '@/assets/order-status/待确认@2x.png'
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
 import { getToken } from '@/utils/auth.js'
