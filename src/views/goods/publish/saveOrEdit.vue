@@ -285,7 +285,7 @@
                 成本价:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.primeCost" placeholder="成本价" style="width:80px"
+                <el-input v-model="dataForm.primeCost" placeholder="成本价" style="width:180px"
                           :disabled="isHiddenEditGood"
                 />
               </el-col>
@@ -293,7 +293,7 @@
                 包装成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.packageCost" placeholder="包装成本" style="width:80px"
+                <el-input v-model="dataForm.packageCost" placeholder="包装成本" style="width:180px"
                           :disabled="isHiddenEditGood"
                 />
               </el-col>
@@ -301,17 +301,17 @@
                 加工成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.processCost" placeholder="加工成本" style="width:80px"
+                <el-input v-model="dataForm.processCost" placeholder="加工成本" style="width:180px"
                           :disabled="isHiddenEditGood"
                 />
               </el-col>
             </el-row>
-            <el-row>
+            <el-row style="margin-top: 1vh">
               <el-col :span="2">
                 物流成本:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.expressCost" placeholder="物流成本" style="width:80px"
+                <el-input v-model="dataForm.expressCost" placeholder="物流成本" style="width:180px"
                           :disabled="isHiddenEditGood"
                 />
               </el-col>
@@ -319,13 +319,13 @@
                 利润:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.profit" placeholder="利润" style="width:80px" :disabled="isHiddenEditGood"/>
+                <el-input v-model="dataForm.profit" placeholder="利润" style="width:180px" :disabled="isHiddenEditGood"/>
               </el-col>
               <el-col :span="2">
                 预估报价:
               </el-col>
               <el-col :span="6">
-                <el-input v-model="dataForm.predictFee" placeholder="预估报价" style="width:80px"
+                <el-input v-model="dataForm.predictFee" placeholder="预估报价" style="width:180px"
                           :disabled="isHiddenEditGood"
                 />
               </el-col>
