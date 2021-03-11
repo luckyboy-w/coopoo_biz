@@ -341,7 +341,7 @@
             <el-switch v-model="dataForm.custom" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item label="商品风格专场">
-            <el-checkbox-group v-model="goodStyleList" @change="changeStyle" :disabled="isHiddenEditGood">
+            <el-checkbox-group v-model="goodStyleList" :disabled="isHiddenEditGood">
               <el-checkbox v-for="styleText in styleList" :key="styleText" :label="styleText">{{
                   styleText
                 }}
@@ -605,9 +605,6 @@ export default {
         skuObj.stock = this.dataForm.stockNum
       }
     },
-    changeStyle(value) {
-
-    },
     stockChange() {
       if (this.dataForm.stockType == '1') {
         for (let i = 0; i < this.skuList.length; i++) {
@@ -635,50 +632,6 @@ export default {
     changeContent(val) {
       this.detail.detailContent = val
     },
-    // 递归获取每条SKU数据
-    getSkuData(skuArr = [], i, list) {
-      for (let j = 0; j < list[i].length; j++) {
-        if (i < list.length - 1) {
-          skuArr[i] = list[i][j]
-          skuArr[i] = this.getSkuKey(skuArr[i])
-          this.getSkuData(skuArr, i + 1, list) // 递归循环
-        } else {
-          skuArr[i] = this.getSkuKey(list[i][j])
-
-          const titleText = [...skuArr].join(';')
-
-          let stockSingle = 0
-          // 如果是全局库存
-          if (this.dataForm.stockType == 1) {
-            stockSingle = this.dataForm.stockNum
-          }
-          const column = {
-            skuText: titleText,
-            skuCompareText: this.getSkuText(titleText),
-            skuCompareId: this.skuIdList.join(','),
-            stock: stockSingle,
-            salePrice: '',
-            saleMemPrice: '',
-            supplyPrice: '',
-            skuImg: ''
-          }
-          this.skuList.push(column) // 扩展运算符，连接两个数组
-        }
-      }
-    },
-    getSkuText(titleText) {
-      const newArr = []
-      const titleArr = titleText.split(';')
-      titleArr.forEach(titleObj => {
-        newArr.push(titleObj.split(':')[1])
-      })
-      return newArr.join(':')
-    },
-    getSkuKey(skuId) {
-      this.skuIdList.push(skuId)
-      const skuObj = this.skuIdToText[skuId]
-      return skuObj['typeName'] + ':' + skuObj['skuText']
-    },
     loadtypeIdList() {
       const scope = this
       const param = {
@@ -698,6 +651,7 @@ export default {
         this.dataForm.afterSaleId = this.goodSaleDescList[0].id
       }
     },
+
     loadGoodBrandList() {
       const scope = this
 
@@ -765,8 +719,6 @@ export default {
         this.uploadGoodFrontImageUrl = getUploadUrl() + '?groupId=' + (this.dataForm.goodFrontImage || res.data)
         this.dataForm.goodFrontImage = this.dataForm.goodFrontImage || res.data
       })
-    },
-    handleGoodFrontImagePreview() {
     },
     handleGoodFrontImageRemove(res) {
       for (let i = 0; i < this.uploadGoodFrontImageList.length; i++) {
@@ -1008,7 +960,6 @@ export default {
         this.dataForm.isGift = this.isGift
         const param = JSON.stringify(this.dataForm)
 
-        // console.log(param)
         try {
 
           await this.handleSaveAttrData()
@@ -1154,6 +1105,7 @@ export default {
 
       this.tableList = tempTableList
     },
+
     // 按分类加载Sku属性
     async loadtypeId2List(typeId2) {
       this.tableList = []
@@ -1180,6 +1132,7 @@ export default {
       autoChecked && this.loadAttrChecked()
 
     },
+
     // 回显已选中的属性
     loadAttrChecked() {
       const allPriceList = []
@@ -1206,6 +1159,7 @@ export default {
       valItem.isChecked = !valItem.isChecked
       this.generatorSkuList()
     },
+
     // 生成SKU列表
     generatorSkuList() {
       this.columnList = []
@@ -1215,6 +1169,7 @@ export default {
         this.tableList = this.addColumn(this.tableList, this.dbAttrList[i].specName, this.dbAttrList[i].skuObj)
       }
     },
+
     // 添加列
     addColumn(dataList, specName, specValue) {
 
@@ -1368,6 +1323,7 @@ export default {
         ]
       })
     },
+
     // 删除属性名
     deleteAttrNameInput(specName, index) {
 
@@ -1386,6 +1342,7 @@ export default {
       // 重新生成sku表格
       this.generatorSkuList()
     },
+
     // 添加属性值
     addAttrValueInput(attrItem, index) {
       let attrSkuList = attrItem.skuList
@@ -1530,6 +1487,7 @@ export default {
       attrItem.disabled = true
 
     },
+
     // 推送新产生的数据到属性备选池
     pushDbAttrList(specName) {
       for (let i = 0; i < this.addAttrParam.length; i++) {
@@ -1619,11 +1577,9 @@ export default {
 
       if (countNum > 1) {
         // 校验不通过
-        console.log('校验不通过')
         return false
       }
       // 无重复 校验通过
-      console.log('校验通过')
       return true
     }
 
