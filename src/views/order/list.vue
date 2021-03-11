@@ -72,6 +72,14 @@
 
               </el-select>
             </td>
+            <td>是否超期未付款:</td>
+            <td>
+              <el-select v-model="searchParam.isOverDuePayment" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="1" label="是"></el-option>
+                <el-option value="0" label="否"></el-option>
+              </el-select>
+            </td>
             <td>
               <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货
               </el-button>
@@ -1917,6 +1925,8 @@ export default {
         orderPrintTemplateWindow.document.write(orderPrintTemplateHtml)
         orderPrintTemplateWindow.document.close()
         loading.close()
+      }).catch(err => {
+        loading.close()
       })
 
     },
@@ -1988,6 +1998,8 @@ export default {
         this.loadList()
         this.showOnlineOrderList = false
         this.closeSendOrderDialog()
+        loading.close()
+      }).catch(err => {
         loading.close()
       })
     },
