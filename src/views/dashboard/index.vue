@@ -181,7 +181,7 @@
         <!--stretch-->
         <el-tabs v-model="activeName" class="dashbord-tab-list" @tab-click="changeChartsTitle()">
           <el-tab-pane width="30" label="" disabled></el-tab-pane>
-          <el-tab-pane label="商品销量TOP10" name="salesNum">
+          <el-tab-pane label="商品销量TOP5" name="salesNum">
             <div>
               <!--              <div class="analysis-title">商品销量TOP10</div>-->
               <div>
@@ -215,7 +215,7 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="收藏量TOP10" name="startsNum">
+          <el-tab-pane label="收藏量TOP5" name="startsNum">
             <div>
               <!--<div class="analysis-title">收藏量TOP10</div>-->
               <div>
