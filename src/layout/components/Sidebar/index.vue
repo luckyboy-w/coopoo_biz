@@ -53,7 +53,6 @@ export default {
       return !this.sidebar.opened
     }
   },
-  methods:{
-  }
+  methods: {}
 }
 </script>

@@ -77,30 +77,36 @@ export default {
   watch: {
     // $route(to, from) {
     //   if (!this.onlyOneChild) return
-    //   // 对路由变化作出响应...
-    //   console.log(to.path, this.onlyOneChild)
-    //   if (to.path === '/dashboard' && this.onlyOneChild) {
+    //   if (this.onlyOneChild.meta.title != 'dashboard') return
+    //
+    //   if (to.path === '/dashboard') {
     //     this.backIcon = this.onlyOneChild.meta.icon
     //     this.onlyOneChild.meta.icon += '-light'
-    //   } else {
+    //
+    //   }
+    //
+    //   if (from.path === '/dashboard' && this.backIcon !== '') {
     //     this.onlyOneChild.meta.icon = this.backIcon
     //   }
     // },
-    // $route: {
-    //   immediate: true,
-    //   deep: true,
-    //   handler(to, from) {
-    //     if (!this.onlyOneChild) return
-    //     // 对路由变化作出响应...
-    //     console.log(to.path, this.onlyOneChild)
-    //     if (to.path === '/dashboard' && this.onlyOneChild) {
-    //       this.backIcon = this.onlyOneChild.meta.icon
-    //       this.onlyOneChild.meta.icon += '-light'
-    //     } else {
-    //       this.onlyOneChild.meta.icon = this.backIcon
-    //     }
-    //   }
-    // }
+    $route: {
+      handler(to, from) {
+        if (!this.onlyOneChild) return
+        if (this.onlyOneChild.meta.title != 'dashboard') return
+
+        if (to.path === '/dashboard') {
+          console.log("immediate: true")
+          this.backIcon = this.onlyOneChild.meta.icon
+          this.onlyOneChild.meta.icon += '-light'
+
+        }
+
+        if (from.path === '/dashboard' && this.backIcon !== '') {
+          this.onlyOneChild.meta.icon = this.backIcon
+        }
+      },
+      immediate: true,
+    }
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
