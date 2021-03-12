@@ -23,7 +23,7 @@
 			<div class="ly-table-panel">
 				<div class="ly-data-list">
 					<el-table
- 						v-loading="loading"					
+ 						v-loading="loading"
 						ref="mainTable"
 						:data="tableData.list"
 						style="width: 100%; margin-bottom: 20px;"
@@ -200,7 +200,7 @@ export default {
 				this.showList = false;
 				this.showAddOrEdit = true;
 			})
-			
+
 			this.loadList();
 			this.loading = false
 		},

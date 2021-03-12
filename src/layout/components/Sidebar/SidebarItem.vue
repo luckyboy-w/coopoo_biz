@@ -74,38 +74,31 @@ export default {
       backIcon: ''
     }
   },
+  mounted() {
+    if (!this.onlyOneChild) return
+    if (this.onlyOneChild.meta.title != 'dashboard') return
+    if (this.$route.path === '/dashboard') {
+      this.backIcon = this.onlyOneChild.meta.icon
+      this.onlyOneChild.meta.icon += '-light'
+    }
+  },
   watch: {
-    // $route(to, from) {
-    //   if (!this.onlyOneChild) return
-    //   if (this.onlyOneChild.meta.title != 'dashboard') return
-    //
-    //   if (to.path === '/dashboard') {
-    //     this.backIcon = this.onlyOneChild.meta.icon
-    //     this.onlyOneChild.meta.icon += '-light'
-    //
-    //   }
-    //
-    //   if (from.path === '/dashboard' && this.backIcon !== '') {
-    //     this.onlyOneChild.meta.icon = this.backIcon
-    //   }
-    // },
     $route: {
       handler(to, from) {
         if (!this.onlyOneChild) return
         if (this.onlyOneChild.meta.title != 'dashboard') return
 
         if (to.path === '/dashboard') {
-          console.log("immediate: true")
           this.backIcon = this.onlyOneChild.meta.icon
           this.onlyOneChild.meta.icon += '-light'
-
         }
 
         if (from.path === '/dashboard' && this.backIcon !== '') {
           this.onlyOneChild.meta.icon = this.backIcon
         }
       },
-      immediate: true,
+      deep: true,
+      immediate: true
     }
   },
   methods: {
