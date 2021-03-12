@@ -567,6 +567,7 @@ export default {
       this.loadGoodSaleDescList()
 
       this.loadEditData()
+
     },
     changeImgMask(index, flag) {
       this.$refs.imgMask[index].style = flag ? 'display:block' : 'display:none'
@@ -1042,10 +1043,14 @@ export default {
         this.$refs['refEditor'].setContent(this.detail.detailContent)
         this.$refs['refEditor1'].setContent(this.detail.postSale)
         this.$refs['refEditor2'].setContent(this.detail.listDetail)
-
-        await this.loadtypeId2List(this.dataForm.typeId2)
-        this.loadTableList()
+        // await this.loadtypeId2List(this.dataForm.typeId2)
+        //
+        // this.loadTableList()
       }
+
+      await this.loadtypeId2List(this.dataForm.typeId2)
+
+      this.loadTableList()
     },
 
     // 加载SKU表格的数据
@@ -1117,6 +1122,8 @@ export default {
 
       if (this.editData.id) {
         this.loadSkuAttr(true)
+      } else {
+        this.loadSkuAttr(false)
       }
     },
 

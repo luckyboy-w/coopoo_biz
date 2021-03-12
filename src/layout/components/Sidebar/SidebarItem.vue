@@ -4,10 +4,13 @@
       v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow"
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-<!--          {{onlyOneChild.meta.icon}}-->
-<!--          {{item.meta}}-->
-<!--          {{item.meta.icon}}-->
+        <el-menu-item
+          :index="resolvePath(onlyOneChild.path)"
+          :class="{'submenu-title-noDropdown':!isNest}"
+        >
+          <!--          {{onlyOneChild.meta.icon}}-->
+          <!--          {{item.meta}}-->
+          <!--          {{item.meta.icon}}-->
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
                 :title="generateTitle(onlyOneChild.meta.title)"
           />
@@ -15,7 +18,12 @@
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      popper-append-to-body
+    >
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="generateTitle(item.meta.title)"/>
       </template>
@@ -62,7 +70,37 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {}
+    return {
+      backIcon: ''
+    }
+  },
+  watch: {
+    // $route(to, from) {
+    //   if (!this.onlyOneChild) return
+    //   // 对路由变化作出响应...
+    //   console.log(to.path, this.onlyOneChild)
+    //   if (to.path === '/dashboard' && this.onlyOneChild) {
+    //     this.backIcon = this.onlyOneChild.meta.icon
+    //     this.onlyOneChild.meta.icon += '-light'
+    //   } else {
+    //     this.onlyOneChild.meta.icon = this.backIcon
+    //   }
+    // },
+    // $route: {
+    //   immediate: true,
+    //   deep: true,
+    //   handler(to, from) {
+    //     if (!this.onlyOneChild) return
+    //     // 对路由变化作出响应...
+    //     console.log(to.path, this.onlyOneChild)
+    //     if (to.path === '/dashboard' && this.onlyOneChild) {
+    //       this.backIcon = this.onlyOneChild.meta.icon
+    //       this.onlyOneChild.meta.icon += '-light'
+    //     } else {
+    //       this.onlyOneChild.meta.icon = this.backIcon
+    //     }
+    //   }
+    // }
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
@@ -98,7 +136,6 @@ export default {
       }
       return path.resolve(this.basePath, routePath)
     },
-
     generateTitle
   }
 }
