@@ -1,95 +1,105 @@
 <template>
   <div>
     <div class="ly-container" v-if="!showOrdDtl">
-      <div class="ly-tool-panel">
-        <table>
-          <tr>
-            <td>订单编号:</td>
-            <td>
-              <el-input v-model="searchParam.orderNo" width="180px"/>
-            </td>
-            <td>快递单号:</td>
-            <td>
-              <el-input v-model="searchParam.expressNo" width="180px"/>
-            </td>
-            <td>买家姓名：</td>
-            <td>
-              <el-input v-model="searchParam.recUname" width="180px"/>
-            </td>
-            <td>买家电话：</td>
-            <td>
-              <el-input v-model="searchParam.recPhone" width="180px"/>
-            </td>
-            <td>
-              <el-button icon="el-icon-search" @click="search()">搜索</el-button>
-            </td>
-            <td>
-              <el-button icon="el-icon-download" @click="exportData()">导出</el-button>
-            </td>
-          </tr>
-          <tr>
-            <td>下单时间</td>
-            <td>
-              <el-date-picker
-                style="width:203px"
-                value-format="yyyy-MM-dd"
-                v-model="searchParam.startTime"
-                type="date"
-                placeholder="开始时间"
-              >
-              </el-date-picker>
-            </td>
-            <td style="padding-left:20px">至</td>
-            <td>
-              <el-date-picker
-                style="width:195px"
-                value-format="yyyy-MM-dd"
-                v-model="searchParam.endTime"
-                type="date"
-                placeholder="结束时间"
-              >
-              </el-date-picker>
-            </td>
-            <td>订单状态:</td>
-            <td>
-              <el-select v-model="searchParam.status" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="0" label="已取消"></el-option>
-                <el-option value="10" label="待发货"></el-option>
-                <el-option value="20" label="待收货"></el-option>
-                <el-option value="30" label="待支付"></el-option>
-                <el-option value="40" label="已退货"></el-option>
-                <el-option value="41" label="退货中"></el-option>
-                <el-option value="60" label="定制信息确认中"></el-option>
-              </el-select>
-            </td>
-            <td>是否需要开发票:</td>
-            <td>
-              <el-select v-model="searchParam.isRequireTaxBill" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="1" label="是"></el-option>
-                <el-option value="0" label="否"></el-option>
+      <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
+        <!-- <table>
+          <tr> -->
+        <div class="tabTd">
+          <div>订单编号：</div>
+          <div>
+            <el-input v-model="searchParam.orderNo" width="180px"/>
+          </div>
+        </div>
 
-              </el-select>
-            </td>
-            <td>是否超期未付款:</td>
-            <td>
-              <el-select v-model="searchParam.isOverDuePayment" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="1" label="是"></el-option>
-                <el-option value="0" label="否"></el-option>
-              </el-select>
-            </td>
-            <td>
-              <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货
-              </el-button>
-              <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
-              </el-button>
-              <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
-              <el-button @click="downloadPrintSoftware" type="primary">下载打印软件</el-button>
-            </td>
-          </tr>
-        </table>
+        <div class="tabTd">
+          <div>快递单号：</div>
+          <div>
+            <el-input v-model="searchParam.expressNo" width="180px"/>
+          </div>
+        </div>
+
+        <div class="tabTd">
+          <div>买家姓名：</div>
+          <div>
+            <el-input v-model="searchParam.recUname" width="180px"/>
+          </div>
+        </div>
+
+        <div class="tabTd">
+          <div>买家电话：</div>
+          <div>
+            <el-input v-model="searchParam.recPhone" width="180px"/>
+          </div>
+
+        </div>
+
+
+        <div class="tabTd">
+          <div>订单状态：</div>
+          <div>
+            <el-select v-model="searchParam.status" placeholder="请选择">
+              <el-option value="" label="全部"></el-option>
+              <el-option value="0" label="已取消"></el-option>
+              <el-option value="10" label="待发货"></el-option>
+              <el-option value="20" label="待收货"></el-option>
+              <el-option value="30" label="待支付"></el-option>
+              <el-option value="40" label="已退货"></el-option>
+              <el-option value="41" label="退货中"></el-option>
+              <el-option value="60" label="定制信息确认中"></el-option>
+            </el-select>
+          </div>
+        </div>
+
+        <div class="tabTd">
+          <div>下单时间：</div>
+          <div>
+            <el-date-picker style="width:203px" value-format="yyyy-MM-dd" v-model="searchParam.startTime" type="date"
+                            placeholder="开始时间"
+            >
+            </el-date-picker>
+          </div>
+          <div>至</div>
+          <div>
+            <el-date-picker style="width:195px" value-format="yyyy-MM-dd" v-model="searchParam.endTime" type="date"
+                            placeholder="结束时间"
+            >
+            </el-date-picker>
+          </div>
+        </div>
+        <div class="tabTd">
+          <div>是否需要开发票：</div>
+          <div>
+            <el-select v-model="searchParam.isRequireTaxBill" placeholder="请选择">
+              <el-option value="" label="全部"></el-option>
+              <el-option value="1" label="是"></el-option>
+              <el-option value="0" label="否"></el-option>
+
+            </el-select>
+          </div>
+        </div>
+
+        <div class="tabTd">
+          <div>是否超期未付款：</div>
+          <div>
+            <el-select v-model="searchParam.isOverDuePayment" placeholder="请选择">
+              <el-option value="" label="全部"></el-option>
+              <el-option value="1" label="是"></el-option>
+              <el-option value="0" label="否"></el-option>
+            </el-select>
+          </div>
+        </div>
+
+        <div class="tabTd">
+          <el-button icon="el-icon-search" @click="search()">搜索</el-button>
+          <el-button icon="el-icon-download" @click="expordivata()">导出</el-button>
+        </div>
+        <div class="tabTd">
+          <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货
+          </el-button>
+          <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
+          </el-button>
+          <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
+        </div>
       </div>
       <div class="ly-table-panel">
         <div class="ly-data-list">
@@ -943,11 +953,13 @@
       </div>
 
     </div>
-    <object ref="LODOP" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+    <object ref="LODOP" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
       <param name="Caption" value="显示区">
       <param name="Border" value="0">
       <param name="Color" value="white">
-      <embed ref="LODOP_EM" TYPE="application/x-print-lodop" width=0 height=0 border=0 Color="white" PLUGINSPAGE="install_lodop.exe">
+      <embed ref="LODOP_EM" TYPE="application/x-print-lodop" width="0" height="0" border="0" Color="white"
+             PLUGINSPAGE="install_lodop.exe"
+      >
     </object>
   </div>
 </template>
@@ -1922,7 +1934,7 @@ export default {
     },
 
     downloadPrintSoftware() {
-      window.open("http://download.coopoo.com/other/CLodop_Setup_for_Win64NT_4.118EN.exe");
+      window.open('http://download.coopoo.com/other/CLodop_Setup_for_Win64NT_4.118EN.exe')
     },
 
     showBatchOrderPrintTemplateWindow() {
@@ -1972,15 +1984,15 @@ export default {
           return
         }
 
-        LODOP = getLodop(document.getElementById('LODOP'), document.getElementById('LODOP_EM'));
-        LODOP.PRINT_INIT("");
+        LODOP = getLodop(document.getElementById('LODOP'), document.getElementById('LODOP_EM'))
+        LODOP.PRINT_INIT('')
 
         for (let i = 0; i < res.data.length; i++) {
-          LODOP.NewPage();
-          let strFormHtml = "<body>" + res.data[i].printTemplate + "</body>";
-          LODOP.ADD_PRINT_HTM(0, 1, "100%", "100%", strFormHtml);
+          LODOP.NewPage()
+          let strFormHtml = '<body>' + res.data[i].printTemplate + '</body>'
+          LODOP.ADD_PRINT_HTM(0, 1, '100%', '100%', strFormHtml)
         }
-        LODOP.PREVIEW();
+        LODOP.PREVIEW()
         loading.close()
       }).catch(err => {
         loading.close()
@@ -2202,6 +2214,15 @@ export default {
     margin-bottom: 3vh;
   }
 }
+
+.tabTd {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 7px 10px;
+  align-items: center;
+
+}
+
 
 .step-container {
   height: 20vh;
