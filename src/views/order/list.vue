@@ -660,130 +660,142 @@
         <!--        ordStep-->
         <!--        :src="ordStep >= 1 ? waitDeliverPng : waitDeliverPngGrey "-->
 
-        <el-steps :active="ordStep" align-center v-if="ptStep">
-          <el-step title="待发货">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 1 ? waitDeliverPng : waitDeliverPngGrey "
-                ></el-avatar>
-              </span>
-          </el-step>
-          <!--          wait / process / finish / error / success-->
-          <el-step title="待收货">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 2 ?waitReceivePng:waitReceivePngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-          <el-step title="待支付">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 3 ?waitPaymentPng:waitPaymentPngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-          <el-step :title="isCancelTitle">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 4?isCancelIconImg:isCancelIconImgGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-        </el-steps>
+        <!--        <el-steps :active="ordStep" align-center v-if="ptStep">-->
+        <!--          <el-step title="待发货">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 1 ? waitDeliverPng : waitDeliverPngGrey "-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          &lt;!&ndash;          wait / process / finish / error / success&ndash;&gt;-->
+        <!--          <el-step title="待收货">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 2 ?waitReceivePng:waitReceivePngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step title="待支付">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 3 ?waitPaymentPng:waitPaymentPngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step :title="isCancelTitle">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 4?isCancelIconImg:isCancelIconImgGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--        </el-steps>-->
 
-        <el-steps :active="ordStep" align-center v-if="lpStep">
-          <el-step title="待支付">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 1?waitPaymentPng:waitPaymentPngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-          <el-step title="待发货">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 2?waitDeliverPng:waitDeliverPngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-          <el-step title="待收货">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 3?waitReceivePng:waitReceivePngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-          <el-step title="已完成">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 4?completePng:completePngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-        </el-steps>
+        <!--        <el-steps :active="ordStep" align-center v-if="lpStep">-->
+        <!--          <el-step title="待支付">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 1?waitPaymentPng:waitPaymentPngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step title="待发货">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 2?waitDeliverPng:waitDeliverPngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step title="待收货">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 3?waitReceivePng:waitReceivePngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step title="已完成">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 4?completePng:completePngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--        </el-steps>-->
 
-        <el-steps :active="ordStep" align-center v-if="dzStep">
-          <el-step title="待沟通">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 1?waitConfirmPng:waitConfirmPngGrey"
-                ></el-avatar>
-              </span></el-step>
-          <el-step title="待发货">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 2?waitDeliverPng:waitDeliverPngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-          <el-step title="待收货">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 3?waitReceivePng:waitReceivePngGrey"
-                ></el-avatar>
-              </span>
-          </el-step>
-          <el-step title="待支付">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 4?waitPaymentPng:waitPaymentPngGrey"
-                >
-                </el-avatar>
-              </span>
-          </el-step>
-          <el-step title="已完成">
-              <span slot="icon">
-                <el-avatar
-                  shape="square" :size="50"
-                  class="step-icon"
-                  :src="ordStep >= 5?completePng:completePngGrey"
-                ></el-avatar>
-              </span>
+        <!--        <el-steps :active="ordStep" align-center v-if="dzStep">-->
+        <!--          <el-step title="待沟通">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 1?waitConfirmPng:waitConfirmPngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span></el-step>-->
+        <!--          <el-step title="待发货">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 2?waitDeliverPng:waitDeliverPngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step title="待收货">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 3?waitReceivePng:waitReceivePngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step title="待支付">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 4?waitPaymentPng:waitPaymentPngGrey"-->
+        <!--                >-->
+        <!--                </el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--          <el-step title="已完成">-->
+        <!--              <span slot="icon">-->
+        <!--                <el-avatar-->
+        <!--                  shape="square" :size="50"-->
+        <!--                  class="step-icon"-->
+        <!--                  :src="ordStep >= 5?completePng:completePngGrey"-->
+        <!--                ></el-avatar>-->
+        <!--              </span>-->
+        <!--          </el-step>-->
+        <!--        </el-steps>-->
+
+        <el-steps :active="stepStatus" align-center>
+          <el-step :title="item.title" v-for="(item,index) in stepList" :key="item">
+            <span slot="icon">
+              <el-avatar
+                shape="square" :size="50"
+                class="step-icon"
+                :src="stepStatus > index ? item.image : item.imageGrey"
+              ></el-avatar>
+            </span>
           </el-step>
         </el-steps>
       </div>
@@ -1277,7 +1289,17 @@ export default {
       orderNo_: '',
       dataList: [],
       // routeFrom: {},
-      fromRoutePath: ''
+      fromRoutePath: '',
+
+      stepStatus: 0,
+      stepList: [
+        // {
+        //   title: '',
+        //   image: '',
+        //   imageGrey: ''
+        // }
+
+      ]
     }
   },
   computed: {
@@ -1486,141 +1508,134 @@ export default {
         })
       })
     },
-    getOrdDtl_() {
-      let scope = this
-      let param = {
-        orderNo: this.orderNo_
-      }
-
-      postMethod('/bc/order/getOrdDtl', param).then(res => {
-        scope.showOrdDtl = true
-        scope.ordDtl = res.data
-        scope.ptStep = false
-        scope.dzStep = false
-        scope.lpStep = false
-
-        if (scope.ordDtl.orderType == 1) {
-
-          scope.ptStep = true
-          if (scope.ordDtl.status == '10') {
-            scope.ordStep = 1
-          } else if (scope.ordDtl.status == '20') {
-            scope.ordStep = 2
-          } else if (scope.ordDtl.status == '30') {
-            scope.ordStep = 3
-          } else {
-            scope.ordStep = 4
-          }
-
-          if (scope.ordDtl.status >= 40 && scope.ordDtl.status < 50) {
-            scope.isCancelTitle = '退货中'
-            scope.isCancelIconImg = scope.returningPng
-            scope.isCancelIconImgGrey = scope.returningPngGrey
-            // scope.
-          } else if (scope.ordDtl.status == 0) {
-            scope.isCancelTitle = '已取消'
-
-            scope.isCancelIconImg = scope.cancelPng
-            scope.isCancelIconImgGrey = scope.cancelPngGrey
-          }
-
-        } else if (scope.ordDtl.orderType == 2) {
-          scope.lpStep = true
-
-          if (scope.ordDtl.status == '10') {
-            scope.ordStep = 1
-          } else if (scope.ordDtl.status == '20') {
-            scope.ordStep = 2
-          } else if (scope.ordDtl.status == '30') {
-            scope.ordStep = 3
-          } else {
-            scope.ordStep = 4
-          }
-
-        } else if (scope.ordDtl.orderType == 4) {
-          scope.dzStep = true
-
-          if (scope.ordDtl.status == '10') {
-            scope.ordStep = 2
-          } else if (scope.ordDtl.status == '20') {
-            scope.ordStep = 3
-          } else if (scope.ordDtl.status == '30') {
-            scope.ordStep = 4
-          } else if (scope.ordDtl.status == '60') {
-            scope.ordStep = 1
-          } else {
-            scope.ordStep = 5
-          }
-        }
-      })
+    async getOrdDtl_() {
+      const { data } = await postMethod('/bc/order/getOrdDtl', { orderNo: this.orderNo_ })
+      this.showOrdDtl = true
+      this.ordDtl = data
+      this.generatorStepList()
     },
-    getOrdDtl(row) {
-      let scope = this
-      let param = {
-        orderId: row.orderId
+    generatorStepList() {
+      this.stepStatus = 0
+      this.stepList = []
+      // 普通订单
+      // 正常流程--> 待发货，待收货，待支付，交易完成
+      // 取消流程--> 待发货，已取消
+      // 退货流程--> 待发货，待收货，待支付，退货中，退货完成
+
+      // 普通的订单
+      if (this.ordDtl.orderType == 1) {
+        // stepList
+        this.stepList.push({
+          title: '待发货',
+          image: this.waitDeliverPng,
+          imageGrey: this.waitDeliverPngGrey
+        })
+        if (this.ordDtl.status == 10) this.stepStatus = 1
+
+        // 被取消
+        if (this.ordDtl.status == 0) {
+          this.stepList.push({
+            title: '已取消',
+            image: this.cancelPng,
+            imageGrey: this.cancelPngGrey
+          })
+          if (this.ordDtl.status == 0) this.stepStatus = 2
+          return
+        }
+
+        this.stepList.push({
+          title: '待收货',
+          image: this.waitReceivePng,
+          imageGrey: this.waitReceivePngGrey
+        })
+        if (this.ordDtl.status == 20) this.stepStatus = 2
+
+        this.stepList.push({
+          title: '待支付',
+          image: this.waitPaymentPng,
+          imageGrey: this.waitPaymentPngGrey
+        })
+        if (this.ordDtl.status == 30) this.stepStatus = 3
+
+        // 被取消
+        if (this.ordDtl.status == 50 || this.ordDtl.status == 51) {
+          this.stepList.push({
+            title: '交易完成',
+            image: this.completePng,
+            imageGrey: this.completePngGrey
+          })
+          this.stepStatus = 4
+          return
+        }
+
+        this.stepList.push({
+          title: '退货中',
+          image: this.returningPng,
+          imageGrey: this.returningPngGrey
+        })
+        if (this.ordDtl.status == 41) this.stepStatus = 4
+
+        this.stepList.push({
+          title: '退货完成',
+          image: this.completePng,
+          imageGrey: this.completePngGrey
+        })
+        if (this.ordDtl.status == 40) this.stepStatus = 5
       }
 
-      postMethod('/bc/order/getOrdDtl', param).then(res => {
-        scope.showOrdDtl = true
-        scope.ordDtl = res.data
-        scope.ptStep = false
-        scope.dzStep = false
-        scope.lpStep = false
+      // 定制订单
+      // 正常流程 待确认，待支付，待发货，待收货，交易完成
+      // 取消流程 待确认，待支付，已取消
+      //
 
-        if (scope.ordDtl.orderType == 1) {
+      // 定制订单
+      if (this.ordDtl.orderType == 4) {
+        this.stepList.push({
+          title: '待确认',
+          image: this.waitConfirmPng,
+          imageGrey: this.waitConfirmPngGrey
+        })
+        if (this.ordDtl.status == 60) this.stepStatus = 1
 
-          scope.ptStep = true
-          if (scope.ordDtl.status == '10') {
-            scope.ordStep = 1
-          } else if (scope.ordDtl.status == '20') {
-            scope.ordStep = 2
-          } else if (scope.ordDtl.status == '30') {
-            scope.ordStep = 3
-          } else {
-            scope.ordStep = 4
-          }
+        this.stepList.push({
+          title: '待支付',
+          image: this.waitPaymentPng,
+          imageGrey: this.waitPaymentPngGrey
+        })
+        if (this.ordDtl.status == 30) this.stepStatus = 2
 
-          if (scope.ordDtl.status >= 40 && scope.ordDtl.status < 50) {
-            scope.isCancelTitle = '退货中'
-
-            scope.isCancelIconImg = scope.returningPng
-            scope.isCancelIconImgGrey = scope.returningPngGrey
-          } else if (scope.ordDtl.status == 0) {
-            scope.isCancelTitle = '已取消'
-
-            scope.isCancelIconImg = scope.cancelPng
-            scope.isCancelIconImgGrey = scope.cancelPngGrey
-          }
-
-        } else if (scope.ordDtl.orderType == 2) {
-          scope.lpStep = true
-
-          if (scope.ordDtl.status == '10') {
-            scope.ordStep = 1
-          } else if (scope.ordDtl.status == '20') {
-            scope.ordStep = 2
-          } else if (scope.ordDtl.status == '30') {
-            scope.ordStep = 3
-          } else {
-            scope.ordStep = 4
-          }
-
-        } else if (scope.ordDtl.orderType == 4) {
-          scope.dzStep = true
-
-          if (scope.ordDtl.status == '10') {
-            scope.ordStep = 2
-          } else if (scope.ordDtl.status == '20') {
-            scope.ordStep = 3
-          } else if (scope.ordDtl.status == '30') {
-            scope.ordStep = 4
-          } else if (scope.ordDtl.status == '60') {
-            scope.ordStep = 1
-          } else {
-            scope.ordStep = 5
-          }
+        // 被取消
+        if (this.ordDtl.status == 0) {
+          this.stepList.push({
+            title: '已取消',
+            image: this.cancelPng,
+            imageGrey: this.cancelPngGrey
+          })
+          this.stepStatus = 3
+          return
         }
-      })
+
+        this.stepList.push({
+          title: '待收货',
+          image: this.waitReceivePng,
+          imageGrey: this.waitReceivePngGrey
+        })
+        if (this.ordDtl.status == 20) this.stepStatus = 3
+
+        this.stepList.push({
+          title: '交易完成',
+          image: this.completePng,
+          imageGrey: this.completePngGrey
+        })
+        if (this.ordDtl.status == 50 || this.ordDtl.status == 51) this.stepStatus = 4
+
+      }
+    },
+    async getOrdDtl(row) {
+      const { data } = await postMethod('/bc/order/getOrdDtl', { orderId: row.orderId })
+      this.showOrdDtl = true
+      this.ordDtl = data
+      this.generatorStepList()
     },
     dealOrd(row) {
       const param = {
