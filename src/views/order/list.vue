@@ -1616,18 +1616,25 @@ export default {
         }
 
         this.stepList.push({
+          title: '待发货',
+          image: this.waitDeliverPng,
+          imageGrey: this.waitDeliverPngGrey
+        })
+        if (this.ordDtl.status == 10) this.stepStatus = 3
+
+        this.stepList.push({
           title: '待收货',
           image: this.waitReceivePng,
           imageGrey: this.waitReceivePngGrey
         })
-        if (this.ordDtl.status == 20) this.stepStatus = 3
+        if (this.ordDtl.status == 20) this.stepStatus = 4
 
         this.stepList.push({
           title: '交易完成',
           image: this.completePng,
           imageGrey: this.completePngGrey
         })
-        if (this.ordDtl.status == 50 || this.ordDtl.status == 51) this.stepStatus = 4
+        if (this.ordDtl.status == 50 || this.ordDtl.status == 51) this.stepStatus = 5
 
       }
     },
