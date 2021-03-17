@@ -1319,6 +1319,7 @@ export default {
         // id: '',
         typeDataStr: this.dataForm.typeId2,
         specName: '',
+        specSort: this.addAttrParam.length,
         specValueWarningStr: '',
         disabled: false,
         skuList: [
@@ -1362,7 +1363,7 @@ export default {
       this.generatorSkuList()
 
       attrSkuList.push({
-        sort: 0,
+        sort: attrSkuList.length,
         skuText: '',
         type: 'spec'
       })
