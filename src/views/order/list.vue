@@ -86,6 +86,7 @@
               <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
               </el-button>
               <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
+              <el-button @click="downloadPrintSoftware" type="primary">下载打印软件</el-button>
             </td>
           </tr>
         </table>
@@ -942,6 +943,12 @@
       </div>
 
     </div>
+    <object ref="LODOP" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+      <param name="Caption" value="显示区">
+      <param name="Border" value="0">
+      <param name="Color" value="white">
+      <embed ref="LODOP_EM" TYPE="application/x-print-lodop" width=0 height=0 border=0 Color="white" PLUGINSPAGE="install_lodop.exe">
+    </object>
   </div>
 </template>
 
@@ -949,6 +956,7 @@
 import { getMethod, postMethod } from '@/api/request'
 import { formatDate } from '@/api/tools.js'
 import { getToken } from '@/utils/auth.js'
+import { getLodop } from '@/utils/lodop.js'
 
 export default {
   components: {},
@@ -1913,6 +1921,10 @@ export default {
       this.showOnlineOrderList = true
     },
 
+    downloadPrintSoftware() {
+      window.open("http://download.coopoo.com/other/CLodop_Setup_for_Win64NT_4.118EN.exe");
+    },
+
     showBatchOrderPrintTemplateWindow() {
       let mainTable = this.$refs.mainTable
       let selection = mainTable.selection
@@ -1955,22 +1967,24 @@ export default {
           })
           let noTemplateOrderRow = selection.filter(item => orderTemplateNo.includes(item.orderNo))
           mainTable.clearSelection()
-          console.info(noTemplateOrderRow)
           noTemplateOrderRow.forEach(row => mainTable.toggleRowSelection(row, true))
           loading.close()
           return
         }
 
-        const orderPrintTemplateHtml = res.data.map(item => item.printTemplate).join('</br>')
-        let orderPrintTemplateWindow = window.open('', 'wildebeast')
-        orderPrintTemplateWindow.document.open()
-        orderPrintTemplateWindow.document.write(orderPrintTemplateHtml)
-        orderPrintTemplateWindow.document.close()
+        LODOP = getLodop(document.getElementById('LODOP'), document.getElementById('LODOP_EM'));
+        LODOP.PRINT_INIT("");
+
+        for (let i = 0; i < res.data.length; i++) {
+          LODOP.NewPage();
+          let strFormHtml = "<body>" + res.data[i].printTemplate + "</body>";
+          LODOP.ADD_PRINT_HTM(0, 1, "100%", "100%", strFormHtml);
+        }
+        LODOP.PREVIEW();
         loading.close()
       }).catch(err => {
         loading.close()
       })
-
     },
 
     submitOnlineBatchSendOrder() {
