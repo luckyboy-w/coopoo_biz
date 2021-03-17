@@ -73,11 +73,13 @@
               <template slot-scope="scope">
 
                 <el-button-group>
-<!--                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
-<!--                  <el-link type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">确认退货</el-link>-->
+                  <!--                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
+                  <!--                  <el-link type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">确认退货</el-link>-->
 
                   <el-button size="mini" type="primary" @click="getOrdDtl(scope.row)">查看订单</el-button>
-                  <el-button size="mini" type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">确认退货</el-button>
+                  <el-button size="mini" type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">
+                    确认退货
+                  </el-button>
                 </el-button-group>
               </template>
             </el-table-column>
@@ -100,48 +102,74 @@
     </div>
 
 
-    <div v-if="showOrdDtl" style="height:600px;padding:40px;width:50%">
+    <!--    style="height:600px;padding:40px;width:50%"-->
+    <div v-if="showOrdDtl">
+
+      <!--      <el-row :gutter="20" style="line-height:40px;font-size:12px">-->
+      <!--        <el-col :span="24">-->
+      <!--          <el-button type="success" @click="showOrdDtl=false">返回列表</el-button>-->
+      <!--        </el-col>-->
+      <!--      </el-row>-->
+
 
       <el-row :gutter="20" style="line-height:40px;font-size:12px">
         <el-col :span="24">
-          <el-button type="success" @click="showOrdDtl=false">返回列表</el-button>
+          <el-button type="primary" size="small" icon="el-icon-back" @click="showOrdDtl=false">返回列表</el-button>
         </el-col>
       </el-row>
 
-      <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;">
-        <el-row :gutter="20" style="line-height:60px;font-size:20px" class="main-title">
-          <el-col :span="24">退货信息</el-col>
+      <!--      style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);padding:10px;margin:10px 0px;"-->
+      <div class="content-container">
+        <el-row :gutter="20" style="font-size:20px" class="main-title"
+        >
+          <el-col :span="24" ><h3>退货信息</h3></el-col>
         </el-row>
-        <el-row :gutter="20" style="line-height:50px;font-size:16px">
-          <el-col :span="20">商品名称：{{ this.detailData.goodName }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">SKU属性：{{ this.detailData.skuInfo }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">退货数量：{{ this.detailData.goodNum }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">商品单价：{{ this.detailData.goodSinglePrice }}</el-col>
-          <el-col :span="20">总价：{{ this.detailData.goodSinglePrice * this.detailData.goodNum | fmtFee }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">买家姓名：{{ this.detailData.name }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">买家手机号：{{ this.detailData.mobile }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">退货理由：{{ this.detailData.reason }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">退货说明：{{ this.detailData.remark }}
-            <el-divider></el-divider>
-          </el-col>
-          <el-col :span="20">快递单号：{{ this.detailData.expressNo }}
-            <el-divider></el-divider>
-          </el-col>
-        </el-row>
+        <table style="line-height:50px;font-size:16px">
+          <tr>
+            <td>商品名称：</td>
+            <td>{{ this.detailData.goodName }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">SKU属性：</td>
+            <td>{{ this.detailData.skuInfo }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">退货数量：</td>
+            <td>{{ this.detailData.goodNum }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">退货数量：</td>
+            <td>{{ this.detailData.goodNum }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">商品单价：</td>
+            <td>{{ this.detailData.goodSinglePrice }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">总价：</td>
+            <td>{{ this.detailData.goodSinglePrice * this.detailData.goodNum | fmtFee }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">买家姓名：</td>
+            <td>{{ this.detailData.name }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">买家手机号：</td>
+            <td>{{ this.detailData.mobile }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">退货理由：</td>
+            <td>{{ this.detailData.reason }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">退货说明：</td>
+            <td>{{ this.detailData.remark }}</td>
+          </tr>
+          <tr>
+            <td style="text-align: right">快递单号：</td>
+            <td>{{ this.detailData.expressNo }}</td>
+          </tr>
+        </table>
       </div>
 
 
@@ -157,9 +185,10 @@ import {
 import {
   formatDate
 } from '@/api/tools.js'
+import Tab from '@/views/tab'
 
 export default {
-  components: {},
+  components: { Tab },
   filters: {
     taxType2Text(type) {
 
@@ -366,7 +395,6 @@ export default {
 }
 
 
-
 .el-pagination {
   white-space: nowrap;
   padding: 2px 0px;
@@ -380,6 +408,14 @@ export default {
   color: #606266;
   min-width: 30px;
   border-radius: 2px;
+}
+
+.content-container {
+  color: #414141;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  padding: 10px;
+  margin: 10px 0px;
+  min-height: 60vh
 }
 
 </style>
