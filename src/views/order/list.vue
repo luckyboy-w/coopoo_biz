@@ -845,7 +845,7 @@
               prop="goodSinglePrice" label="商品总价"
             >
               <template slot-scope="scope">
-                {{ scope.row.goodSinglePrice * scope.row.goodNum }}
+                {{ (scope.row.goodSinglePrice * scope.row.goodNum).toFixed(2) }}
               </template>
             </el-table-column>
             <el-table-column
@@ -939,9 +939,9 @@
             <el-col :span="24">定制信息</el-col>
           </span>
           <el-row :gutter="24" class="main-content">
-            <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName }}</el-col>
-            <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone }}</el-col>
-            <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo }}</el-col>
+            <el-col :span="6">联系人：{{ ordDtl.ordDtlList[0].goodCustom.userName || '' }}</el-col>
+            <el-col :span="6">联系电话：{{ ordDtl.ordDtlList[0].goodCustom.userPhone || '' }}</el-col>
+            <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo || '' }}</el-col>
           </el-row>
         </template>
 
