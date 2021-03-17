@@ -1331,7 +1331,8 @@ export default {
         // statusImg = '待支付'
         statusImg = require('@/assets/order-status/waitPaymentPngBlack.png')
       } else if (this.ordDtl.status == '40') {
-        statusImg = '已退货'//--
+        // statusImg = '已退货'//--
+        statusImg = require('@/assets/order-status/completePngBlack.png')
       } else if (this.ordDtl.status == '41') {
         // statusImg = '退货中'
         statusImg = require('@/assets/order-status/returningPngBlack.png')
