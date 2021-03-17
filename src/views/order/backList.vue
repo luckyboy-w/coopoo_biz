@@ -122,11 +122,11 @@
       <div class="content-container">
         <el-row :gutter="20" style="font-size:20px" class="main-title"
         >
-          <el-col :span="24" ><h3>退货信息</h3></el-col>
+          <el-col :span="24"><h3>退货信息</h3></el-col>
         </el-row>
         <table style="line-height:50px;font-size:16px">
           <tr>
-            <td>商品名称：</td>
+            <td style="text-align: right">商品名称：</td>
             <td>{{ this.detailData.goodName }}</td>
           </tr>
           <tr>
