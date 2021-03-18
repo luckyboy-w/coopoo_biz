@@ -791,7 +791,8 @@
           <el-step :title="item.title" v-for="(item,index) in stepList" :key="item">
             <span slot="icon">
               <el-avatar
-                shape="square" :size="50"
+                shape="square"
+                style="width: auto;height: 50px"
                 class="step-icon"
                 :src="stepStatus > index ? item.image : item.imageGrey"
               ></el-avatar>
@@ -802,8 +803,9 @@
       <div class="notic-container">
         <div class="avatar">
           <el-avatar
+            style="width: auto;height: 80px"
             shape="square"
-            :size="80"
+            fit="cover"
             :src="noticContainerImg"
           ></el-avatar>
         </div>
@@ -898,7 +900,7 @@
         </span>
         <el-row :gutter="20" class="main-content">
           <el-col :span="6">收货人：{{ ordDtl.recUname }}</el-col>
-          <el-col :span="6">收货地址：{{ ordDtl.recArea }}</el-col>
+          <el-col :span="6">收货地址：{{ `${ordDtl.recArea} ${ordDtl.recAddress}` }}</el-col>
           <el-col :span="6">收货人电话：{{ ordDtl.recPhone }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
