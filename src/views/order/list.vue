@@ -898,7 +898,7 @@
         </span>
         <el-row :gutter="20" class="main-content">
           <el-col :span="6">收货人：{{ ordDtl.recUname }}</el-col>
-          <el-col :span="6">收货地址：{{ ordDtl.recArea }}</el-col>
+          <el-col :span="6">收货地址：{{ `${ordDtl.recArea} - ${ordDtl.recAddress}` }}</el-col>
           <el-col :span="6">收货人电话：{{ ordDtl.recPhone }}</el-col>
           <el-col :span="6"></el-col>
         </el-row>
