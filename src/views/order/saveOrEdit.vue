@@ -17,8 +17,11 @@
       <el-form-item label="联系人">
         <el-input v-model="dataForm.person"/>
       </el-form-item>
-      <el-form-item label="联系人手机号">
+      <el-form-item label="移动手机号">
         <el-input v-model="dataForm.mobilePhone"/>
+      </el-form-item>
+      <el-form-item label="座机号">
+        <el-input v-model="dataForm.telPhone"/>
       </el-form-item>
       <el-form-item label="地区号">
         <el-input v-model="dataForm.areaNo"/>
@@ -78,11 +81,12 @@ export default {
       fileList: [],
       dataForm: {
         isDefault: '0',
-        type: '1',
+        type: '2',
         addrName: '',
         addrSeq: '',
         person: '',
         mobilePhone: '',
+        telPhone: '',
         areaNo: '',
         provinceid: '',
         provincetext: '',
@@ -172,6 +176,51 @@ export default {
         'citytext': '省份信息不能为空',
         'provincetext': '省份信息不能为空',
         'areaText': '省份信息不能为空'
+      }
+
+      let isInputMobilePhone = this.dataForm.mobilePhone == '' || this.dataForm.mobilePhone == undefined || this.dataForm.mobilePhone == null
+      let isInputTelPhone = this.dataForm.telPhone == '' || this.dataForm.telPhone == undefined || this.dataForm.telPhone == null
+
+      if (isInputMobilePhone && isInputTelPhone) {
+        this.$message({
+          message: '移动手机号与座机号必填一个',
+          type: 'warning'
+        })
+        return false
+      }
+
+      if (!isInputMobilePhone) {
+        const reg = /^1[3|4|5|7|8|9][0-9]\d{8}$/;
+        const isPhone = reg.test(this.dataForm.mobilePhone);
+        let value = Number(this.dataForm.mobilePhone); //转换为数字
+        if (typeof value === "number" && !isNaN(value)) {//判断是否为数字
+          value = value.toString(); //转换成字符串
+          if (value.length < 0 || value.length > 12 || !isPhone) { //判断是否为11位手机号
+            this.$message({
+              message: "移动手机号格式如:138xxxx8754",
+              type: 'warning'
+            })
+            return false
+          }
+        } else {
+          this.$message({
+            message: "联系人手机号输入错误",
+            type: 'warning'
+          })
+          return false
+        }
+      }
+
+      if (!isInputTelPhone) {
+        const telReg = /^((d{3,4})|d{3,4}-|s)?d{7,14}$/;
+        const isTelPhone = telReg.test(this.dataForm.telPhone);
+        if (isTelPhone) {
+          this.$message({
+            message: "座机号输入错误",
+            type: 'warning'
+          })
+          return false
+        }
       }
 
       for (const key in notNvl) {

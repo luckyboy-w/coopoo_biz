@@ -44,7 +44,8 @@
             <!--            </el-table-column>-->
             <el-table-column prop="addrSeq" label="地址序号" width="100px"></el-table-column>
             <el-table-column prop="person" label="联系人" width="100px"></el-table-column>
-            <el-table-column prop="mobilePhone" label="联系人手机号" width="120px"></el-table-column>
+            <el-table-column prop="mobilePhone" label="移动手机号" width="120px"></el-table-column>
+            <el-table-column prop="telPhone" label="座机号" width="120px"></el-table-column>
             <el-table-column label="所在城市" width="200px">
               <template slot-scope="scope">
                 {{ `${scope.row.provincetext} ${scope.row.citytext} ${scope.row.areaText}` }}
