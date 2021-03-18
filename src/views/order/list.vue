@@ -791,7 +791,8 @@
           <el-step :title="item.title" v-for="(item,index) in stepList" :key="item">
             <span slot="icon">
               <el-avatar
-                shape="square" :size="50"
+                shape="square"
+                style="width: auto;height: 50px"
                 class="step-icon"
                 :src="stepStatus > index ? item.image : item.imageGrey"
               ></el-avatar>
@@ -802,8 +803,9 @@
       <div class="notic-container">
         <div class="avatar">
           <el-avatar
+            style="width: auto;height: 80px"
             shape="square"
-            :size="80"
+            fit="cover"
             :src="noticContainerImg"
           ></el-avatar>
         </div>
