@@ -136,7 +136,7 @@
               </el-table-column>
               <el-table-column align="center" prop="stock" label="库存">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>
+                  <el-input-number v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="salePrice" label="建议零售价">
@@ -863,7 +863,7 @@ export default {
           return
         }
 
-        if (rowObj.stock < 0) {
+        if (rowObj.stock < 0 || rowObj.stock == undefined) {
           errorMsg = '库存不能为空'
         }
 
