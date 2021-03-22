@@ -130,6 +130,11 @@
             <td>{{ this.detailData.goodName }}</td>
           </tr>
           <tr>
+            <td style="text-align: right">商品类型：</td>
+            <td v-if="this.detailData.isMarketing == 0">普通商品</td>
+            <td v-if="this.detailData.isMarketing == 1">活动商品</td>
+          </tr>
+          <tr>
             <td style="text-align: right">SKU属性：</td>
             <td>{{ this.detailData.skuInfo }}</td>
           </tr>
