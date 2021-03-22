@@ -13,6 +13,12 @@
               show-word-limit
             />
           </el-form-item>
+          <el-form-item label="商品类型">
+            <el-select v-model="dataForm.isMarketing" :disabled="isHiddenEditGood">
+              <el-option label="普通商品" value="0"/>
+              <el-option label="活动商品" value="1"/>
+            </el-select>
+          </el-form-item>
           <el-form-item label="所属分类">
             <el-select v-model="dataForm.typeId" placeholder="请选择分类" @change="loadtypeId2List()"
                        :disabled="isHiddenEditGood"
@@ -337,7 +343,7 @@
           <el-form-item label="是否推荐">
             <el-switch v-model="dataForm.recommend" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
-          <el-form-item label="是否定制">
+          <el-form-item v-if="dataForm.isMarketing == 0" label="是否定制">
             <el-switch v-model="dataForm.custom" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item label="商品风格专场">
@@ -483,6 +489,7 @@ export default {
         skuJsonStr: '',
         checkRuleStr: '',
         detailStr: '',
+        isMarketing: "0",
         isGift: '',
         id: ''
       },
@@ -959,6 +966,10 @@ export default {
         this.dataForm.checkRuleStr = JSON.stringify(textList)
 
         this.dataForm.isGift = this.isGift
+        if (this.dataForm.isMarketing == 1) {
+          this.dataForm.custom = null
+        }
+
         const param = JSON.stringify(this.dataForm)
 
         try {
@@ -1038,6 +1049,7 @@ export default {
         this.goodStyleList = this.editData.goodStyle.split(',')
         this.serviceRuleList = this.editData.serviceRule.split(',')
         this.dataForm = this.editData
+        this.dataForm.isMarketing = this.dataForm.isMarketing + ''
         this.detail = this.editData.detail
         this.initDefaultImage()
         this.$refs['refEditor'].setContent(this.detail.detailContent)
