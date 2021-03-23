@@ -12,6 +12,14 @@
             <td>
               <el-input v-model="searchParam.goodCode" width="180px"/>
             </td>
+            <td>商品类型:</td>
+            <td>
+              <el-select v-model="searchParam.isMarketing" placeholder="请选择">
+                <el-option value="" label="全部"/>
+                <el-option value="0" label="普通商品"/>
+                <el-option value="1" label="活动商品"/>
+              </el-select>
+            </td>
             <td>
               <el-button icon="el-icon-search" @click="search()">搜索</el-button>
               <!--              <el-button plain type="primary" icon="el-icon-add" @click="addOrEdit('add')">新增</el-button>-->
