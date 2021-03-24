@@ -28,7 +28,7 @@
             <el-button type="primary" style="margin-left:20px" @click="search()">搜索</el-button>
           </td>
           <td>
-            <el-button type="download" style="margin-left:20px" @click="exportDtl()">导出Excel</el-button>
+            <el-button type="primary" style="margin-left:20px" @click="exportDtl()">导出Excel</el-button>
           </td>
         </tr>
         <!--   <el-row style="line-height:40px;padding:10px 0px ">
@@ -110,7 +110,7 @@
             <el-button type="primary" style="margin-left:20px" @click="searchOne()">搜索</el-button>
           </td>
           <td style="padding-left:20px">
-            <el-button type="download" @click="exportData()">导出Excel</el-button>
+            <el-button type="primary" @click="exportData()">导出Excel</el-button>
           </td>
         </tr>
         <el-table ref="settleFinshData" :data="settleFinshData.list" style="width: 100%; margin-bottom: 20px;"
@@ -167,7 +167,7 @@
             <el-button type="primary" style="margin-left:20px" @click="searchTwo()">搜索</el-button>
           </td>
           <td style="padding-left:20px">
-            <el-button type="download" @click="exportData_()">导出Excel</el-button>
+            <el-button type="primary" @click="exportData_()">导出Excel</el-button>
           </td>
         </tr>
         <el-table ref="settleEndData" :data="settleEndData.list" style="width: 100%; margin-bottom: 20px;" row-key="id">
@@ -227,7 +227,7 @@
                 </el-button>
               </td>
               <td style="padding-left: 20px;">
-                <el-button type="download" @click="exportDataDtl()">导出Excel</el-button>
+                <el-button type="primary" @click="exportDataDtl()">导出Excel</el-button>
               </td>
             </tr>
           </table>

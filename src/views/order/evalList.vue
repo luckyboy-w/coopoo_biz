@@ -15,7 +15,7 @@
               </el-select>
             </td>
             <td>
-              <el-button plain type="primary" @click="search()" icon="el-icon-document-add">搜索</el-button>
+              <el-button type="primary" @click="search()" icon="el-icon-document-add">搜索</el-button>
             </td>
           </tr>
         </table>
@@ -319,7 +319,6 @@ export default {
     }
   }
 }
-
 
 
 .el-pagination {

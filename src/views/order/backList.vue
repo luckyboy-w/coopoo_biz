@@ -21,7 +21,7 @@
               <el-input v-model="searchParam.goodName" width="180px"/>
             </td>
             <td>
-              <el-button icon="el-icon-search" @click="search()">搜索</el-button>
+              <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
             </td>
           </tr>
         </table>

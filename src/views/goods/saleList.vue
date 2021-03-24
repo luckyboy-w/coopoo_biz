@@ -13,7 +13,7 @@
               <el-input v-model="searchParam.goodCode" width="180px"/>
             </td>
             <td>
-              <el-button icon="el-icon-search" @click="search()">搜索</el-button>
+              <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
               <!--              <el-button plain type="primary" icon="el-icon-add" @click="addOrEdit('add')">新增</el-button>-->
             </td>
           </tr>
