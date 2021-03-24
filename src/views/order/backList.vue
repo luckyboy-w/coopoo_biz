@@ -6,11 +6,11 @@
           <tr>
             <td>订单编号:</td>
             <td>
-              <el-input v-model="searchParam.orderNo" width="180px"/>
+              <el-input  @keyup.enter.native="search()" v-model="searchParam.orderNo" width="180px"/>
             </td>
             <td>买家姓名：</td>
             <td>
-              <el-input v-model="searchParam.name" width="180px"/>
+              <el-input  @keyup.enter.native="search()" v-model="searchParam.name" width="180px"/>
             </td>
             <!-- <td>买家电话：</td>
              <td>
@@ -18,7 +18,7 @@
              </td> -->
             <td>商品名称：</td>
             <td>
-              <el-input v-model="searchParam.goodName" width="180px"/>
+              <el-input  @keyup.enter.native="search()" v-model="searchParam.goodName" width="180px"/>
             </td>
             <td>
               <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>

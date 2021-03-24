@@ -10,7 +10,7 @@
         <tr>
           <td>订单号:&nbsp;</td>
           <td>
-            <el-input v-model="searchParam.orderNo" width="180px"/>
+            <el-input @keyup.enter.native="search()" v-model="searchParam.orderNo" width="180px"/>
           </td>
           <td style="padding-left:20px">入账时间:&nbsp;</td>
           <td>
@@ -93,7 +93,7 @@
         <tr>
           <td>订单号:</td>
           <td>
-            <el-input v-model="searchParam.orderNo" width="180px"/>
+            <el-input @keyup.enter.native="searchOne()" v-model="searchParam.orderNo" width="180px"/>
           </td>
           <td style="padding-left:20px">申请结账时间:</td>
           <td>
@@ -149,7 +149,7 @@
         <tr>
           <td>订单号:</td>
           <td>
-            <el-input v-model="searchParam.orderNo" width="180px"/>
+            <el-input @keyup.enter.native="searchTwo()" v-model="searchParam.orderNo" width="180px"/>
           </td>
           <td style="padding-left:20px">结束完成时间:</td>
           <td>

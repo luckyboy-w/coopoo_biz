@@ -6,11 +6,11 @@
           <tr>
             <td>商品名称:</td>
             <td>
-              <el-input v-model="searchParam.goodName" width="180px"/>
+              <el-input @keyup.enter.native="search()" v-model="searchParam.goodName" width="180px"/>
             </td>
             <td>货号:</td>
             <td>
-              <el-input v-model="searchParam.goodCode" width="180px"/>
+              <el-input @keyup.enter.native="search()" v-model="searchParam.goodCode" width="180px"/>
             </td>
             <td>
               <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>

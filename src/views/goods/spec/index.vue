@@ -6,11 +6,11 @@
           <tr>
             <td>规格名称:</td>
             <td>
-              <el-input v-model="searchParam.specName" width="180px"></el-input>
+              <el-input @keyup.enter.native="search()" v-model="searchParam.specName" width="180px"></el-input>
             </td>
             <td>备注名称:</td>
             <td>
-              <el-input v-model="searchParam.specDescName" width="180px"></el-input>
+              <el-input @keyup.enter.native="search()" v-model="searchParam.specDescName" width="180px"></el-input>
             </td>
             <td>
               <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
