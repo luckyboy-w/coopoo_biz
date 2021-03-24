@@ -54,6 +54,7 @@
                   <el-table-column prop="salePrice" label="零售价"></el-table-column>
                   <el-table-column prop="saleMemPrice" label="会员价"></el-table-column>
                   <el-table-column prop="saleCount" label="销量"></el-table-column>
+                  <el-table-column prop="goodsCode" label="物料编码"></el-table-column>
                 </el-table>
               </template>
             </el-table-column>
