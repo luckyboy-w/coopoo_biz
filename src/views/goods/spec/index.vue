@@ -15,7 +15,7 @@
             <td>
               <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
               <el-button  type="primary" @click="addOrEdit('add')" icon="el-icon-document-add">新建</el-button>
-              <el-button  type="warning" @click="batchDeleteRow()" icon="el-icon-delete">批量删除</el-button>
+              <el-button  type="danger" @click="batchDeleteRow()" icon="el-icon-delete">批量删除</el-button>
             </td>
           </tr>
         </table>
