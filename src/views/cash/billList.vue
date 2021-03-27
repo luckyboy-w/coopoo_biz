@@ -10,7 +10,7 @@
         <tr>
           <td>订单号:&nbsp;</td>
           <td>
-            <el-input v-model="searchParam.orderNo" width="180px"/>
+            <el-input @keyup.enter.native="search()" v-model="searchParam.orderNo" width="180px"/>
           </td>
           <td style="padding-left:20px">入账时间:&nbsp;</td>
           <td>
@@ -28,7 +28,7 @@
             <el-button type="primary" style="margin-left:20px" @click="search()">搜索</el-button>
           </td>
           <td>
-            <el-button type="download" style="margin-left:20px" @click="exportDtl()">导出Excel</el-button>
+            <el-button type="primary" style="margin-left:20px" @click="exportDtl()">导出Excel</el-button>
           </td>
         </tr>
         <!--   <el-row style="line-height:40px;padding:10px 0px ">
@@ -93,7 +93,7 @@
         <tr>
           <td>订单号:</td>
           <td>
-            <el-input v-model="searchParam.orderNo" width="180px"/>
+            <el-input @keyup.enter.native="searchOne()" v-model="searchParam.orderNo" width="180px"/>
           </td>
           <td style="padding-left:20px">申请结账时间:</td>
           <td>
@@ -110,7 +110,7 @@
             <el-button type="primary" style="margin-left:20px" @click="searchOne()">搜索</el-button>
           </td>
           <td style="padding-left:20px">
-            <el-button type="download" @click="exportData()">导出Excel</el-button>
+            <el-button type="primary" @click="exportData()">导出Excel</el-button>
           </td>
         </tr>
         <el-table ref="settleFinshData" :data="settleFinshData.list" style="width: 100%; margin-bottom: 20px;"
@@ -149,7 +149,7 @@
         <tr>
           <td>订单号:</td>
           <td>
-            <el-input v-model="searchParam.orderNo" width="180px"/>
+            <el-input @keyup.enter.native="searchTwo()" v-model="searchParam.orderNo" width="180px"/>
           </td>
           <td style="padding-left:20px">结束完成时间:</td>
           <td>
@@ -167,7 +167,7 @@
             <el-button type="primary" style="margin-left:20px" @click="searchTwo()">搜索</el-button>
           </td>
           <td style="padding-left:20px">
-            <el-button type="download" @click="exportData_()">导出Excel</el-button>
+            <el-button type="primary" @click="exportData_()">导出Excel</el-button>
           </td>
         </tr>
         <el-table ref="settleEndData" :data="settleEndData.list" style="width: 100%; margin-bottom: 20px;" row-key="id">
@@ -227,7 +227,7 @@
                 </el-button>
               </td>
               <td style="padding-left: 20px;">
-                <el-button type="download" @click="exportDataDtl()">导出Excel</el-button>
+                <el-button type="primary" @click="exportDataDtl()">导出Excel</el-button>
               </td>
             </tr>
           </table>

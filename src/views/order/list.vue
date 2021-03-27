@@ -7,28 +7,28 @@
         <div class="tabTd">
           <div>订单编号：</div>
           <div>
-            <el-input v-model="searchParam.orderNo" width="180px"/>
+            <el-input @keyup.enter.native="search()" v-model="searchParam.orderNo" width="180px"/>
           </div>
         </div>
 
         <div class="tabTd">
           <div>快递单号：</div>
           <div>
-            <el-input v-model="searchParam.expressNo" width="180px"/>
+            <el-input @keyup.enter.native="search()" v-model="searchParam.expressNo" width="180px"/>
           </div>
         </div>
 
         <div class="tabTd">
           <div>买家姓名：</div>
           <div>
-            <el-input v-model="searchParam.recUname" width="180px"/>
+            <el-input @keyup.enter.native="search()" v-model="searchParam.recUname" width="180px"/>
           </div>
         </div>
 
         <div class="tabTd">
           <div>买家电话：</div>
           <div>
-            <el-input v-model="searchParam.recPhone" width="180px"/>
+            <el-input @keyup.enter.native="search()" v-model="searchParam.recPhone" width="180px"/>
           </div>
 
         </div>
@@ -90,8 +90,8 @@
         </div>
 
         <div class="tabTd">
-          <el-button icon="el-icon-search" @click="search()">搜索</el-button>
-          <el-button icon="el-icon-download" @click="expordivata()">导出</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
+          <el-button type="primary" icon="el-icon-download" @click="expordivata()">导出</el-button>
         </div>
         <div class="tabTd">
           <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货

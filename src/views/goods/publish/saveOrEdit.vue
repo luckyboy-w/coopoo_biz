@@ -155,6 +155,11 @@
                   <el-input v-model="scope.row.saleMemPrice" :disabled="isHiddenEditGood"/>
                 </template>
               </el-table-column>
+              <el-table-column align="center" prop="goodsCode" label="物料编码">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.goodsCode" :disabled="isHiddenEditGood"/>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="skuImg" label="SKU展示图">
                 <template slot-scope="scope">
                   <img :src="scope.row.skuImg" width="60px" height="60px"
@@ -1214,6 +1219,7 @@ export default {
             stock: '',
             salePrice: '',
             saleMemPrice: '',
+            goodsCode: '',
             supplyPrice: '',
             skuImg: ''
           })
@@ -1236,6 +1242,7 @@ export default {
             stock: dataList[j].stock,
             salePrice: dataList[j].salePrice,
             saleMemPrice: dataList[j].saleMemPrice,
+            goodsCode: dataList[j].goodsCode,
             supplyPrice: dataList[j].supplyPrice,
             skuImg: dataList[j].skuImg
           })

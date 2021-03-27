@@ -6,11 +6,11 @@
           <tr>
             <td>商品名称:</td>
             <td>
-              <el-input v-model="searchParam.goodName" width="180px"/>
+              <el-input @keyup.enter.native="search()" v-model="searchParam.goodName" width="180px"/>
             </td>
             <td>货号:</td>
             <td>
-              <el-input v-model="searchParam.goodCode" width="180px"/>
+              <el-input @keyup.enter.native="search()" v-model="searchParam.goodCode" width="180px"/>
             </td>
             <td>商品类型:</td>
             <td>
@@ -21,7 +21,7 @@
               </el-select>
             </td>
             <td>
-              <el-button icon="el-icon-search" @click="search()">搜索</el-button>
+              <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
               <!--              <el-button plain type="primary" icon="el-icon-add" @click="addOrEdit('add')">新增</el-button>-->
             </td>
           </tr>
@@ -61,7 +61,8 @@
                   <el-table-column prop="stock" label="库存"></el-table-column>
                   <el-table-column prop="salePrice" label="零售价"></el-table-column>
                   <el-table-column prop="saleMemPrice" label="会员价"></el-table-column>
-                  <el-table-column prop="saleCount" label="销量"></el-table-column>
+<!--                  <el-table-column prop="saleCount" label="销量"></el-table-column>-->
+                  <el-table-column prop="goodsCode" label="物料编码"></el-table-column>
                 </el-table>
               </template>
             </el-table-column>

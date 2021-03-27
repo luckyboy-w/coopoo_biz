@@ -5,11 +5,11 @@
         <table>
           <tr>
             <td>
-              <el-button plain type="danger" @click="remove()" icon="el-icon-delete">
+              <el-button type="danger" @click="remove()" icon="el-icon-delete">
                 删除
               </el-button>
 
-              <el-button plain type="primary" @click="addOrEdit('add')" icon="el-icon-document-add">
+              <el-button type="primary" @click="addOrEdit('add')" icon="el-icon-document-add">
                 新建
               </el-button>
             </td>
@@ -238,7 +238,6 @@ export default {
   margin-top: 3px;
   margin-bottom: 3px;
 }
-
 
 
 .el-pagination {
