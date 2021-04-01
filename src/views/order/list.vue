@@ -1381,6 +1381,10 @@ export default {
       this.searchParam.isBackend = '1'
     }
 
+    if (this.$route.query.status != undefined) {
+      this.searchParam.status = "50"
+    }
+
     this.initLoad()
     this.initAddrList()
     this.loadtypeIdList()
