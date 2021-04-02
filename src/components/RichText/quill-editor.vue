@@ -1,7 +1,7 @@
 <template>
    <div class="rich-text">
         <quill-editor v-model="richText"  ref="myQuillEditor" class="editer" :options="editorOption" @ready="onEditorReady($event)"></quill-editor>
-        <el-upload 
+        <el-upload
         v-show='false'
         class="avatar-uploader"
         :action="uploadUrl"
@@ -68,7 +68,7 @@ export default {
             toolbar: {
               container:[
                 [{ 'size': ['small', false, 'large'] }],
-                [{ 'color': [] }, { 'background': [] }], 
+                [{ 'color': [] }, { 'background': [] }],
                 [{ 'font': [] }],
                 [{ 'align': [] }],
                 ['bold', 'italic'],
@@ -112,6 +112,14 @@ export default {
 
     },
     handleAvatarSuccess(res,file){
+      let fileSize = file.size / 1024 / 1024 < 3;
+      if (!fileSize) {
+        this.$message({
+          message: '图片大小不能超过3MB',
+          type: 'warning'
+        })
+        return false;
+      }
       let imageUrl = res.data.url
       let quill = this.$refs.myQuillEditor.quill
       let length = quill.getSelection().index;

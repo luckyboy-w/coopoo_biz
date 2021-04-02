@@ -212,6 +212,25 @@
               />
             </el-select>
           </el-form-item>
+
+          <el-form-item label="视频">
+                        <el-input v-show="false" v-model="dataForm.goodsVideo" :disabled="isHiddenEditGood" />
+                        <el-upload :class="{hide:hideGoodVideoUpload}" :action="uploadVideoUrl" list-type="picture-card" v-bind:on-progress="uploadVideoProcess"
+                          v-bind:on-success="handleVideoSuccess" v-bind:before-upload="beforeUploadVideo" v-bind:show-file-list="false"
+                          :disabled="isHiddenEditGood" >
+                          <video v-if="dataForm.goodsVideo !='' && !videoFlag" v-bind:src="dataForm.goodsVideo" class="video-avatar" style="height: inherit;min-width: -webkit-fill-available;"
+                            controls="controls">
+                            您的浏览器不支持视频播放
+                          </video>
+                          <i v-else-if="dataForm.goodsVideo =='' && !videoFlag" class="el-icon-plus"></i>
+                          <i v-if="dataForm.goodsVideo !='' && !videoFlag" @click="handleGoodVideoRemove" class="el-icon-error" style="position: absolute;top: 0;display: flex;"></i>
+                          <el-progress v-if="videoFlag == true" type="circle" v-bind:percentage="videoUploadPercent" style="margin-top:7px;"></el-progress>
+                        </el-upload>
+                        <el-dialog>
+                          <img width="100%" :src="imageUrl" alt>
+                        </el-dialog>
+                    </el-form-item>
+
           <el-form-item label="封面图片">
             <div id="front-img">
               <el-input v-show="false" v-model="dataForm.goodFrontImage" :disabled="isHiddenEditGood"/>
@@ -345,20 +364,20 @@
           <el-form-item v-show="false" label="是否礼品">
             <el-input v-model="isGift" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
-          <el-form-item label="是否推荐">
+          <el-form-item v-if="dataForm.isMarketing == 0" label="是否推荐">
             <el-switch v-model="dataForm.recommend" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item v-if="dataForm.isMarketing == 0" label="是否定制">
             <el-switch v-model="dataForm.custom" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
-          <el-form-item label="商品风格专场">
+         <!-- <el-form-item label="商品风格专场">
             <el-checkbox-group v-model="goodStyleList" :disabled="isHiddenEditGood">
               <el-checkbox v-for="styleText in styleList" :key="styleText" :label="styleText">{{
                   styleText
                 }}
               </el-checkbox>
             </el-checkbox-group>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="商家承偌服务">
             <el-checkbox-group v-model="serviceRuleList" :disabled="isHiddenEditGood">
               <el-checkbox v-for="obj in buServiceList" :key="obj" :label="obj">{{ obj }}</el-checkbox>
@@ -444,8 +463,8 @@ export default {
       dialogImageUrl: '',
       loading: false,
       addFrontCls: 'el-icon-plus',
-      styleList: ['新品上架', '七星睡眠'],
-      goodStyleList: [],
+      // styleList: ['新品上架', '七星睡眠'],
+      // goodStyleList: [],
       buServiceList: ['正品保证', '全场包邮', '无理由退货', '超时赔偿'],
       serviceRuleList: [],
       typeIdList: [],
@@ -458,6 +477,8 @@ export default {
       hideGoodFrontImageUpload: false,
       uploadGoodFrontImageUrl: '',
       uploadSkuImgUrl: getUploadUrl() + '?groupId=-1',
+      hideGoodVideoUpload:false,
+      uploadVideoUrl: getUploadUrl(),
       fileSortImage: 0,
       imageUrl: '',
       fileList: [],
@@ -469,6 +490,7 @@ export default {
       },
       dataForm: {
         afterSaleId: '',
+        goodsVideo:'',
         goodName: '',
         goodOrigin: '',
         goodMerit: '',
@@ -486,7 +508,7 @@ export default {
         recommend: true,
         custom: true,
         skuPriceList: [],
-        goodStyle: '',
+        // goodStyle: '',
         serviceRule: '',
         stockType: '2',
         goodImage: '',
@@ -525,7 +547,12 @@ export default {
         //     { skuText: '' }
         //   ]
         // }
-      ]
+      ],
+      videoFlag: false,
+      //是否显示进度条
+      videoUploadPercent: "",
+      //进度条的进度，
+      isShowUploadVideo: false,
     }
   },
   computed: {
@@ -580,6 +607,51 @@ export default {
 
       this.loadEditData()
 
+    },
+    //上传前回调
+    beforeUploadVideo(file) {
+      var fileSize = file.size / 1024 / 1024 < 50;
+      // , 'video/ogg', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb', 'video/mov'
+      if (['video/mp4'].indexOf(file.type) == -1) {
+        this.$message({
+          message: '请上传正确的视频格式',
+          type: 'warning'
+        })
+        return false;
+      }
+      if (!fileSize) {
+        this.$message({
+          message: '视频大小不能超过50MB',
+          type: 'warning'
+        })
+        return false;
+      }
+      this.isShowUploadVideo = false;
+    },
+    //进度条
+    uploadVideoProcess(event, file, fileList) {
+      this.videoFlag = true;
+      this.videoUploadPercent = file.percentage.toFixed(0) * 1;
+    },
+    //上传成功回调
+    handleVideoSuccess(res, file) {
+      this.isShowUploadVideo = true;
+      this.videoFlag = false;
+      this.videoUploadPercent = 0;
+      console.log(res, 'res')
+      //后台上传地址
+      if (res.code == 200) {
+        this.dataForm.goodsVideo=res.data.url;
+      } else {
+        this.$message({
+          message: res.message,
+          type: 'warning'
+        })
+      }
+    },
+    handleGoodVideoRemove(res) {
+      console.log('res删除',res)
+      this.dataForm.goodsVideo=''
     },
     changeImgMask(index, flag) {
       this.$refs.imgMask[index].style = flag ? 'display:block' : 'display:none'
@@ -945,7 +1017,7 @@ export default {
         this.dataForm.files = []
         this.dataForm.detailStr = JSON.stringify(this.detail)
         this.dataForm.skuJsonStr = JSON.stringify(this.tableList)
-        this.dataForm.goodStyle = this.goodStyleList.join(',')
+        // this.dataForm.goodStyle = this.goodStyleList.join(',')
         this.dataForm.serviceRule = this.serviceRuleList.join(',')
         // 把ID转换成Text
         // [{"name":"颜色","list":["1298268253058621441","1298268253058621441"]},{"name":"尺寸","list":["1298268035080642561"]}]
@@ -974,7 +1046,7 @@ export default {
         if (this.dataForm.isMarketing == 1) {
           this.dataForm.custom = null
         }
-
+        console.log(this.dataForm,'传的值')
         const param = JSON.stringify(this.dataForm)
 
         try {
@@ -1051,7 +1123,7 @@ export default {
         this.uploadGoodFrontImageList = []
         this.uploadGoodImageList = []
 
-        this.goodStyleList = this.editData.goodStyle.split(',')
+        // this.goodStyleList = this.editData.goodStyle.split(',')
         this.serviceRuleList = this.editData.serviceRule.split(',')
         this.dataForm = this.editData
         this.dataForm.isMarketing = this.dataForm.isMarketing + ''

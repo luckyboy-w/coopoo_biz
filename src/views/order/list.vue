@@ -92,7 +92,7 @@
 
         <div class="tabTd">
           <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
-          <el-button type="primary" icon="el-icon-download" @click="expordivata()">导出</el-button>
+          <el-button type="primary" icon="el-icon-download" @click="exportData()">导出</el-button>
         </div>
         <div class="tabTd">
           <el-button v-if="searchParam.status == 10" @click="showOnlineBatchSendOrder()" type="primary">在线批量发货
