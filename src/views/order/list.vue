@@ -45,6 +45,7 @@
               <el-option value="30" label="待支付"></el-option>
               <el-option value="40" label="已退货"></el-option>
               <el-option value="41" label="退货中"></el-option>
+              <el-option value="50" label="交易完成"></el-option>
               <el-option value="60" label="定制信息确认中"></el-option>
             </el-select>
           </div>
