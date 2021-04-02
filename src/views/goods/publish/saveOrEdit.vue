@@ -345,7 +345,7 @@
           <el-form-item v-show="false" label="是否礼品">
             <el-input v-model="isGift" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
-          <el-form-item label="是否推荐">
+          <el-form-item v-if="dataForm.isMarketing == 0" label="是否推荐">
             <el-switch v-model="dataForm.recommend" inactive-value="0" active-value="1" :disabled="isHiddenEditGood"/>
           </el-form-item>
           <el-form-item v-if="dataForm.isMarketing == 0" label="是否定制">
