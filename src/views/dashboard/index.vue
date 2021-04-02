@@ -123,7 +123,8 @@
           :to="{
                 path: '/bc-order/list',
                 query: {
-                  dt: '1'
+                  dt: '1',
+                  status:50
                 }
             }"
         >
