@@ -140,7 +140,7 @@
                   <!--                  {{ `${index} , ${scope.$index}` }}-->
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="stock" label="库存">
+              <el-table-column align="center" prop="stock" label="库存" width="250">
                 <template slot-scope="scope">
                   <el-input-number v-model="scope.row.stock" :disabled="dataForm.stockType==1 || isHiddenEditGood"/>
                 </template>
@@ -561,7 +561,17 @@ export default {
       //是否显示进度条
       videoUploadPercent: '',
       //进度条的进度，
-      isShowUploadVideo: false
+      isShowUploadVideo: false,
+
+      // SKU 自动填充的逻辑
+      SEPARATOR: '@',
+      // oldTableList: {
+      //   // '黄@L@华为': {}
+      // }
+      oldTableMap: {
+        // '黄@L@华为': {}
+      }
+
     }
   },
   computed: {
@@ -1267,12 +1277,31 @@ export default {
 
     // 生成SKU列表
     generatorSkuList() {
+      this.fillTableList()
       this.columnList = []
       this.tableList = []
 
       for (let i = this.dbAttrList.length - 1; i >= 0; i--) {
         this.tableList = this.addColumn(this.tableList, this.dbAttrList[i].specName, this.dbAttrList[i].skuObj)
       }
+    },
+
+    // 填充老数据
+    fillTableList() {
+      this.oldTableMap = new Map()
+      for (const skuInfo of this.tableList) {
+        let fillData = {}
+        let key = this.getKeyByTdList(skuInfo.tdList)
+
+        this.oldTableMap.set(key, skuInfo)
+      }
+    },
+
+    // 通过动态列表 获取对应Key值
+    getKeyByTdList(list) {
+      return list.map(item => {
+        return item.value
+      }).join(this.SEPARATOR)
     },
 
     // 添加列
@@ -1320,12 +1349,18 @@ export default {
             skuText: `${specName}:${specValue[i].skuText};${dataList[j].skuText}`,
             skuCompareText: `${specValue[i].skuText}:${dataList[j].skuCompareText}`,
             skuCompareId: dataList[j].skuCompareId,
-            stock: dataList[j].stock,
-            salePrice: dataList[j].salePrice,
-            saleMemPrice: dataList[j].saleMemPrice,
-            goodsCode: dataList[j].goodsCode,
-            supplyPrice: dataList[j].supplyPrice,
-            skuImg: dataList[j].skuImg
+            // stock: dataList[j].stock,
+            // salePrice: dataList[j].salePrice,
+            // saleMemPrice: dataList[j].saleMemPrice,
+            // goodsCode: dataList[j].goodsCode,
+            // supplyPrice: dataList[j].supplyPrice,
+            // skuImg: dataList[j].skuImg
+            stock: '',
+            salePrice: '',
+            saleMemPrice: '',
+            goodsCode: '',
+            supplyPrice: '',
+            skuImg: ''
           })
         }
       }
@@ -1333,6 +1368,40 @@ export default {
       // 当前属性有规格被选中 添加动态列
       if (isAddColume) {
         this.columnList = [specName, ...this.columnList]
+      }
+
+      // 判断之前的老值 进行填充
+      // for (const newData of newDataList) {
+      //   let key = this.getKeyByTdList(newData.tdList)
+      //   if (this.oldTableMap.get(key)) {
+      //     let oldData = this.oldTableMap.get(key)
+      //     // stock: '',
+      //     // salePrice: '',
+      //     // saleMemPrice: '',
+      //     // goodsCode: '',
+      //     // supplyPrice: '',
+      //     // skuImg: ''
+      //     // 用老的数据替换新的这几个值
+      //     let { stock, salePrice, saleMemPrice, goodsCode, supplyPrice, skuImg } = oldData
+      //     newData = { ...newData, stock, salePrice, saleMemPrice, goodsCode, supplyPrice, skuImg }
+      //     console.log(JSON.stringify(newData))
+      //   }
+      // }
+
+      for (let i = 0; i < newDataList.length; i++) {
+        let key = this.getKeyByTdList(newDataList[i].tdList)
+        if (this.oldTableMap.get(key)) {
+          let oldData = this.oldTableMap.get(key)
+          // stock: '',
+          // salePrice: '',
+          // saleMemPrice: '',
+          // goodsCode: '',
+          // supplyPrice: '',
+          // skuImg: ''
+          // 用老的数据替换新的这几个值
+          let { stock, salePrice, saleMemPrice, goodsCode, supplyPrice, skuImg } = oldData
+          newDataList[i] = { ...newDataList[i], stock, salePrice, saleMemPrice, goodsCode, supplyPrice, skuImg }
+        }
       }
 
       // 拼装过了 返回拼装的新结构
