@@ -1469,6 +1469,11 @@ export default {
           this.onlineSendOrderFrm.addrId = res.data[0].addrId
           this.sendOrderFrm.sendAddrId = res.data[0].addrId
           this.offlineSendAddrId = res.data[0].addrId
+
+          for(let i = 0; i < this.addrList.length; i++){
+            const addr = this.addrList[i]
+            addr.addrDtl = addr.provincetext + addr.citytext + addr.areaText + addr.addrDtl
+          }
         }
       })
     },
