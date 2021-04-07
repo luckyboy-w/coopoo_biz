@@ -88,9 +88,6 @@
                 {{ scope.row | parseStatus }}
               </template>
             </el-table-column>
-            <el-table-column prop="stock" label="总销量">
-              0
-            </el-table-column>
 
             <el-table-column prop="createTime" label="创建时间">
               <template slot-scope="scope">
