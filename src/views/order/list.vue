@@ -1374,6 +1374,7 @@ export default {
     }
     if (this.$route.query.dt != undefined) {
       this.searchParam.dataType = this.$route.query.dt
+      this.searchParam.isOverDuePayment = '1'
       if (this.searchParam.dataType == '2') {
         this.searchParam.riskOrder = 'all'
       }
@@ -1382,7 +1383,7 @@ export default {
     }
 
     if (this.$route.query.status != undefined) {
-      this.searchParam.status = "50"
+      this.searchParam.status = '50'
     }
 
     this.initLoad()
