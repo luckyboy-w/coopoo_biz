@@ -14,7 +14,7 @@
             />
           </el-form-item>
           <el-form-item label="商品类型">
-            <el-select v-model="dataForm.isMarketing" :disabled="isHiddenEditGood">
+            <el-select v-model="dataForm.isMarketing" :disabled="dataForm.id != ''">
               <el-option label="普通商品" value="0"/>
               <el-option label="活动商品" value="1"/>
             </el-select>
