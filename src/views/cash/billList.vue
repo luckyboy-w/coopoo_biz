@@ -31,27 +31,7 @@
             <el-button type="primary" style="margin-left:20px" @click="exportDtl()">导出Excel</el-button>
           </td>
         </tr>
-        <!--   <el-row style="line-height:40px;padding:10px 0px ">
-                  <el-col :span="1.5" style="padding-left:10px">订单号</el-col>
-                  <el-col :span="2"><el-input v-model="searchParam.orderNo" placeholder=""></el-input></el-col>
-                  <el-col :span="1.5" style="padding-left:10px">入账时间</el-col>
-                  <el-col :span="8">
-                      <el-date-picker
-                          v-model="searchParam.startTime"
-                          type="date"
-                          placeholder="开始日期">
-                      </el-date-picker>
-                      至
-                      <el-date-picker
-                          v-model="searchParam.endTime"
-                          type="date"
-                          placeholder="结束日期">
-                      </el-date-picker>
-                  </el-col>
-                  <el-col :span="8" style="padding-left:10px">
-                        <el-button type="primary" @click="search()">搜索</el-button> -->
-        <!--  </el-col>
-              </el-row> -->
+
         <el-table
           ref="noBillData"
           :data="noBillData.list"
@@ -84,8 +64,16 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination v-show="noBillData.total != 0" :total="noBillData.total" background layout="prev, pager, next"
-                       @current-change="currentPage" @prev-click="currentPage" @next-click="currentPage"
+        <el-pagination
+          v-show="noBillData.total != 0"
+          :total="noBillData.total"
+          background
+          layout="prev, pager, next"
+          @current-change="currentPage"
+          @prev-click="currentPage"
+          @next-click="currentPage"
+          :page-size="searchParam.pageSize"
+          :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
       <el-tab-pane label="结算中" name="settleFinsh" style="height:600px">
@@ -139,9 +127,16 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination v-show="settleFinshData.total != 0" :total="settleFinshData.total" background
-                       layout="prev, pager, next"
-                       @current-change="currentPage" @prev-click="currentPage" @next-click="currentPage"
+        <el-pagination
+          v-show="settleFinshData.total != 0"
+          :total="settleFinshData.total"
+          background
+          layout="prev, pager, next"
+          @current-change="currentPage"
+          @prev-click="currentPage"
+          @next-click="currentPage"
+          :page-size="searchParam.pageSize"
+          :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
       <el-tab-pane label="已结算" name="settleEnd" style="height:600px">
@@ -194,9 +189,16 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination v-show="settleEndData.total != 0" :total="settleEndData.total" background
-                       layout="prev, pager, next"
-                       @current-change="currentPage" @prev-click="currentPage" @next-click="currentPage"
+        <el-pagination
+          v-show="settleEndData.total != 0"
+          :total="settleEndData.total"
+          background
+          layout="prev, pager, next"
+          @current-change="currentPage"
+          @prev-click="currentPage"
+          @next-click="currentPage"
+          :page-size="searchParam.pageSize"
+          :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
 
@@ -255,9 +257,16 @@
           <el-table-column prop="platformFee" label="服务金额" min-width="24%">
           </el-table-column>
         </el-table>
-        <el-pagination v-show="billCashData.total != 0" :total="billCashData.total" background
-                       layout="prev, pager, next"
-                       @current-change="currentPage" @prev-click="currentPage" @next-click="currentPage"
+        <el-pagination
+          v-show="billCashData.total != 0"
+          :total="billCashData.total"
+          background
+          layout="prev, pager, next"
+          @current-change="currentPageDetail"
+          @prev-click="currentPageDetail"
+          @next-click="currentPageDetail"
+          :page-size="searchParam.pageSize"
+          :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
 
@@ -613,6 +622,12 @@ export default {
       this.searchParam.pageNum = pageNum
       this.loadList()
       this.loadList_()
+      this.searchDtl()
+
+    },
+    currentPageDetail(pageNum) {
+      this.searchParam.pageNum = pageNum
+      this.searchDtl()
 
     },
     loadList() {
