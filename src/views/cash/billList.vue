@@ -5,7 +5,7 @@
                 <el-col v-if="!isCanBill" :span="24" style="color: red">今天不是结算日</el-col>
                 <el-col :span="24">{{billDate}}</el-col>
             </el-row> -->
-      <el-tab-pane label="可结算" name="readyBill" style="height:600px">
+      <el-tab-pane label="可结算" name="readyBill">
         <span slot="label" class="my-tab-label">可结算</span>
         <tr>
           <td>订单号:&nbsp;</td>
@@ -76,7 +76,7 @@
           :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
-      <el-tab-pane label="结算中" name="settleFinsh" style="height:600px">
+      <el-tab-pane label="结算中" name="settleFinsh">
         <span slot="label" class="my-tab-label">结算中</span>
         <tr>
           <td>订单号:</td>
@@ -139,7 +139,7 @@
           :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
-      <el-tab-pane label="已结算" name="settleEnd" style="height:600px">
+      <el-tab-pane label="已结算" name="settleEnd">
         <span slot="label" class="my-tab-label">已结算</span>
         <tr>
           <td>订单号:</td>
@@ -202,7 +202,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane label="明细" name="dataDtl" v-if="dataDtl" style="height:600px">
+      <el-tab-pane label="明细" name="dataDtl" v-if="dataDtl" >
         <span slot="label" class="my-tab-label">明细</span>
         <el-row style="line-height:40px;padding:10px 0px ">
           <el-col :span="24" style="padding-left:10px">
