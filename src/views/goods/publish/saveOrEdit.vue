@@ -255,6 +255,9 @@
                 :disabled="isHiddenEditGood"
               >
                 <i :class="addFrontCls"/>
+                <div slot="tip" class="el-upload__tip">推荐图片尺寸:
+                  {{ dataForm.isMarketing == 0 ? '800 * 800' : '1200 * 636' }}
+                </div>
               </el-upload>
               <el-dialog>
                 <img width="100%" :src="imageUrl" alt>
@@ -275,6 +278,7 @@
               :disabled="isHiddenEditGood"
             >
               <i class="el-icon-plus"/>
+              <div slot="tip" class="el-upload__tip">推荐图片尺寸: 800 * 800</div>
             </el-upload>
             <el-dialog>
               <img width="100%" :src="imageUrl" alt>
