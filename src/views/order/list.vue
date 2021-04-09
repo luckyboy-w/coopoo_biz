@@ -463,7 +463,7 @@
             </el-form-item>
 
             <el-form-item label="包裹数量" prop="quantity" style="width:460px">
-              <el-input v-model.number="onlineSendOrderFrm.quantity"></el-input>
+              <el-input type="number" v-model.number="onlineSendOrderFrm.quantity"></el-input>
             </el-form-item>
 
             <el-form-item label="备注">
