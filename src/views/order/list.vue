@@ -100,6 +100,7 @@
           <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
           </el-button>
           <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
+          <el-button @click="downloadPrintSoftware" type="primary">下载打印软件</el-button>
         </div>
       </div>
       <div class="ly-table-panel">
