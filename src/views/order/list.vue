@@ -923,16 +923,6 @@
           <el-col :span="6"></el-col>
         </el-row>
 
-        <!--        物流信息-->
-        <span class="main-title">
-          <el-col :span="24">物流信息</el-col>
-        </span>
-        <el-row :gutter="20" class="main-content">
-          <el-col :span="6">物流公司：{{ ordDtl.expressName }}</el-col>
-          <el-col :span="6">快递单号：{{ ordDtl.expressNo }}</el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-
         <!--        发票信息-->
         <span class="main-title">
           <el-col :span="24">发票信息</el-col>
@@ -965,7 +955,30 @@
             <el-col :span="12">定制内容：{{ ordDtl.ordDtlList[0].goodCustom.customInfo || '' }}</el-col>
           </el-row>
         </template>
-
+		<!--        物流信息-->
+		<span class="main-title">
+		  <el-col :span="24">物流信息</el-col>
+		</span>
+		<el-row :gutter="20" class="main-content">
+		  <el-col :span="6">物流公司：{{ ordDtl.expressName }}</el-col>
+		  <el-col :span="6">快递单号：{{ ordDtl.expressNo }}</el-col>
+		  <el-col :span="6"></el-col>
+		</el-row>
+    <div>
+        <div class="steps-view">
+          <div class="steps" v-for="item in logisticsList" :key="item.key">
+            <div style="min-width: 100px;text-align: right;">
+               <div>{{item.time1}}</div>
+               <div>{{item.time2}}</div>
+            </div>
+            <div class="steps-node"></div>
+            <div >
+              <div>{{item.text}}</div>
+              <div>{{item.acceptStation}}</div>
+            </div>
+          </div>
+        </div>
+    </div>
         <!--        <div style="line-height:400px;height:20px">-->
         <!--          <el-row :gutter="24" style="line-height:40px;font-size:12px">-->
         <!--            <el-col :span="24">&nbsp;&nbsp;&nbsp;111</el-col>-->
@@ -1195,6 +1208,8 @@ export default {
         ordPrice: '',
         goodNum: '2'
       },
+      //物流轨迹信息数组
+      logisticsList:[],
       //订单状态;0:订单被取消;10:已提交,待发货20;已付款,待发货;30:已收货;待支付;40:退货/售后;50:交易完成/未评价;51:交易完成/已评价
       ordMarks: {
         10: '待发货',
@@ -1533,6 +1548,7 @@ export default {
       this.showOrdDtl = true
       this.ordDtl = data
       this.generatorStepList()
+      this.getLogistics()
     },
     generatorStepList() {
       this.stepStatus = 0
@@ -1663,6 +1679,7 @@ export default {
       this.showOrdDtl = true
       this.ordDtl = data
       this.generatorStepList()
+      this.getLogistics()
     },
     dealOrd(row) {
       const param = {
@@ -2238,7 +2255,88 @@ export default {
           this.logisticsCompanyTypeId = res.data[0].id
         }
       })
-    }
+    },
+    // 获取物流轨迹
+    getLogistics() {
+        let that = this
+        let params = {
+          recPhone: that.ordDtl.recPhone,
+          orderNo:that.ordDtl.orderNo
+        }
+        if (that.ordDtl.expressNo&&that.ordDtl.expressNo!='') {
+          params.logisticCode=that.ordDtl.expressNo
+        }
+        if (that.ordDtl.expressId&&that.ordDtl.expressId!='') {
+          params.shipperCode=that.ordDtl.expressId
+        }
+        getMethod('/bc/order/getLogisticsInfo', params)
+          .then(res => {
+            console.log(res)
+            if (res.code == 200) {
+              let result = res.data
+              let arr = []
+              let text = ''
+              let title = ''
+              result.map(item => {
+                if (item.acceptTime) {
+                  arr = item.acceptTime.split(" ")
+                }
+                item.time1 = arr[0].substring(0, 10)
+                item.time2 = arr[1].substring(0, 8)
+              })
+              let status
+              for (let i = 0; i < result.length; i++) {
+                status =result[i].action
+              if (status==0) {
+                result[i].text = '暂无轨迹信息';
+              } else if(status=='1'){
+                result[i].text = '已揽收';
+              } else if(status=='2'){
+                result[i].text = '运输中';
+              } else if(status==201){
+                result[i].text = '到达派件城市';
+              } else if(status==202){
+                result[i].text = '派件中';
+              } else if(status==211){
+                result[i].text = '已放入快递柜或驿站';
+              } else if(status==3){
+                result[i].text = '已签收';
+              } else if(status==301){
+                result[i].text = '已签收';
+              } else if(status==302){
+                result[i].text = '派件异常后最终签收';
+              } else if(status==304){
+                result[i].text = '代收签收';
+              } else if(status==311){
+                result[i].text = '快递柜或驿站签收';
+              } else if(status==4){
+                result[i].text = '问题件';
+              } else if(status==401){
+                result[i].text = '发货无信息';
+              } else if(status==402){
+                result[i].text = '超时未签收';
+              } else if(status==403){
+                result[i].text = '超时未更新';
+              }else if(status==404){
+                result[i].text = '拒收（退件）';
+              } else if(status==405){
+                result[i].text = '派件异常';
+              } else if(status==406){
+                result[i].text = '退货签收';
+              }else if(status==407){
+                result[i].text = '退货未签收';
+              } else if(status==412){
+                result[i].text = '快递柜或驿站超时未取';
+              } else if(status== '001'){
+                result[i].text = '已下单';
+              }else if(status=='002'){
+                result[i].text = '已发货';
+              }
+            }
+            that.logisticsList=result
+          }
+          })
+      }
   }
 }
 </script>
@@ -2363,5 +2461,34 @@ export default {
   font-size: 14px;
   text-align: -webkit-center;
 }
-
+.steps-view{
+    padding: 0 20px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+}
+.steps-view::before{
+  content: "";
+    position: absolute;
+    width: 2px;
+    background-color: #d8d8d8;
+    height: calc(100% - 0px);
+    left: 138px;
+    z-index: 2;
+}
+.steps{
+  display: flex;
+  min-height: 60px;
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: 20px;
+  height: auto;
+}
+.steps-node{
+  background-color: #d8d8d8;
+  min-width: 18px;
+  border-radius: 25px;
+  height: 18px;
+  margin: 0 30px 0 10px;
+}
 </style>
