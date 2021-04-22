@@ -11,7 +11,7 @@
               <div class="card-panel-text">
                 审核不通过
               </div>
-              <count-to :start-val="0" :end-val="ordDtl.rejectGood" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.rejectGood" :duration="2000" class="card-panel-num"/>
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
@@ -29,7 +29,7 @@
               <div class="card-panel-text">
                 在售商品
               </div>
-              <count-to :start-val="0" :end-val="ordDtl.onSale" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.onSale" :duration="2000" class="card-panel-num"/>
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
@@ -47,7 +47,7 @@
               <div class="card-panel-text">
                 待发货
               </div>
-              <count-to :start-val="0" :end-val="ordDtl.reaySend" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.reaySend" :duration="2000" class="card-panel-num"/>
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
@@ -65,7 +65,7 @@
               <div class="card-panel-text">
                 待支付
               </div>
-              <count-to :start-val="0" :end-val="ordDtl.reayPay" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.reayPay" :duration="2000" class="card-panel-num"/>
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
@@ -91,7 +91,7 @@
               <div class="card-panel-text">
                 待回复订单
               </div>
-              <count-to :start-val="0" :end-val="ordDtl.reayEval" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.reayEval" :duration="2000" class="card-panel-num"/>
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
@@ -110,7 +110,9 @@
               <div class="card-panel-text">
                 退货中订单
               </div>
-              <count-to :start-val="0" :end-val="ordDtl.reayReject" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.reayReject" :duration="2000"
+                        class="card-panel-num"
+              />
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
@@ -137,7 +139,7 @@
                 昨日交易额
               </div>
               <!--              <span style="font-size:20px">{{ ordDtl.dealLast }}</span>-->
-              <count-to :start-val="0" :end-val="ordDtl.dealLast" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.dealLast" :duration="2000" class="card-panel-num"/>
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
@@ -162,7 +164,7 @@
               <div class="card-panel-text">
                 超期未付款
               </div>
-              <count-to :start-val="0" :end-val="ordDtl.exceedOrd" :duration="100" class="card-panel-num"/>
+              <count-to :start-val="0" :end-val="ordDtl.exceedOrd" :duration="2000" class="card-panel-num"/>
             </div>
             <el-divider></el-divider>
             <div class="card-panel-footer-text">点击查看</div>
