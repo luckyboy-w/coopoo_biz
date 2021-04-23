@@ -52,6 +52,16 @@
         </div>
 
         <div class="tabTd">
+        <div>支付方式：</div>
+        <div>
+          <el-select v-model="searchParam.payType" placeholder="请选择">
+            <el-option value="" label="全部"></el-option>
+            <el-option value="2" label="微信"></el-option>
+            <el-option value="1" label="支付宝"></el-option>
+          </el-select>
+        </div>
+        </div>
+        <div class="tabTd">
           <div>下单时间：</div>
           <div>
             <el-date-picker style="width:203px" value-format="yyyy-MM-dd" v-model="searchParam.startTime" type="date"
@@ -100,7 +110,6 @@
           <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
           </el-button>
           <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
-          <el-button @click="downloadPrintSoftware" type="primary">下载打印软件</el-button>
         </div>
       </div>
       <div class="ly-table-panel">
@@ -166,6 +175,16 @@
               <template slot-scope="scope">
                 {{ scope.row.taxId != undefined && scope.row.taxId != '' ? '是' : '否' }}
               </template>
+            </el-table-column>
+            <el-table-column
+              prop="payType"
+              label="支付方式"
+              width="150px"
+            >
+            <template slot-scope="scope">
+              <span v-if="scope.row.payType == 1">支付宝</span>
+              <span v-if="scope.row.payType == 2 || scope.row.payType == 3">微信</span>
+            </template>
             </el-table-column>
             <el-table-column prop="status" label="订单状态" width="150px">
               <template slot-scope="scope">
@@ -1281,6 +1300,7 @@ export default {
         stockNum: ''
       },
       searchParam: {
+        payType:'',
         orderNo: '',
         recUname: '',
         recMobile: '',
