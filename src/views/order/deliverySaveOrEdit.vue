@@ -53,8 +53,7 @@
 </template>
 
 <script>
-import { getMethod, postMethod, putMethod } from '@/api/request'
-import { isInteger } from '@/utils/validate'
+import { getMethod, postMethod, putMethod } from '@/api/request-new'
 
 export default {
   props: {
@@ -104,18 +103,18 @@ export default {
   },
   methods: {
     async loadDeliveryCompanyList() {
-      const { data } = await getMethod('bu/delivery/allCompanyList')
+      const { data } = await getMethod('/delivery/allCompanyList')
       this.deliveryCompanyList = data
     },
     async loadDeliveryTypeList(companyId) {
       if (companyId > 0) {
-        const { data } = await getMethod(`bu/delivery/allTypeList/${companyId}`)
+        const { data } = await getMethod(`/delivery/allTypeList/${companyId}`)
         this.deliveryTypeList = data
       }
     },
     async loadDeliveryAttrList(companyId) {
       if (companyId > 0) {
-        const { data } = await getMethod(`bu/delivery/attrList/${companyId}`)
+        const { data } = await getMethod(`/delivery/attrList/${companyId}`)
         this.deliveryAttrList = data
       }
     },
@@ -156,7 +155,8 @@ export default {
     },
     async addObject() {
       if (this.validate()) {
-        const { code } = await postMethod('/bu/delivery/company', this.dataForm)
+        this.dataForm.kdnArgs = JSON.stringify(this.dataForm.kdnArgs)
+        const { code } = await postMethod('/delivery/company', this.dataForm)
         if (code != 200) {
           this.$message.error('操作失败')
           return
@@ -167,7 +167,8 @@ export default {
     },
     async updateObject() {
       if (this.validate()) {
-        const { code } = await putMethod('/bu/delivery/company', this.dataForm)
+        this.dataForm.kdnArgs = JSON.stringify(this.dataForm.kdnArgs)
+        const { code } = await putMethod('/delivery/company', this.dataForm)
         if (code != 200) {
           this.$message.error('操作失败')
           return

@@ -112,7 +112,7 @@
 
 <script>
 import deliverySaveOrEdit from './deliverySaveOrEdit'
-import { getMethod, postMethod, putMethod, deleteMethod } from '@/api/request'
+import { getMethod, putMethod, deleteMethod } from '@/api/request-new'
 
 export default {
   computed: {},
@@ -144,7 +144,7 @@ export default {
       this.loadList()
     },
     async loadList() {
-      const { data } = await getMethod('/bu/delivery/companyList', this.searchParam)
+      const { data } = await getMethod('/delivery/companyList', this.searchParam)
       this.tableData = data
       this.showPagination = this.tableData.total == 0
     },
@@ -152,7 +152,7 @@ export default {
       this.multipleSelection = val
     },
     async enable(id) {
-      const res = await putMethod('/bu/delivery/enable', { id })
+      const res = await putMethod('/delivery/enable', { id })
       if (res.code !== 200) {
         this.$message.error('操作失败')
         return
@@ -161,7 +161,7 @@ export default {
       this.loadList()
     },
     async disable(id) {
-      const res = await putMethod('/bu/delivery/disable', { id })
+      const res = await putMethod('/delivery/disable', { id })
       if (res.code !== 200) {
         this.$message.error('操作失败')
         return
@@ -187,7 +187,7 @@ export default {
           type: 'warning'
         })
 
-        const res = await deleteMethod('/bu/delivery/company', { ids: removeIds })
+        const res = await deleteMethod('/delivery/company', { ids: removeIds })
         if (res.code !== 200) {
           this.$message.error('删除失败')
           return
@@ -203,7 +203,7 @@ export default {
     },
     async addOrEdit(oper, rowIndex, data) {
       if (oper == 'edit') {
-        const res = await getMethod(`/bu/delivery/companyInfo/${data.list[rowIndex].id}`)
+        const res = await getMethod(`/delivery/companyInfo/${data.list[rowIndex].id}`)
         res.data.kdnArgs = JSON.parse(res.data.kdnArgs)
         this.editData = res.data
         this.showList = false
