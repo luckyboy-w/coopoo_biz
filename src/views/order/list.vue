@@ -1020,6 +1020,7 @@
 
 <script>
 import { getMethod, postMethod } from '@/api/request'
+import { getMethod as getMethodNew, postMethod as postMethodNew} from '@/api/request-new'
 import { formatDate } from '@/api/tools.js'
 import { getToken } from '@/utils/auth.js'
 import { getLodop } from '@/utils/lodop.js'
@@ -1499,7 +1500,7 @@ export default {
       return obj.addrDtl
     },
     initAddrList() {
-      getMethod('/bc/sendAddr/findList', { 'enable': 1, 'type': 1 }).then(res => {
+      getMethodNew('/address/findList', { 'enable': 1, 'type': 1 }).then(res => {
         this.addrList = res.data
         if (res.data.length > 0) {
           this.addrId = res.data[0].addrId
@@ -1525,17 +1526,6 @@ export default {
         scope.loadList()
       })
     },
-    doneGiftOrd(row) {
-      let scope = this
-      let param = {
-        orderNo: row.orderNo,
-        orderId: row.orderId
-      }
-      postMethod('/bc/order/doneGiftOrd', param).then(res => {
-        this.$message('已经发起收款，请等待用户支付')
-        scope.loadList()
-      })
-    },
     collectCus(rowObj) {
       this.dealPriceFrm.orderNo = rowObj.orderNo
       this.dealPriceFrm.orderId = rowObj.orderId
@@ -1555,7 +1545,7 @@ export default {
         return
       }
 
-      postMethod('/bc/order/dealOrdPrice', this.dealPriceFrm).then(res => {
+      postMethodNew('/order/dealOrdPrice', this.dealPriceFrm).then(res => {
         scope.dealPrice = false
         scope.loadList()
         this.$message({
@@ -1565,7 +1555,7 @@ export default {
       })
     },
     async getOrdDtl_() {
-      const { data } = await postMethod('/bc/order/getOrdDtl', { orderNo: this.orderNo_ })
+      const { data } = await postMethodNew('/order/getOrdDtl', { orderNo: this.orderNo_ })
       this.showOrdDtl = true
       this.ordDtl = data
       this.generatorStepList()
@@ -1696,7 +1686,7 @@ export default {
       }
     },
     async getOrdDtl(row) {
-      const { data } = await postMethod('/bc/order/getOrdDtl', { orderId: row.orderId })
+      const { data } = await postMethodNew('/order/getOrdDtl', { orderId: row.orderId })
       this.showOrdDtl = true
       this.ordDtl = data
       this.generatorStepList()
@@ -1711,7 +1701,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        postMethod('/bc/order/dealOrd', param).then(res => {
+        postMethodNew('/order/dealOrd', param).then(res => {
           this.loadList()
           this.$message(
             {
@@ -1730,7 +1720,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        postMethod('/bc/order/dealCustomOrd', param).then(res => {
+        postMethodNew('/order/dealCustomOrd', param).then(res => {
           this.loadList()
           this.$message(
             {
@@ -1749,7 +1739,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        postMethod('/bc/order/cancelOrd', param).then(res => {
+        postMethodNew('/order/cancelOrd', param).then(res => {
           this.loadList()
           this.$message('操作成功')
         })
@@ -2250,7 +2240,7 @@ export default {
         expressNo: '',
         opContent: ''
       },
-        postMethod('/bc/order/bizOrderList', this.searchParam).then(res => {
+        postMethodNew('/order/list', this.searchParam).then(res => {
           scope.tableData = res.data
           scope.sendOrder = false
           scope.updataOrder = false
@@ -2258,7 +2248,7 @@ export default {
         })
     },
     loadLogisticsCompanyList() {
-      getMethod('/bu/delivery/companyNameList').then(res => {
+      getMethodNew('/delivery/companyNameList').then(res => {
         this.logisticsCompanyList = res.data
         if (res.data.length > 0) {
           this.logisticsCompany = res.data[0]
@@ -2270,7 +2260,7 @@ export default {
       const param = {
         companyId: this.logisticsCompany.companyId
       }
-      getMethod('/bu/delivery/companyTypeList', param).then(res => {
+      getMethodNew('/delivery/companyTypeList', param).then(res => {
         this.logisticsCompanyTypeList = res.data
         if (res.data.length == 1) {
           this.logisticsCompanyTypeId = res.data[0].id

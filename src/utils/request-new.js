@@ -10,7 +10,6 @@ const errCode = {
 }
 
 const requestBodyUrl = []
-requestBodyUrl.push('/bc/order/bizOrderList')
 requestBodyUrl.push('/bu/orderBill/findListPost')
 requestBodyUrl.push('/bu/good/modityGoodStock')
 requestBodyUrl.push('/bc/order/confirmReturnOrder')
@@ -19,6 +18,7 @@ requestBodyUrl.push('/bu/orderBill/findPlatApplyBill')
 requestBodyUrl.push('/bc/order/batchOnlineSendOrder')
 requestBodyUrl.push('/bc/order/batchOfflineSendOrder')
 requestBodyUrl.push('/bc/order/orderPrintTemplate')
+requestBodyUrl.push('/order/list')
 requestBodyUrl.push('/delivery/company')
 
 // create an axios instance
