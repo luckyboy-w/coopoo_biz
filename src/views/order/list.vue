@@ -110,6 +110,7 @@
           <el-button v-if="searchParam.status == 10" @click="showOfflineBatchSendOrder()" type="primary">线下批量发货
           </el-button>
           <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
+          <el-button @click="downloadPrintSoftware" type="primary">下载打印软件</el-button>
         </div>
       </div>
       <div class="ly-table-panel">
@@ -1483,7 +1484,7 @@ export default {
         exportParam.push(key + '=' + param[key])
       }
       //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
-      window.open(process.env.VUE_APP_BASE_API + '/bc/order/export?token=' + getToken() + '&' + exportParam.join('&'))
+      window.open(process.env.VUE_APP_BASE_API_NEW + '/order/export?token=' + getToken() + '&' + exportParam.join('&'))
     },
     showOrdDtlClos() {
       this.showOrdDtl = false
@@ -1513,17 +1514,6 @@ export default {
             addr.addrDtl = addr.provincetext + addr.citytext + addr.areaText + addr.addrDtl
           }
         }
-      })
-    },
-    collect(row) {
-      let scope = this
-      let param = {
-        orderNo: row.orderNo,
-        orderId: row.orderId
-      }
-      postMethod('/bc/order/collectOrder', param).then(res => {
-        this.$message('已经发起收款，请等待用户支付')
-        scope.loadList()
       })
     },
     collectCus(rowObj) {
@@ -1761,7 +1751,7 @@ export default {
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
           })
-          postMethod('/bc/order/onlineSendOrder', this.onlineSendOrderFrm).then(res => {
+          postMethodNew('/order/onlineSendOrder', this.onlineSendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message)
               return
@@ -1813,7 +1803,7 @@ export default {
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
           })
-          postMethod('/bc/order/offlineSendOrder', this.sendOrderFrm).then(res => {
+          postMethodNew('/order/offlineSendOrder', this.sendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message)
               return
@@ -1840,7 +1830,7 @@ export default {
           this.sendOrderFrm.sendAddress = this.getAddrLabel(addrId)
           let express = this.expressList.find(item => item.id == this.sendOrderFrm.expressId)
           this.sendOrderFrm.expressName = express.text
-          postMethod('/bc/order/orderLogisticCode', this.sendOrderFrm).then(res => {
+          postMethodNew('/order/orderLogisticCode', this.sendOrderFrm).then(res => {
             if (res.code != 200) {
               this.$message.error(res.message)
               return
@@ -1866,7 +1856,7 @@ export default {
       let param = {
         orderId: rowObj.orderId
       }
-      postMethod('/bc/order/getOrdDtl', param).then(res => {
+      postMethodNew('/order/getOrdDtl', param).then(res => {
         if (res.code != 200) {
           this.$message.error(res.message)
           return
@@ -2027,7 +2017,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
 
-      postMethod('/bc/order/orderPrintTemplate', selectedOrderList).then(res => {
+      postMethodNew('/order/orderPrintTemplate', selectedOrderList).then(res => {
         if (res.data.length <= 0) {
           this.$message({
             message: '选中的订单没有电子面单',
@@ -2119,7 +2109,7 @@ export default {
         'addrId': this.addrId
       }
 
-      postMethod('/bc/order/batchOnlineSendOrder', param).then(res => {
+      postMethodNew('/order/batchOnlineSendOrder', param).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
@@ -2207,7 +2197,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
 
-      postMethod('/bc/order/batchOfflineSendOrder', this.offlineOrderList).then(res => {
+      postMethodNew('/order/batchOfflineSendOrder', this.offlineOrderList).then(res => {
         if (res.data.length > 0) {
           this.$alert(res.data, '批量发送订单出现错误', {
             dangerouslyUseHTMLString: true
@@ -2280,7 +2270,7 @@ export default {
         if (that.ordDtl.expressId&&that.ordDtl.expressId!='') {
           params.shipperCode=that.ordDtl.expressId
         }
-        getMethod('/bc/order/getLogisticsInfo', params)
+        getMethodNew('/order/getLogisticsInfo', params)
           .then(res => {
             console.log(res)
             if (res.code == 200) {
