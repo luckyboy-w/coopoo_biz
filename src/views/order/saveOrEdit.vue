@@ -64,6 +64,7 @@
 
 <script>
 import { getMethod, postMethod } from '@/api/request'
+import { postMethod as postMethodNew} from '@/api/request-new'
 import { isInteger } from '@/utils/validate'
 
 export default {
@@ -162,7 +163,7 @@ export default {
       if (this.validate()) {
         delete this.dataForm.createTime
         delete this.dataForm.createBy
-        postMethod('/bc/sendAddr/update', this.dataForm).then(
+        postMethodNew('/address/update', this.dataForm).then(
           res => {
             scope.typeList = res.data
             this.$message({

@@ -103,7 +103,7 @@
 
 <script>
 import saveOrEdit from './saveOrEdit'
-import { getMethod, postMethod } from '@/api/request'
+import { getMethod, postMethod } from '@/api/request-new'
 
 export default {
   computed: {},
@@ -162,7 +162,7 @@ export default {
           addrIds: idArr.join(',')
         }
       }
-      postMethod('/bc/sendAddr/delete', param).then(res => {
+      postMethod('/address/delete', param).then(res => {
         this.$message({
           message: '删除成功',
           type: 'success'
@@ -179,44 +179,6 @@ export default {
       // 	scope.provinceList = res.data.list;
       // });
     },
-    deleteRow(rowIndex, data) {
-      let param = {
-        id: data.list[rowIndex].id
-      }
-      this.$confirm('是否继续删除操作?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        postMethod('/backend/sendAddr/delete', param).then(res => {
-          this.loadList()
-          this.$message('删除成功')
-        })
-      })
-    },
-    batchDeleteRow(rowIndex, data) {
-      let selectList = this.$refs.mainTable.selection
-      let idArr = []
-      for (let i = 0; i < selectList.length; i++) {
-        idArr.push(selectList[i].id)
-      }
-      let param = {
-        delType: '2',
-        ids: idArr.join(',')
-      }
-      postMethod('/backend/sendAddr/delete', param).then(res => {
-        scope.editData = res.data[0]
-        this.showList = false
-        this.showAddOrEdit = true
-        this.$message({
-          message: '删除成功',
-          type: 'success'
-        })
-      })
-      this.searchParam.pageSize = 10
-      this.searchParam.pageNum = 0
-      this.loadList()
-    },
     search() {
       this.loadList()
     },
@@ -227,7 +189,7 @@ export default {
         let param = {
           addrId: data.list[rowIndex].addrId
         }
-        getMethod('/bc/sendAddr/findObject', param).then(res => {
+        getMethod('/address/findObject', param).then(res => {
           scope.editData = res.data[0]
           this.showList = false
           this.showAddOrEdit = true
@@ -252,7 +214,7 @@ export default {
     },
     loadList() {
       let scope = this
-      getMethod('/bc/sendAddr/findPage', this.searchParam).then(
+      getMethod('/address/findPage', this.searchParam).then(
         res => {
           scope.tableData = res.data
           scope.showPagination = scope.tableData.total == 0
