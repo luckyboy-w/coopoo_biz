@@ -77,7 +77,7 @@
                   <!--                  <el-link type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">确认退货</el-link>-->
 
                   <el-button size="mini" type="primary" @click="getOrdDtl(scope.row)">查看订单</el-button>
-                  <el-button size="mini" type="primary" v-if="scope.row.dtlStatus == 60" @click="cancelOrd(scope.row)">
+                  <el-button size="mini" type="primary"  @click="cancelOrd(scope.row)">
                     确认退货
                   </el-button>
                 </el-button-group>
@@ -186,7 +186,7 @@
 import {
   getMethod,
   postMethod
-} from '@/api/request'
+} from '@/api/request-new'
 import {
   formatDate
 } from '@/api/tools.js'
@@ -325,7 +325,7 @@ export default {
         orderNo: row.orderNo
       }
 
-      getMethod('/bc/order/findRejectPage', param).then(res => {
+      getMethod('/order/findRejectPage', param).then(res => {
         console.log(res.data.list, '5446456')
         scope.showOrdDtl = true
         this.detailData = res.data.list[0]
@@ -341,7 +341,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        postMethod('/bc/order/confirmReturnOrder', param).then(res => {
+        postMethod('/order/confirmReturnOrder', param).then(res => {
           console.log(res, '4564896797')
           this.loadList()
           this.$message({
@@ -383,7 +383,7 @@ export default {
         expressNo: '',
         opContent: ''
       },
-        getMethod('/bc/order/findRejectPage', this.searchParam).then(res => {
+        getMethod('/order/findRejectPage', this.searchParam).then(res => {
           scope.tableData = res.data
           scope.sendOrder = false
           scope.showPagination = scope.tableData.total == 0

@@ -12,13 +12,13 @@ const errCode = {
 const requestBodyUrl = []
 requestBodyUrl.push('/bu/orderBill/findListPost')
 requestBodyUrl.push('/bu/good/modityGoodStock')
-requestBodyUrl.push('/bc/order/confirmReturnOrder')
 requestBodyUrl.push('/bu/orderBill/findBillDtl')
 requestBodyUrl.push('/bu/orderBill/findPlatApplyBill')
 requestBodyUrl.push('/order/batchOnlineSendOrder')
 requestBodyUrl.push('/order/batchOfflineSendOrder')
 requestBodyUrl.push('/order/orderPrintTemplate')
 requestBodyUrl.push('/order/list')
+requestBodyUrl.push('/order/confirmReturnOrder')
 requestBodyUrl.push('/delivery/company')
 
 // create an axios instance
