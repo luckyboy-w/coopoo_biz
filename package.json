@@ -9,6 +9,7 @@
     "build:prod": "vue-cli-service build",
     "build:stage": "vue-cli-service build --mode staging",
     "build:fort": "vue-cli-service build --mode fort",
+    "build:dev": "vue-cli-service build --mode dev",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
