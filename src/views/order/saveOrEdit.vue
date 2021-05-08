@@ -239,6 +239,14 @@ export default {
         this.dataForm.mobilePhone = null
       }
 
+      if (this.dataForm.addrDtl == null || this.dataForm.addrDtl == undefined || this.dataForm.addrDtl.length > 50) {
+        this.$message({
+          message: "详细地址输入错误",
+          type: 'warning'
+        })
+        return false
+      }
+
       for (const key in notNvl) {
         if (this.dataForm[key] == '') {
           this.$message({
