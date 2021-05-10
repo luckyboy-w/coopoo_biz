@@ -172,6 +172,7 @@
                   <el-upload
                     :disabled="isHiddenEditGood"
                     class="avatar-uploader"
+                    :headers="token"
                     :action="uploadSkuImgUrl"
                     :show-file-list="false"
                     :on-success="handleSuccessSkuImg"
@@ -448,6 +449,8 @@ import { isInteger } from '@/utils/validate'
 import qEditor from '@/components/RichText/quill-editor'
 import qEditor1 from '@/components/RichText/quill-editor_1'
 import qEditor2 from '@/components/RichText/quill-editor_2'
+import Cookies from 'js-cookie'
+import Vue from 'vue'
 
 export default {
   components: { qEditor, qEditor1, qEditor2 },
@@ -469,6 +472,9 @@ export default {
   },
   data() {
     return {
+      token: {
+        token: Cookies.get('token')
+      },
       goodSaleDescImgVisible: false,
       goodSaleDescImgUrl: '',
       goodSaleDescList: [],
