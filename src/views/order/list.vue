@@ -213,7 +213,6 @@
               <template slot-scope="scope">
                 <el-button-group>
                   <template v-if="scope.row.orderType == 1 ">
-                    <!--                  <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 10"
@@ -221,8 +220,6 @@
                     >
                       发货
                     </el-button>
-
-                    <!--                  <el-link type="primary" v-if="scope.row.status == 20" @click="updataOrd(scope.row)">修改快递</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 20"
@@ -230,20 +227,19 @@
                     >
                       修改快递
                     </el-button>
-
-                    <!-- 发货后七天可以手动确认 -->
-                    <!--                  <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20" @click="dealOrd(scope.row)">确认收货</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
                       @click="dealOrd(scope.row)"
                     >确认收货
                     </el-button>
-
-                    <!--                  这个本来就是注释的 不改-->
-                    <!--<el-link type="primary" v-if="scope.row.status == 20" @click="collect(scope.row)" >发起收款</el-link>-->
-
-                    <!--                  <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="(scope.row.status == 50||scope.row.status == 51||scope.row.status == 52)&&scope.row.isInvoiced==0"
+                      @click="makeInvoice(scope.row)"
+                    >
+                      开具发票
+                    </el-button>
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 10"
@@ -251,9 +247,6 @@
                     >
                       取消订单
                     </el-button>
-
-
-                    <!--                  <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       @click="getOrdDtl(scope.row)"
@@ -262,7 +255,6 @@
 
                   </template>
                   <template v-if="scope.row.orderType == 2 ">
-                    <!--                    <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 10"
@@ -270,8 +262,6 @@
                     >
                       发货
                     </el-button>
-
-                    <!--                    <el-link type="primary" v-if="scope.row.status == 20" @click="dealOrd(scope.row)">确认收货</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 20"
@@ -279,8 +269,6 @@
                     >
                       确认收货
                     </el-button>
-
-                    <!--                    <el-link type="primary" @click="cancelOrd(scope.row)" v-if="scope.row.status == 10">取消订单</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 10"
@@ -288,8 +276,6 @@
                     >
                       取消订单
                     </el-button>
-
-                    <!--                    <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       @click="getOrdDtl(scope.row)"
@@ -298,7 +284,6 @@
                     </el-button>
                   </template>
                   <template v-if="scope.row.orderType == 4 ">
-                    <!--                    <el-link type="primary" v-if="scope.row.status == 10" @click="sendOrd(scope.row)">发货</el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 10"
@@ -306,9 +291,13 @@
                     >
                       发货
                     </el-button>
-
-                    <!-- 发货后七天可以手动确认 -->
-                    <!--                    <el-link type="primary" v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20" @click="dealCustomOrd(scope.row)">确认收货</el-link>-->
+                    <el-button
+                      type="primary" size="mini"
+                      v-if="(scope.row.status == 50||scope.row.status == 51||scope.row.status == 52)&&scope.row.isInvoiced==0"
+                      @click="makeInvoice(scope.row)"
+                    >
+                      开具发票
+                    </el-button>
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.isRiskOrder == '1' && scope.row.status == 20"
@@ -316,18 +305,12 @@
                     >
                       确认收货
                     </el-button>
-
-                    <!--                    <el-link type="primary" v-if="scope.row.status == 60" @click="collectCus(scope.row)">发起定价收款</el-link>-->
                     <el-button type="primary" size="mini" v-if="scope.row.status == 60" @click="collectCus(scope.row)">
                       发起定价收款
                     </el-button>
-
-                    <!--                    <el-link type="primary" @click="getOrdDtl(scope.row)">查看订单</el-link>-->
                     <el-button type="primary" size="mini" @click="getOrdDtl(scope.row)">
                       查看订单
                     </el-button>
-
-                    <!--                    <el-link type="primary" @click="cancelOrd(scope.row)" v-show="scope.row.status == 10 || scope.row.status == 60" >取消订单 </el-link>-->
                     <el-button
                       type="primary" size="mini"
                       v-if="scope.row.status == 10 || scope.row.status == 60"
@@ -1442,6 +1425,19 @@ export default {
     })
   },
   methods: {
+    //列表开具发票
+    makeInvoice(data){
+      this.$confirm('是否给该订单开具发票?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        getMethodNew('/order/printInvoice', {orderMainId:data.orderMainId}).then(res => {
+          this.loadList()
+          this.$message('操作成功')
+        })
+      })
+    },
     handlerReturnPOrderList() {
       if (this.fromRoutePath !== '') {
         this.$router.push({
