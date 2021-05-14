@@ -172,9 +172,11 @@
             </el-table-column>
             <el-table-column prop="recUname" label="买家姓名" width="120px"/>
             <el-table-column prop="recPhone" label="买家手机号码" width="120px"/>
-            <el-table-column prop="taxId" label="是否需要开发票" width="150px">
+            <el-table-column prop="isInvoiced" label="是否需要开发票" width="150px">
               <template slot-scope="scope">
-                {{ scope.row.taxId != undefined && scope.row.taxId != '' ? '是' : '否' }}
+                <span v-if="scope.row.isInvoiced == '' || scope.row.isInvoiced ==undefined">否</span>
+                <span v-if="scope.row.isInvoiced == 1">是（已开票）</span>
+                <span v-if="scope.row.isInvoiced == 0">是（未开票）</span>
               </template>
             </el-table-column>
             <el-table-column
