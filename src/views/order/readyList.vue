@@ -34,45 +34,12 @@
             </div>
           </div>
           <div class="tabTd">
-            <div>订单状态：</div>
-            <div>
-              <!-- 订单状态 0:已取消 1:已提交 2:待支付 3:退款中 4:退款完成 5:待取件 6:待发货 7:待收货 8:交易完成 9:拒收 10:拒收完成 11:退货中 12:退货完成 -->
-              <el-select v-model="searchParam.orderStatus" placeholder="请选择">
-                <el-option value="" label="全部" />
-                <el-option value="0" label="已取消" />
-                <el-option value="1" label="已提交" />
-                <el-option value="2" label="待支付" />
-                <el-option value="3" label="退款中" />
-                <el-option value="4" label="退款完成" />
-                <el-option value="5" label="待取件" />
-                <el-option value="6" label="待发货" />
-                <el-option value="7" label="待收货" />
-                <el-option value="8" label="交易完成" />
-                <el-option value="9" label="拒收" />
-                <el-option value="10" label="拒收完成" />
-                <el-option value="11" label="退货中" />
-                <el-option value="12" label="退货完成" />
-              </el-select>
-            </div>
-          </div>
-          <div class="tabTd">
             <div>支付方式：</div>
             <div>
               <el-select v-model="searchParam.payType" placeholder="请选择">
                 <el-option value="" label="全部"></el-option>
                 <el-option value="2" label="微信"></el-option>
                 <el-option value="1" label="支付宝"></el-option>
-              </el-select>
-            </div>
-          </div>
-          <div class="tabTd">
-            <div>开票状态：</div>
-            <div>
-              <el-select v-model="searchParam.receiptStatus" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="1" label="无需开票"></el-option>
-                <el-option value="2" label="未开票"></el-option>
-                <el-option value="3" label="已开票"></el-option>
               </el-select>
             </div>
           </div>
@@ -116,13 +83,12 @@
                 <template slot-scope="scope">
                   <div class="item">
                     <span style="margin-left:150px">
-                        <el-checkbox v-model="scope.row.isChecked" :checked="scope.row.isChecked?scope.row.isChecked:false" @change="changeGoodsChecked(scope.row)"></el-checkbox>
+                        <el-checkbox v-model="scope.row.isChecked" :checked="scope.row.isChecked?scope.row.isChecked:false" @change="changeGoodsChecked(scope.row)">
+                          
                       订单编号：{{ scope.row.orderNo }}
-                      <el-tag effect="light" size="mini">
-                        已打印
-                      </el-tag>
+                        </el-checkbox>
                     </span>
-                    <span style="margin-left:150px">订单总额：{{ scope.row.orderAmount }}</span>
+                    <span style="margin-left:150px">订单总额：{{ scope.row.orderPayAmount }}</span>
                     <span style="margin-left:150px">下单时间：{{ scope.row.createTime }}</span>
                   </div>
                 </template>

@@ -77,6 +77,16 @@
             </div>
           </div>
           <div class="tabTd">
+            <div>是否可打印：</div>
+            <div>
+              <el-select v-model="searchParam.isPrint" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="0" label="不可打印"></el-option>
+                <el-option value="1" label="可打印"></el-option>
+              </el-select>
+            </div>
+          </div>
+          <div class="tabTd">
             <div>下单时间：</div>
             <div>
               <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.startCreateTime"
@@ -94,23 +104,25 @@
             <el-button icon="el-icon-search" type="primary" @click="search()">
               搜索
             </el-button>
-            <el-button type="primary" icon="el-icon-download" @click="exportData()">导出</el-button>
-            <el-button @click="showBatchOrderPrintTemplateWindow()" type="primary">批量打印</el-button>
+            <!-- <el-button type="primary" icon="el-icon-download" @click="exportData()">导出</el-button> -->
+            <el-button icon="el-icon-s-order" type="primary" @click="showBatchOrderPrintTemplateWindow()">
+              批量打印
+            </el-button>
             <el-button @click="downloadPrintSoftware" type="primary">下载打印软件</el-button>
           </div>
         </div>
-        <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
+        <!-- <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
           <div class="tabTd">
             <div>
               <el-checkbox @change="allGoodsChecked(isChecked)" :checked="isChecked">&nbsp;&nbsp;全选</el-checkbox>
             </div>
           </div>
           <div class="tabTd">
-            <el-button icon="el-icon-s-promotion" type="primary" @click="bulkDelivery()">
-              批量发货
+            <el-button icon="el-icon-s-order" type="primary" @click="showBatchOrderPrintTemplateWindow()">
+              批量打印
             </el-button>
           </div>
-         </div>
+         </div> -->
         <div class="ly-table-panel">
           <div class="content1">
             <el-table :data="tableData.list" border row-key="orderId" style="width: 100%">
@@ -118,13 +130,15 @@
                 <template slot-scope="scope">
                   <div class="item">
                     <span style="margin-left:150px">
-                        <el-checkbox v-model="scope.row.isChecked" :checked="scope.row.isChecked?scope.row.isChecked:false" @change="changeGoodsChecked(scope.row)"></el-checkbox>
-                      订单编号：{{ scope.row.orderNo }}
-                      <el-tag effect="light" size="mini">
+                        <el-checkbox :disabled="scope.row.isPrinted==null" v-model="scope.row.isChecked" :checked="scope.row.isChecked?scope.row.isChecked:false" @change="changeGoodsChecked(scope.row)">
+                           订单编号：{{ scope.row.orderNo }}
+                      <el-tag effect="light" size="mini" v-if="scope.row.isPrinted==1">
                         已打印
                       </el-tag>
+                        </el-checkbox>
+
                     </span>
-                    <span style="margin-left:150px">订单总额：{{ scope.row.orderAmount }}</span>
+                    <span style="margin-left:150px">订单总额：{{ scope.row.orderPayAmount }}</span>
                     <span style="margin-left:150px">下单时间：{{ scope.row.createTime }}</span>
                   </div>
                 </template>
@@ -199,13 +213,13 @@
                         <div>
                           <el-button-group>
                             <template>
-                              <el-button type="primary" size="mini" @click="deliverGoods(scope.row)">
+                              <!-- <el-button type="primary" size="mini" @click="deliverGoods(scope.row)">
                                 发货
                               </el-button>
                               <el-button type="primary" size="mini" @click="dealCustomOrd(scope.row)">
                                 确认退货
-                              </el-button>
-                              <el-button type="primary" size="mini" @click="makeInvoice(scope.row)">
+                              </el-button> -->
+                              <el-button type="primary" v-if="scope.row.isInvoiced===0" size="mini" @click="makeInvoice(scope.row)">
                                 开具发票
                               </el-button>
                             </template>
@@ -391,6 +405,7 @@
     getToken
   } from '@/utils/auth.js'
   import deliverGoods from './deliverGoods'
+  import { getLodop } from '@/utils/lodop.js'
   export default {
     components: {
       deliverGoods
@@ -499,6 +514,7 @@
         showPagination: false,
         editData: [],
         searchParam: {
+          isPrint:'',
           receiptStatus:'',
           buyerMobile: '',
           buyerName: '',
@@ -543,25 +559,6 @@
       //单个勾选
       changeGoodsChecked(row){
         console.log(row)
-      },
-      bulkDelivery(){
-        let scope = this
-        scope.editData = []
-        for (let j = 0; j < this.tableData.list.length; j++) {
-          if (this.tableData.list[j].isChecked==true) {
-            scope.editData.push(this.tableData.list[j])
-          }
-        }
-        if (scope.editData.length<=0) {
-          this.$message({
-            message: '请选择要发货的订单',
-            type: 'warning'
-          })
-          return false
-        }else{
-          scope.showList = false
-        }
-        console.log(scope.editData,'scope.editData')
       },
       writeOff(row) {
         console.log(row)
@@ -726,26 +723,30 @@
         })
       },
       showBatchOrderPrintTemplateWindow() {
-        let mainTable = this.$refs.mainTable
-        let selection = mainTable.selection
-        const selectedOrderList = JSON.parse(JSON.stringify(selection))
-      
-        if (selectedOrderList.length <= 0) {
+        let scope = this
+        let selectedOrderList = []
+        for (let j = 0; j < this.tableData.list.length; j++) {
+          if (this.tableData.list[j].isChecked==true) {
+            selectedOrderList.push(this.tableData.list[j].orderNo)
+          }
+        }
+        if (selectedOrderList.length<=0) {
           this.$message({
-            message: '请选择订单！',
+            message: '请选择要打印的订单',
             type: 'warning'
           })
-          return
+          return false
         }
-      
+        console.log(selectedOrderList,'selectedOrderList')
+        // return false
         let loading = this.$loading({
           lock: true,
           text: '正在生成电子面单页面...',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
-      
-        postMethodNew('/order/orderPrintTemplate', selectedOrderList).then(res => {
+
+        postMethod('/express/order-print-template', selectedOrderList).then(res => {
           if (res.data.length <= 0) {
             this.$message({
               message: '选中的订单没有电子面单',
@@ -754,27 +755,27 @@
             loading.close()
             return
           }
-      
-          const orderTemplateNo = res.data.map(item => item.orderNo)
-          const selectedOrderNo = selectedOrderList.map(item => item.orderNo)
-      
-          let noTemplateOrderNo = selectedOrderNo.filter(x => !orderTemplateNo.includes(x))
-      
-          if (noTemplateOrderNo.length > 0) {
-            this.$message({
-              message: `${[...noTemplateOrderNo]} 没有电子面单`,
-              type: 'warning'
-            })
-            let noTemplateOrderRow = selection.filter(item => orderTemplateNo.includes(item.orderNo))
-            mainTable.clearSelection()
-            noTemplateOrderRow.forEach(row => mainTable.toggleRowSelection(row, true))
-            loading.close()
-            return
-          }
-      
+
+          // const orderTemplateNo = res.data.map(item => item.orderNo)
+          // const selectedOrderNo = selectedOrderList.map(item => item.orderNo)
+
+          // let noTemplateOrderNo = selectedOrderNo.filter(x => !orderTemplateNo.includes(x))
+
+          // if (noTemplateOrderNo.length > 0) {
+          //   this.$message({
+          //     message: `${[...noTemplateOrderNo]} 没有电子面单`,
+          //     type: 'warning'
+          //   })
+          //   let noTemplateOrderRow = selection.filter(item => orderTemplateNo.includes(item.orderNo))
+          //   mainTable.clearSelection()
+          //   noTemplateOrderRow.forEach(row => mainTable.toggleRowSelection(row, true))
+          //   loading.close()
+          //   return
+          // }
+
           LODOP = getLodop(document.getElementById('LODOP'), document.getElementById('LODOP_EM'))
           LODOP.PRINT_INIT('')
-      
+
           for (let i = 0; i < res.data.length; i++) {
             LODOP.NewPage()
             let strFormHtml = '<body>' + res.data[i].printTemplate + '</body>'
