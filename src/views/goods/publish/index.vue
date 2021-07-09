@@ -1,80 +1,5 @@
 <template>
 	<div>
-		<div v-if="showList" class="ly-container" v-show="false">
-			<div class="ly-tool-panel">
-				<table>
-					<tr>
-						<td>商品名称:</td>
-						<td>
-							<el-input v-model="searchParam.goodName" width="180px" />
-						</td>
-						<td>货号:</td>
-						<td>
-							<el-input v-model="searchParam.goodCode" width="180px" />
-						</td>
-						<td>
-							<el-button icon="el-icon-search" @click="search()">搜索</el-button>
-							<el-button plain type="primary" icon="el-icon-document-add" @click="addOrEdit('add')">新建</el-button>
-							<el-button plain type="warning" icon="el-icon-delete" @click="batchDeleteRow()">批量删除</el-button>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class="ly-table-panel">
-				<div class="ly-data-list">
-					<el-table
- 						v-loading="loading"
-						ref="mainTable"
-						:data="tableData.list"
-						style="width: 100%; margin-bottom: 20px;"
-						row-key="id"
-						border
-						default-expand-all
-						:tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-						<el-table-column type="selection" width="55" />
-						<el-table-column prop="goodName" label="商品名称" width="150px" />
-						<el-table-column prop="goodMerit" label="商品卖点" width="150px" />
-						<el-table-column prop="primeCost" label="成本价" width="150px" />
-						<el-table-column prop="packageCost" label="包装成本" width="150px" />
-						<el-table-column prop="processCost" label="加工成本" width="150px" />
-						<el-table-column prop="expressCost" label="物流成本" width="150px" />
-						<el-table-column prop="profit" label="利润" width="150px" />
-						<el-table-column prop="goodCode" label="商品名称" width="150px" />
-						<el-table-column prop="typeId" label="一级分类" width="150px" />
-						<el-table-column prop="typeId2" label="二级分类" width="150px" />
-						<el-table-column prop="typeId" label="一级分类" width="150px" />
-						<el-table-column prop="goodBrand" label="商品品牌" width="150px" />
-
-						<el-table-column prop="id" label="操作" width="200px">
-							<template slot-scope="scope">
-								<el-button
-									type="text"
-									size="small"
-									@click.native.prevent="addOrEdit('edit',scope.$index, tableData)"
-								>编辑</el-button>
-								<el-button
-									type="text"
-									size="small"
-									@click.native.prevent="deleteRow(scope.$index, tableData)"
-								>删除</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-				</div>
-				<div class="ly-data-pagination">
-					<el-pagination
-						v-show="!showPagination"
-						background
-						layout="prev, pager, next"
-						:total="tableData.total"
-						@current-change="currentPage"
-						@prev-click="currentPage"
-						@next-click="currentPage"
-					/>
-				</div>
-			</div>
-			<div class="list-panel" />
-		</div>
 		<saveOrEdit v-if="showAddOrEdit" :edit-data="editData" :isGift="isGift" @showListPanel="showListPanel" />
 	</div>
 </template>
@@ -118,7 +43,7 @@ export default {
 	computed: {},
 	mounted() {
 		this.isGift = this.giftStatus
-		this.initLoad();
+		// this.initLoad();
 		this.loadtypeIdList();
 	},
 	created() {},

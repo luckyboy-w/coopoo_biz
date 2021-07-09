@@ -1,24 +1,20 @@
 <template>
   <div>
-    <div class="ly-container" v-if="showList">
-      <div class="ly-tool-panel">
-        <table>
-          <tr>
-            <td>
-              评价状态
-            </td>
-            <td>
-              <el-select v-model="searchParam.replyMsgStatus" placeholder="请选择">
-                <el-option value="" label="全部"></el-option>
-                <el-option value="2" label="已回复"></el-option>
-                <el-option value="1" label="未回复"></el-option>
-              </el-select>
-            </td>
-            <td>
-              <el-button type="primary" @click="search()" icon="el-icon-search">搜索</el-button>
-            </td>
-          </tr>
-        </table>
+    <div class="ly-container">
+     <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
+       <div class="tabTd">
+         <div>评价状态：</div>
+         <div>
+           <el-select v-model="searchParam.replyStatus" placeholder="请选择">
+             <el-option value="" label="全部"></el-option>
+             <el-option value="1" label="已回复"></el-option>
+             <el-option value="0" label="未回复"></el-option>
+           </el-select>
+         </div>
+       </div>
+       <div class="tabTd">
+         <el-button type="primary" @click="search()" icon="el-icon-search">搜索</el-button>
+       </div>
       </div>
       <div class="ly-table-panel">
         <div class="ly-data-list">
@@ -26,40 +22,46 @@
             ref="mainTable"
             :data="tableData.list"
             style="width: 100%; margin-bottom: 20px;"
-            row-key="id"
+            row-key="id" border
           >
-            <el-table-column prop="orderNo" label="订单号" width="150px"></el-table-column>
-            <el-table-column prop="goodName" label="商品名称" width="150px"></el-table-column>
-            <el-table-column prop="conform" label="描述相符评价" width="150px">
+            <el-table-column prop="orderNo" label="订单号" ></el-table-column>
+            <el-table-column prop="goodsName" label="商品名称"></el-table-column>
+            <el-table-column prop="conform" label="描述相符评价">
               <template slot-scope="scope">
                 {{ scope.row.conform | type2Text }}
               </template>
             </el-table-column>
-            <el-table-column prop="manner" label="服务态度评价" width="150px">
+            <el-table-column prop="manner" label="服务态度评价" >
               <template slot-scope="scope">
                 {{ scope.row.manner | type2Text }}
               </template>
             </el-table-column>
-            <el-table-column prop="efficiency" label="发货速度评价" width="150px">
+            <el-table-column prop="efficiency" label="发货速度评价">
               <template slot-scope="scope">
                 {{ scope.row.efficiency | type2Text }}
               </template>
             </el-table-column>
-            <el-table-column prop="nickName" label="评价人" width="150px"></el-table-column>
-            <el-table-column prop="replyMsgStatus" label="回复状态" width="150px">
+            <el-table-column prop="memberNickname" label="评价人" ></el-table-column>
+            <el-table-column prop="isShow" label="是否显示"  width="150px">
               <template slot-scope="scope">
-                {{ scope.row.replyMsgStatus | msg2Text }}
+                <el-switch v-model="scope.row.isShow" active-value="1" inactive-value="0"
+                  @change="isShow(scope.row)" />
               </template>
             </el-table-column>
-            <el-table-column prop="evalContent" label="评价内容" width="150px"></el-table-column>
-            <el-table-column fixed="right" prop="id" label="操作" width="200px">
+            <el-table-column fixed="right" prop="id" label="操作" >
               <template slot-scope="scope">
                 <el-button-group>
                   <el-button
                     @click="replyMsg(scope.row)"
-                    v-if="scope.row.replyMsgStatus == 1"
+                    v-if="scope.row.replyStatus == 0"
                     size="mini" type="primary"
                   >回复
+                  </el-button>
+                  <el-button
+                    @click="replyMsg(scope.row)"
+                    v-if="scope.row.replyStatus == 1"
+                    size="mini" type="primary"
+                  >查看
                   </el-button>
                 </el-button-group>
               </template>
@@ -82,29 +84,35 @@
       </div>
       <div class="list-panel"></div>
     </div>
-    <el-dialog title="发货信息" visible="sendEval" v-if="sendEval" :before-close="handleClose">
+    <el-dialog title="评价信息" :visible="sendEval" v-if="sendEval" :before-close="handleClose">
       <el-form ref="form" :model="replyFrm" label-width="80px">
+        <el-form-item label="用户评价">
+          <el-input
+            type="textarea"
+            :rows="4"
+            v-model="replyFrm.commentContent"
+          >
+          </el-input>
+        </el-form-item>
         <el-form-item label="回复内容">
           <el-input
             type="textarea"
             :rows="4"
             placeholder="请输入回复信息"
-            v-model="replyFrm.replyMsg"
+            v-model="replyFrm.replyContent"
           >
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="sendReply()">回复</el-button>
-          <el-button @click="cancel">取消</el-button>
+          <el-button type="primary" v-if="replyFrm.replyStatus==0" @click="sendReply()">回复</el-button>
+          <el-button plain type="primary" @click="handleClose">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
-    <saveOrEdit v-if="showAddOrEdit" @showListPanel="showListPanel" :editData="editData"></saveOrEdit>
   </div>
 </template>
 
 <script>
-import saveOrEdit from './saveOrEdit'
 import { getMethod, postMethod } from '@/api/request'
 
 export default {
@@ -116,15 +124,9 @@ export default {
       default: ''
     }
   },
-  // mounted() {
-
-  // 	this.initLoad();
-  // 	this.loadcityList();
-  // 	this.loadprovinceList();
-  // },
   filters: {
     msg2Text(status) {
-      if (status == '1') {
+      if (status == '0') {
         return '未回复'
       } else {
         return '已回复'
@@ -142,141 +144,83 @@ export default {
       }
     }
   },
-  components: { saveOrEdit },
   created() {
   },
   data() {
     return {
-      id: this.$route.params.id,
       sendEval: false,
-      rowData: {},
-      cityList: [],
-      provinceList: [],
-      showList: true,
-      showAddOrEdit: false,
       showPagination: false,
-      editData: {},
       replyFrm: {
-        replyMsg: ''
+
       },
       searchParam: {
-        replyMsgStatus: '',
+        replyStatus: '',
         pageSize: 10,
-        pageNum: 0
+        pageNum: 1
       },
       tableData: {
         list: []
       },
-      dataList: []
     }
   },
   mounted() {
-    // this.$route.params.id
-    if (this.$route.query.s != '') {
-      this.searchParam.replyMsgStatus = this.$route.query.s
-    }
     this.initLoad()
-    this.loadcityList()
-    this.loadprovinceList()
   },
   methods: {
     handleClose(done) {
-      this.replyFrm.replyMsg = ''
       this.sendEval = false
     },
     sendReply() {
       let scope = this
-      this.rowData.replyMsg = this.replyFrm.replyMsg
-      this.rowData.pkEvalId = this.rowData.id
-      postMethod('/bc/order/replyEval', this.rowData).then(res => {
+      console.log(this.replyFrm);
+      let param = {
+        id:this.replyFrm.id,
+        isShow:this.replyFrm.isShow,
+        replyContent:this.replyFrm.replyContent
+      }
+      if (param.replyContent=='') {
+        this.$message({
+            message: "回复内容不能为空",
+            type: "success"
+        });
+        return false;
+      }else{
+        postMethod('/order/reply-goods-comment', param).then(res => {
+        this.$message({
+            message: "回复成功",
+            type: "success"
+        });
         this.loadList()
-        this.replyFrm.replyMsg = ''
         scope.sendEval = false
       })
+      }
+    },
+    isShow(row){
+      let scope = this
+      if (row.isShow=="1") {
+        postMethod('/order/reply-goods-comment', {id:row.id,isShow:'1'}).then(res => {
+          scope.loadList()
+          scope.$message({
+            message: "操作成功",
+            type: "success"
+          });
+        });
+      } else if(row.isShow=="0"){
+      postMethod('/order/reply-goods-comment', {id:row.id,isShow:'0'}).then(res => {
+        scope.loadList()
+        scope.$message({
+          message: "操作成功",
+          type: "success"
+        });
+      });
+      }
     },
     replyMsg(row) {
       console.log(row, '这是回复')
       this.sendEval = true
-      this.rowData = row
-    },
-    loadcityList() {
-      let scope = this
-      // getMethod("/backend/areas/findCity", null).then(res => {
-      // 	scope.cityList = res.data.list;
-      // });
-    },
-    loadprovinceList() {
-      let scope = this
-      // getMethod("/backend/areas/findProvince", null).then(res => {
-      // 	scope.provinceList = res.data.list;
-      // });
-    },
-    cancel() {
-      this.replyFrm.replyMsg = ''
-      this.sendEval = false
-    },
-    deleteRow(rowIndex, data) {
-      let param = {
-        id: data.list[rowIndex].id
-      }
-      this.$confirm('是否继续删除操作?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        postMethod('/backend/sendAddr/delete', param).then(res => {
-          this.loadList()
-          this.$message('删除成功')
-        })
-      })
-    },
-    batchDeleteRow(rowIndex, data) {
-      let selectList = this.$refs.mainTable.selection
-      let idArr = []
-      for (let i = 0; i < selectList.length; i++) {
-        idArr.push(selectList[i].id)
-      }
-      let param = {
-        delType: '2',
-        ids: idArr.join(',')
-      }
-      postMethod('/backend/sendAddr/delete', param).then(res => {
-        scope.editData = res.data[0]
-        this.showList = false
-        this.showAddOrEdit = true
-        this.$message({
-          message: '删除成功',
-          type: 'success'
-        })
-      })
-      this.searchParam.pageSize = 10
-      this.searchParam.pageNum = 0
-      this.loadList()
+      this.replyFrm = row
     },
     search() {
-      this.loadList()
-    },
-    addOrEdit(oper, rowIndex, data) {
-      let scope = this
-
-      if (oper == 'edit') {
-        let param = {
-          addrId: data.list[rowIndex].addrId
-        }
-        getMethod('/bc/sendAddr/findObject', param).then(res => {
-          scope.editData = res.data[0]
-          this.showList = false
-          this.showAddOrEdit = true
-        })
-      } else {
-        scope.editData = {}
-        this.showList = false
-        this.showAddOrEdit = true
-      }
-    },
-    showListPanel(isCancel) {
-      this.showList = true
-      this.showAddOrEdit = false
       this.loadList()
     },
     currentPage(pageNum) {
@@ -288,9 +232,13 @@ export default {
     },
     loadList() {
       let scope = this
-      postMethod('/bc/order/findReplyEval', this.searchParam).then(
+      getMethod('/order/get-goods-comment-list', this.searchParam).then(
         res => {
-          scope.tableData = res.data
+          scope.tableData.list = res.data.records
+          scope.tableData.list.forEach(i=>{
+            i.isShow=String(i.isShow)
+          })
+          scope.tableData.total = res.data.total
           scope.showPagination = scope.tableData.total == 0
         }
       )
@@ -304,9 +252,6 @@ export default {
   font-size: 14px;
 
   .ly-tool-panel {
-    div {
-      display: inline;
-    }
 
     line-height: "60px";
     height: "60px";
@@ -319,7 +264,13 @@ export default {
     }
   }
 }
+ .tabTd {
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 7px 10px;
+    align-items: center;
 
+  }
 
 .el-pagination {
   white-space: nowrap;

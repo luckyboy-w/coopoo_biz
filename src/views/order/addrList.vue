@@ -6,8 +6,8 @@
           <tr>
             <td>
               <el-button  type="primary" @click="addOrEdit('add')" icon="el-icon-document-add">新建</el-button>
-              <el-button v-if="false" plain type="primary" @click="remove('add')" icon="el-icon-document-add">删除
-              </el-button>
+            <!--  <el-button v-if="false" plain type="primary" @click="remove('add')" icon="el-icon-document-add">删除
+              </el-button> -->
             </td>
           </tr>
         </table>
@@ -24,10 +24,24 @@
             :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
           >
 
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="addrName" label="地址名称" width="150px">
+            <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+            <el-table-column prop="addrName" label="地址名称">
               <template slot-scope="scope">
                 {{ scope.row.addrName }}
+                <el-tag
+                  v-if="scope.row.type == 1"
+                  effect="light"
+                  size="mini"
+                >
+                  发货
+                </el-tag>
+                <el-tag
+                  v-if="scope.row.type == 2"
+                  effect="light"
+                  size="mini"
+                >
+                  退货
+                </el-tag>
                 <el-tag
                   v-if="scope.row.isDefault == 1"
                   effect="light"
@@ -37,43 +51,51 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <!--            <el-table-column prop="enable" label="地址类型" width="80px">-->
-            <!--              <template slot-scope="scope">-->
-            <!--                {{ scope.row.type == '1' ? '发货地址' : '退货地址' }}-->
-            <!--              </template>-->
-            <!--            </el-table-column>-->
-            <el-table-column prop="addrSeq" label="地址序号" width="100px"></el-table-column>
-            <el-table-column prop="person" label="联系人" width="100px"></el-table-column>
-            <el-table-column prop="mobilePhone" label="移动手机号" width="120px"></el-table-column>
-            <el-table-column prop="telPhone" label="座机号" width="120px"></el-table-column>
+            <el-table-column prop="person" label="联系人" ></el-table-column>
+            <el-table-column prop="mobilePhone" label="联系方式" width="150px"></el-table-column>
             <el-table-column label="所在城市" width="200px">
               <template slot-scope="scope">
                 {{ `${scope.row.provincetext} ${scope.row.citytext} ${scope.row.areaText}` }}
               </template>
             </el-table-column>
 
-            <el-table-column prop="addrDtl" label="详细地址" width="220px"></el-table-column>
-            <el-table-column prop="sendCom" label="发货公司" width="100px"></el-table-column>
-            <el-table-column prop="enable" label="状态" width="80px">
+            <el-table-column prop="addrDtl" label="详细地址"></el-table-column>
+            <el-table-column prop="enable" label="状态" >
               <template slot-scope="scope">
                 {{ scope.row.enable == '0' ? '禁用' : '启用' }}
               </template>
             </el-table-column>
-            <!-- <el-table-column prop="city" label="城市" width="150px"></el-table-column>
-            <el-table-column prop="province" label="省份" width="150px"></el-table-column> -->
-
-            <el-table-column prop="id" label="操作" width="200px">
+            <el-table-column prop="id" label="操作">
               <template slot-scope="scope">
                 <el-button-group>
                   <el-button
+                  v-if="scope.row.enable=='0'"
                     @click="addOrEdit('edit',scope.$index, tableData)"
                     size="mini" type="primary"
                   >编辑
                   </el-button>
                   <el-button
-                    v-if="false"
-                    @click="remove(scope.row.addrId)"
+                  v-if="scope.row.enable=='1'"
+                    @click="addOrEdit('detail',scope.$index, tableData)"
                     size="mini" type="primary"
+                  >详情
+                  </el-button>
+                  <el-button
+                  v-if="scope.row.enable=='0'"
+                    @click="enable('1',scope.$index, tableData)"
+                    size="mini" type="primary"
+                  >启用
+                  </el-button>
+                  <el-button
+                  v-if="scope.row.enable=='1'"
+                    @click="enable('0',scope.$index, tableData)"
+                    size="mini" type="primary"
+                  >禁用
+                  </el-button>
+                  <el-button
+                  v-if="scope.row.enable=='0'"
+                    @click="remove(scope.row.addrId)"
+                    size="mini" type="danger"
                   >删除
                   </el-button>
                 </el-button-group>
@@ -103,22 +125,18 @@
 
 <script>
 import saveOrEdit from './saveOrEdit'
-import { getMethod, postMethod } from '@/api/request-new'
+import { getMethod, postMethod } from '@/api/request'
 
 export default {
   computed: {},
   mounted() {
     this.initLoad()
-    this.loadcityList()
-    this.loadprovinceList()
   },
   components: { saveOrEdit },
   created() {
   },
   data() {
     return {
-      cityList: [],
-      provinceList: [],
       showList: true,
       showAddOrEdit: false,
       showPagination: false,
@@ -136,48 +154,14 @@ export default {
     }
   },
   methods: {
-    loadcityList() {
-      let scope = this
-      // getMethod("/backend/areas/findCity", null).then(res => {
-      // 	scope.cityList = res.data.list;
-      // });
-    },
     remove(ids) {
-      let param = {}
-      if (ids != undefined) {
-        param.addrIds = ids
-      } else {
-        let selectList = this.$refs.mainTable.selection
-        if (selectList.length == 0) {
-          this.$message({
-            message: '请选择一条要删除的记录',
-            type: 'success'
-          })
-        }
-        let idArr = []
-        for (let i = 0; i < selectList.length; i++) {
-          idArr.push(selectList[i].id)
-        }
-        let param = {
-          addrIds: idArr.join(',')
-        }
-      }
-      postMethod('/address/delete', param).then(res => {
+      postMethod('/address/delete?addrId='+ids).then(res => {
         this.$message({
           message: '删除成功',
           type: 'success'
         })
-        scope.editData = res.data[0]
+        this.loadList()
       })
-      this.searchParam.pageSize = 10
-      this.searchParam.pageNum = 0
-      this.loadList()
-    },
-    loadprovinceList() {
-      let scope = this
-      // getMethod("/backend/areas/findProvince", null).then(res => {
-      // 	scope.provinceList = res.data.list;
-      // });
     },
     search() {
       this.loadList()
@@ -189,15 +173,44 @@ export default {
         let param = {
           addrId: data.list[rowIndex].addrId
         }
-        getMethod('/address/findObject', param).then(res => {
-          scope.editData = res.data[0]
+        getMethod('/address/get-send-addr-info', param).then(res => {
+          scope.editData = res.data
           this.showList = false
           this.showAddOrEdit = true
         })
-      } else {
+      } else if (oper == 'detail') {
+        let param = {
+          addrId: data.list[rowIndex].addrId
+        }
+        getMethod('/address/get-send-addr-info', param).then(res => {
+          scope.editData = res.data
+          scope.editData.isDisabled = true
+          this.showList = false
+          this.showAddOrEdit = true
+        })
+      }else{
         scope.editData = {}
         this.showList = false
         this.showAddOrEdit = true
+      }
+    },
+    enable(oper, rowIndex, data){
+      if (oper == '0') {
+        postMethod('/address/disable?addrId='+data.list[rowIndex].addrId).then(res => {
+          this.$message({
+            message: '禁用成功',
+            type: 'success'
+          })
+          this.loadList()
+        })
+      } else if (oper == '1') {
+        postMethod('/address/enable?addrId='+data.list[rowIndex].addrId).then(res => {
+          this.$message({
+            message: '启用成功',
+            type: 'success'
+          })
+          this.loadList()
+        })
       }
     },
     showListPanel(isCancel) {
@@ -214,9 +227,10 @@ export default {
     },
     loadList() {
       let scope = this
-      getMethod('/address/findPage', this.searchParam).then(
+      getMethod('/address/get-send-addr-list', this.searchParam).then(
         res => {
-          scope.tableData = res.data
+          scope.tableData.list = res.data.records
+          scope.tableData.total = res.data.total
           scope.showPagination = scope.tableData.total == 0
         }
       )

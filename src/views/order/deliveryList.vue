@@ -5,10 +5,6 @@
         <table>
           <tr>
             <td>
-              <el-button type="danger" @click="remove()" icon="el-icon-delete">
-                删除
-              </el-button>
-
               <el-button type="primary" @click="addOrEdit('add')" icon="el-icon-document-add">
                 新建
               </el-button>
@@ -28,7 +24,7 @@
             @selection-change="handleSelectionChange"
           >
 
-            <el-table-column type="selection" width="55"></el-table-column>
+            <!-- <el-table-column type="selection" width="55"></el-table-column> -->
             <el-table-column label="快递公司">
               <template slot-scope="scope">
                 {{ scope.row.expressName }}
@@ -70,9 +66,16 @@
               <template slot-scope="scope">
                 <el-button-group>
                   <el-button
+                  v-if="scope.row.status == 1"
                     @click="addOrEdit('edit',scope.$index, tableData)"
                     size="mini" type="primary"
                   >编辑
+                  </el-button>
+                  <el-button
+                  v-if="scope.row.status == 0"
+                    @click="addOrEdit('detail',scope.$index, tableData)"
+                    size="mini" type="primary"
+                  >详情
                   </el-button>
                   <el-button
                     v-if="scope.row.status == 0"
@@ -81,10 +84,13 @@
                   >禁用
                   </el-button>
                   <el-button
-                    v-else-if="scope.row.status == 1"
+                    v-if="scope.row.status == 1"
                     @click="enable(scope.row.id)"
                     size="mini" type="primary"
                   >启用
+                  </el-button>
+                  <el-button v-if="scope.row.status == 1" type="danger" size="mini" @click="remove(scope.row.id)">
+                    删除
                   </el-button>
                 </el-button-group>
               </template>
@@ -112,7 +118,7 @@
 
 <script>
 import deliverySaveOrEdit from './deliverySaveOrEdit'
-import { getMethod, putMethod, deleteMethod } from '@/api/request-new'
+import { getMethod, postMethod, deleteMethod } from '@/api/request'
 
 export default {
   computed: {},
@@ -130,7 +136,7 @@ export default {
       editData: {},
       searchParam: {
         pageSize: 10,
-        pageNum: 0
+        pageNum: 1
       },
       tableData: {
         list: []
@@ -144,16 +150,17 @@ export default {
       this.loadList()
     },
     async loadList() {
-      const { data } = await getMethod('/delivery/companyList', this.searchParam)
-      this.tableData = data
+      const { data } = await getMethod('/delivery/get-company-list', this.searchParam)
+      this.tableData.list = data.records
+      this.tableData.total = data.total
       this.showPagination = this.tableData.total == 0
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
     async enable(id) {
-      const res = await putMethod('/delivery/enable', { id })
-      if (res.code !== 200) {
+      const res = await postMethod('/delivery/enable?id='+id )
+      if (res.errCode !== 0) {
         this.$message.error('操作失败')
         return
       }
@@ -161,38 +168,26 @@ export default {
       this.loadList()
     },
     async disable(id) {
-      const res = await putMethod('/delivery/disable', { id })
-      if (res.code !== 200) {
+      const res = await postMethod('/delivery/disable?id='+id)
+      if (res.errCode !== 0) {
         this.$message.error('操作失败')
         return
       }
       this.$message.success('操作成功')
       this.loadList()
     },
-    async remove() {
-      const removeIds = []
-      for (let i = 0; i < this.multipleSelection.length; i++) {
-        removeIds.push(this.multipleSelection[i].id)
-      }
-
-      if (removeIds.length == 0) {
-        this.$message.warning('要删除的元素不能为空')
-        return
-      }
-
+    async remove(id) {
       try {
         await this.$confirm('是否继续删除操作?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         })
-
-        const res = await deleteMethod('/delivery/company', { ids: removeIds })
-        if (res.code !== 200) {
+        const res = await postMethod('/delivery/delete?id='+id)
+        if (res.errCode !== 0) {
           this.$message.error('删除失败')
           return
         }
-
         this.loadList()
         this.$message.success('删除成功')
       } catch (e) {
@@ -203,9 +198,16 @@ export default {
     },
     async addOrEdit(oper, rowIndex, data) {
       if (oper == 'edit') {
-        const res = await getMethod(`/delivery/companyInfo/${data.list[rowIndex].id}`)
+        const res = await getMethod('/delivery/get-company-info?id='+data.list[rowIndex].id)
         res.data.kdnArgs = JSON.parse(res.data.kdnArgs)
         this.editData = res.data
+        this.showList = false
+        this.showAddOrEdit = true
+      } else if (oper == 'detail') {
+        const res = await getMethod('/delivery/get-company-info?id='+data.list[rowIndex].id)
+        res.data.kdnArgs = JSON.parse(res.data.kdnArgs)
+        this.editData = res.data
+        this.editData.isDisabled = true
         this.showList = false
         this.showAddOrEdit = true
       } else {

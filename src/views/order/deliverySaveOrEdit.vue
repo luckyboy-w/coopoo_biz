@@ -4,6 +4,7 @@
 
       <el-form-item label="快递公司">
         <el-select v-model="selectDeliveryCompany"
+        :disabled="isDisabled"
                    size="small"
                    value-key="id"
                    placeholder="请选择物流公司"
@@ -15,6 +16,7 @@
       </el-form-item>
       <el-form-item label="业务类型">
         <el-select v-model="selectDeliveryType"
+        :disabled="isDisabled"
                    size="small"
                    value-key="id"
                    placeholder="请选择业务类型"
@@ -26,6 +28,7 @@
       </el-form-item>
       <el-form-item label="结款方式">
         <el-select v-model="selectPaymentMethod"
+        :disabled="isDisabled"
                    size="small"
                    value-key="id"
                    placeholder="请选择结款方式"
@@ -35,17 +38,17 @@
         </el-select>
       </el-form-item>
       <el-form-item label="是否默认">
-        <el-switch v-model="dataForm.isDefault" inactive-value="0" active-value="1"/>
+        <el-switch         :disabled="isDisabled" v-model="dataForm.isDefault" inactive-value="0" active-value="1"/>
       </el-form-item>
       <el-form-item
         v-for="(item,index) in deliveryAttrList"
         :label="item.attributeName"
         :key="item.id"
       >
-        <el-input v-model="dataForm.kdnArgs[item.attributeValue]"/>
+        <el-input         :disabled="isDisabled" v-model="dataForm.kdnArgs[item.attributeValue]"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitUpdate">提交</el-button>
+        <el-button         :disabled="isDisabled" type="primary" @click="submitUpdate">提交</el-button>
         <el-button @click="cancelUpdate">取消</el-button>
       </el-form-item>
     </el-form>
@@ -53,7 +56,7 @@
 </template>
 
 <script>
-import { getMethod, postMethod, putMethod } from '@/api/request-new'
+import { getMethod, postMethod, putMethod } from '@/api/request'
 
 export default {
   props: {
@@ -64,6 +67,7 @@ export default {
   },
   data() {
     return {
+      isDisabled:false,
       deliveryCompanyList: [],
       selectDeliveryCompany: '',
       deliveryTypeList: [],
@@ -100,21 +104,22 @@ export default {
     this.loadDeliveryAttrList(this.editData ? this.editData.companyId : 0)
     this.dataForm = { ...this.dataForm, ...this.editData }
     this.dataForm.isDefault = this.dataForm.isDefault == 1 ? '1' : '0'
+    this.isDisabled=this.editData.isDisabled==true?true:false
   },
   methods: {
     async loadDeliveryCompanyList() {
-      const { data } = await getMethod('/delivery/allCompanyList')
+      const { data } = await getMethod('/delivery/get-all-company-list')
       this.deliveryCompanyList = data
     },
     async loadDeliveryTypeList(companyId) {
       if (companyId > 0) {
-        const { data } = await getMethod(`/delivery/allTypeList/${companyId}`)
+        const { data } = await getMethod('/delivery/get-company-type',{companyId:companyId})
         this.deliveryTypeList = data
       }
     },
     async loadDeliveryAttrList(companyId) {
       if (companyId > 0) {
-        const { data } = await getMethod(`/delivery/attrList/${companyId}`)
+        const { data } = await getMethod('/delivery/attr-list',{companyId:companyId})
         this.deliveryAttrList = data
       }
     },
@@ -156,8 +161,8 @@ export default {
     async addObject() {
       if (this.validate()) {
         this.dataForm.kdnArgs = JSON.stringify(this.dataForm.kdnArgs)
-        const { code } = await postMethod('/delivery/company', this.dataForm)
-        if (code != 200) {
+        const { errCode } = await postMethod('/delivery/add-company', this.dataForm)
+        if (errCode != 0) {
           this.$message.error('操作失败')
           return
         }
@@ -168,8 +173,8 @@ export default {
     async updateObject() {
       if (this.validate()) {
         this.dataForm.kdnArgs = JSON.stringify(this.dataForm.kdnArgs)
-        const { code } = await putMethod('/delivery/company', this.dataForm)
-        if (code != 200) {
+        const { errCode } = await postMethod('/delivery/update-company', this.dataForm)
+        if (errCode != 0) {
           this.$message.error('操作失败')
           return
         }
