@@ -716,7 +716,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          getMethodNew('/order/printInvoice', { orderMainId: data.orderMainId }).then(res => {
+          getMethod('/order/print-invoice', { orderNo: data.orderNo }).then(res => {
             this.loadList()
             this.$message('操作成功')
           })

@@ -123,13 +123,13 @@
                   <div v-for="(item, index) in scope.row.orderItemList" :key="index" class="mesSty2">
                     <div>
                     <span style="line-height: 50px;">{{ item.orderItemStatus| goodsText }}</span>
-                    <div v-if="item.orderItemStatus==10">
-                      <el-button type="primary" size="mini" @click="deliverGoods(scope.row)">
+                    <div v-if="item.orderItemStatus==12">
+                      <el-button type="primary" size="mini" @click="confirmReturn(item)">
                         确认退货
                       </el-button>
                     </div>
-                    <div v-if="item.orderItemStatus==12">
-                      <el-button type="primary" size="mini" @click="deliverGoods(scope.row)">
+                    <div v-if="item.orderItemStatus==10">
+                      <el-button type="primary" size="mini" @click="confirmRejection(item)">
                         确认拒收
                       </el-button>
                     </div>
@@ -334,7 +334,6 @@
         </div>
       </div>
     </div>
-    <deliverGoods v-if="!showList" ref="deliverGoods" :editData="editData" @backToList="backToList" />
   </div>
 </template>
 
@@ -349,10 +348,8 @@
   import {
     getToken
   } from '@/utils/auth.js'
-  import deliverGoods from './deliverGoods'
   export default {
     components: {
-      deliverGoods
     },
     filters: {
       taxType2Text(type) {
@@ -494,12 +491,54 @@
           })
         })
       },
+      // 退货
+      confirmReturn(row){
+        console.log(row)
+        this.$confirm('该笔订单是否同意退货？', '提示', {
+          confirmButtonText: '同意',
+          cancelButtonText: '拒绝',
+          type: 'warning'
+        }).then(() => {
+          this.$confirm('是否返还该商品库存?', '提示', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            getMethod('/express/confirm-return-order-item' ,{isReturnStock:1,orderItemId:row.orderItemId}).then(res => {
+              this.$message('操作成功')
+            })
+          }).catch(() => {
+          getMethod('/express/confirm-return-order-item' ,{isReturnStock:0,orderItemId:row.orderItemId}).then(res => {
+            this.$message('操作成功')
+          })
+        });
+        })
+      },
+      // 拒收
+      confirmRejection(row){
+        console.log('row',row);
+        this.$confirm('该笔订单是否同意拒收？', '提示', {
+          confirmButtonText: '同意',
+          cancelButtonText: '拒绝',
+          type: 'warning'
+        }).then(() => {
+          this.$confirm('是否返还该商品库存?', '提示', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          }).then(() => {
+            getMethod('/express/confirm-reject-order-item' ,{isReturnStock:1,orderItemId:row.orderItemId}).then(res => {
+              this.$message('操作成功')
+            })
+          }).catch(() => {
+          getMethod('/express/confirm-reject-order-item' ,{isReturnStock:0,orderItemId:row.orderItemId}).then(res => {
+            this.$message('操作成功')
+          })
+        });
+        })
+      },
       handlerReturnPOrderList() {
         this.showOrdDtl = false
-      },
-      backToList() {
-        this.loadList()
-        this.showList = true
       },
       exportData() {
         if (this.searchParam.startTime == null) {
