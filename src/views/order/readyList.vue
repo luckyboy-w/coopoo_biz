@@ -84,7 +84,7 @@
                   <div class="item">
                     <span style="margin-left:150px">
                         <el-checkbox v-model="scope.row.isChecked" :checked="scope.row.isChecked?scope.row.isChecked:false" @change="changeGoodsChecked(scope.row)">
-                          
+
                       订单编号：{{ scope.row.orderNo }}
                         </el-checkbox>
                     </span>
@@ -558,23 +558,20 @@
         }
         let param = {
           orderNo: this.searchParam.orderNo,
-          recUname: this.searchParam.recUname,
-          recMobile: this.searchParam.recMobile,
-          isBackend: this.searchParam.isBackend,
-          orderType: this.searchParam.orderType,
-          isRequireTaxBill: this.searchParam.isRequireTaxBill,
-          status: this.searchParam.status,
+          buyerName: this.searchParam.buyerName,
+          buyerMobile: this.searchParam.buyerMobile,
+          goodsName: this.searchParam.goodsName,
+          storeName: this.searchParam.storeName,
+          payType: this.searchParam.payType,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
-          riskOrder: this.searchParam.riskOrder,
-          dataType: this.searchParam.dataType
         }
         let exportParam = []
         for (let key in param) {
           exportParam.push(key + '=' + param[key])
         }
         //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
-        window.open(process.env.VUE_APP_BASE_API_NEW + '/order/export?token=' + getToken() + '&' + exportParam.join('&'))
+        window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'))
       },
       async getOrdDtl(row) {
         const {
