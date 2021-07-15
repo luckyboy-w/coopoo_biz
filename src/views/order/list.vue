@@ -40,11 +40,10 @@
               <el-select v-model="searchParam.orderStatus" placeholder="请选择">
                 <el-option value="" label="全部" />
                 <el-option value="0" label="已取消" />
-                <el-option value="1" label="已提交" />
                 <el-option value="2" label="待支付" />
                 <el-option value="3" label="退款中" />
                 <el-option value="4" label="退款完成" />
-                <el-option value="5" label="待取件" />
+                <el-option value="5" label="待自提" />
                 <el-option value="6" label="待发货" />
                 <el-option value="7" label="待收货" />
                 <el-option value="8" label="交易完成" />
@@ -89,13 +88,13 @@
           <div class="tabTd">
             <div>下单时间：</div>
             <div>
-              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.startCreateTime"
+              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.orderStartTime"
                 type="date" placeholder="开始时间">
               </el-date-picker>
             </div>
             <div style="padding: 0 6px;">至</div>
             <div>
-              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.endCreateTime"
+              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.orderEndTime"
                 type="date" placeholder="结束时间">
               </el-date-picker>
             </div>
@@ -445,7 +444,7 @@
         } else if (status == '4') {
           statusText = '退款完成'
         } else if (status == '5') {
-          statusText = '待取件'
+          statusText = '待自提'
         } else if (status == '6') {
           statusText = '待发货'
         } else if (status == '7') {
@@ -493,13 +492,17 @@
         } else if (status == '9') {
           statusText = '退货已接单'
         } else if (status == '10') {
-          statusText = '拒收'
-        } else if (status == '11') {
-          statusText = '拒收完成'
-        } else if (status == '12') {
           statusText = '退货中'
-        } else if (status == '13') {
+        } else if (status == '11') {
           statusText = '退货完成'
+        } else if (status == '12') {
+          statusText = '拒收'
+        } else if (status == '13') {
+          statusText = '拒收完成'
+        } else if (status == '14') {
+          statusText = '退货退款中'
+        } else if (status == '15') {
+          statusText = '拒收退款中'
         }
         return statusText
       },

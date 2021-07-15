@@ -142,8 +142,6 @@ export default {
       showPagination: false,
       editData: {},
       searchParam: {
-        delFlag: '1',
-        typeName: '',
         pageSize: 10,
         pageNum: 1
       },

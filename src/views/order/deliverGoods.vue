@@ -566,6 +566,12 @@
           pageSize: 50
         }).then(res => {
           this.logisticsCompanyList = res.data.records
+          this.logisticsCompanyList.map(i => {
+            if (i.isDefault == 1) {
+              this.logisticsCompany = i
+              this.logisticsCompanySelectChange(i)
+            }
+          })
         })
       },
       initAddrList() {
@@ -576,6 +582,12 @@
           enable: 1
         }).then(res => {
           this.sendAddressList = res.data.records
+          this.sendAddressList.map(i => {
+            if (i.isDefault == 1) {
+              this.onlineSendOrderFrm.sendAddressId=i.addrId
+              this.sendOrderFrm.sendAddressId=i.addrId
+            }
+          })
         })
         getMethod('/address/get-send-addr-list', {
           pageNum: 1,
@@ -584,6 +596,12 @@
           enable: 1
         }).then(res => {
           this.returnAddressList = res.data.records
+          this.returnAddressList.map(i => {
+            if (i.isDefault == 1) {
+              this.returnAddressId.sendAddressId=i.addrId
+              this.returnAddressId.sendAddressId=i.addrId
+            }
+          })
         })
       },
     }

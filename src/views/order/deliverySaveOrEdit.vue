@@ -41,6 +41,7 @@
         <el-switch         :disabled="isDisabled" v-model="dataForm.isDefault" inactive-value="0" active-value="1"/>
       </el-form-item>
       <el-form-item
+        v-if="dataForm.paymentMethod==3"
         v-for="(item,index) in deliveryAttrList"
         :label="item.attributeName"
         :key="item.id"

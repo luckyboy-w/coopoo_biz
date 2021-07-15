@@ -468,7 +468,7 @@ export default {
             message: '操作成功',
             type: 'success'
           })
-          scope.loadList()
+          scope.loadListOne()
         })
       })
     },
@@ -510,13 +510,6 @@ export default {
       })
     },
     backTo() {
-      if (this.only == '1') {
-        this.activeName = 'settleFinsh'
-      } else if (this.only == '2') {
-        this.activeName = 'settleEnd'
-      }
-      this.back = true
-      this.dataDtl = false
       this.searchParam= {
         orderNo: '',
         settleNo:'',
@@ -524,9 +517,16 @@ export default {
         endTime: '',
         pageSize: 10,
         pageNum: 1
-      },
-      this.loadListOne()
-      this.loadListTwo()
+      }
+      if (this.only == '1') {
+        this.activeName = 'settleFinsh'
+        this.loadListOne()
+      } else if (this.only == '2') {
+        this.activeName = 'settleEnd'
+        this.loadListTwo()
+      }
+      this.back = true
+      this.dataDtl = false
     },
     billOrd(param) {
       let scope = this
