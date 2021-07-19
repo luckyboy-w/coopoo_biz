@@ -2,7 +2,7 @@
   <div>
     <div class="panel-group">
       <div class="card-panel-col">
-        <router-link to="/bc-goods/reject">
+        <router-link to="/goods/inventory">
           <div class="card-panel">
             <div class="card-left">
               <div class="card-title">
@@ -19,7 +19,7 @@
         </router-link>
       </div>
       <div class="card-panel-col">
-        <router-link to="/bc-goods/saleList">
+        <router-link to="order/readyList">
           <div class="card-panel">
             <div class="card-left">
               <div class="card-title">
@@ -36,7 +36,7 @@
         </router-link>
       </div>
       <div class="card-panel-col">
-        <router-link to="/bc-order/ready">
+        <router-link to="/order/backList">
           <div class="card-panel">
             <div class="card-left">
               <div class="card-title">
@@ -53,7 +53,12 @@
         </router-link>
       </div>
       <div class="card-panel-col">
-        <router-link to="bc-order/readyPay">
+        <router-link :to="{
+                          path: '/order/list',
+                          query: {
+                              orderStatus: '5'
+                          }
+                      }">
           <div class="card-panel">
             <div class="card-left">
               <div class="card-title">

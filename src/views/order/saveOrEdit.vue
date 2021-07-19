@@ -2,7 +2,7 @@
   <div class="update-form-panel">
     <el-form ref="dataForm" :model="dataForm" label-width="100px">
       <el-form-item label="地址类型" >
-        <el-select v-model="dataForm.type" :disabled="isDisabled">
+        <el-select v-model="dataForm.type" :disabled="isDisabled||disabled">
           <el-option value="1" label="发货地址" />
           <el-option value="2" label="退货地址" />
           <el-option value="3" label="发货和退货" />
@@ -68,6 +68,7 @@
     },
     data() {
       return {
+		  disabled:false,
         city: [],
         cityList: [],
         areaList: [],
@@ -105,6 +106,7 @@
       console.log(this.editData)
       this.$nextTick(function() {
         if (this.editData.addrId) {
+          this.disabled=true
           this.dataForm = this.editData
           this.isDisabled = this.editData.isDisabled
           this.dataForm.type=this.dataForm.type+''

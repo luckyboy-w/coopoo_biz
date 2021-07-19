@@ -510,10 +510,12 @@
           }).then(() => {
             getMethod('/express/confirm-return-order-item' ,{isReturnStock:1,orderItemId:row.orderItemId}).then(res => {
               this.$message('操作成功')
+			  this.loadList()
             })
           }).catch(() => {
           getMethod('/express/confirm-return-order-item' ,{isReturnStock:0,orderItemId:row.orderItemId}).then(res => {
             this.$message('操作成功')
+			this.loadList()
           })
         });
         })
@@ -533,10 +535,12 @@
           }).then(() => {
             getMethod('/express/confirm-reject-order-item' ,{isReturnStock:1,orderItemId:row.orderItemId}).then(res => {
               this.$message('操作成功')
+			  this.loadList()
             })
           }).catch(() => {
           getMethod('/express/confirm-reject-order-item' ,{isReturnStock:0,orderItemId:row.orderItemId}).then(res => {
             this.$message('操作成功')
+			this.loadList()
           })
         });
         })

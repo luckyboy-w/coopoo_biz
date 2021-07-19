@@ -538,6 +538,9 @@
     },
     computed: {},
     mounted() {
+      if (this.$route.query.orderStatus != undefined) {
+            this.searchParam.orderStatus = this.$route.query.orderStatus
+          }
       this.initLoad()
     },
     created() {},
