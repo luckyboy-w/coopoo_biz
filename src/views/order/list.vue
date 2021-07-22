@@ -129,12 +129,14 @@
                 <template slot-scope="scope">
                   <div class="item">
                     <span style="margin-left:150px">
-                        <el-checkbox :disabled="scope.row.isPrinted==null" v-model="scope.row.isChecked" :checked="scope.row.isChecked?scope.row.isChecked:false" @change="changeGoodsChecked(scope.row)">
-                           订单编号：{{ scope.row.orderNo }}
-                      <el-tag effect="light" size="mini" v-if="scope.row.isPrinted==1">
-                        已打印
-                      </el-tag>
-                        </el-checkbox>
+                      <el-checkbox :disabled="scope.row.isPrinted==null" v-model="scope.row.isChecked"
+                        :checked="scope.row.isChecked?scope.row.isChecked:false"
+                        @change="changeGoodsChecked(scope.row)">
+                        订单编号：{{ scope.row.orderNo }}
+                        <el-tag effect="light" size="mini" v-if="scope.row.isPrinted==1">
+                          已打印
+                        </el-tag>
+                      </el-checkbox>
 
                     </span>
                     <span style="margin-left:150px">订单总额：{{ scope.row.orderPayAmount }}</span>
@@ -218,7 +220,8 @@
                               <el-button type="primary" size="mini" @click="dealCustomOrd(scope.row)">
                                 确认退货
                               </el-button> -->
-                              <el-button type="primary" v-if="scope.row.isInvoiced===0" size="mini" @click="makeInvoice(scope.row)">
+                              <el-button type="primary" v-if="scope.row.isInvoiced===0" size="mini"
+                                @click="makeInvoice(scope.row)">
                                 开具发票
                               </el-button>
                             </template>
@@ -404,7 +407,9 @@
     getToken
   } from '@/utils/auth.js'
   import deliverGoods from './deliverGoods'
-  import { getLodop } from '@/utils/lodop.js'
+  import {
+    getLodop
+  } from '@/utils/lodop.js'
   export default {
     components: {
       deliverGoods
@@ -517,8 +522,8 @@
         showPagination: false,
         editData: [],
         searchParam: {
-          isPrint:'',
-          receiptStatus:'',
+          isPrint: '',
+          receiptStatus: '',
           buyerMobile: '',
           buyerName: '',
           goodsName: '',
@@ -539,31 +544,31 @@
     computed: {},
     mounted() {
       if (this.$route.query.orderStatus != undefined) {
-            this.searchParam.orderStatus = this.$route.query.orderStatus
-          }
+        this.searchParam.orderStatus = this.$route.query.orderStatus
+      }
       this.initLoad()
     },
     created() {},
     methods: {
       //全选
-      allGoodsChecked(val){
-        this.isChecked=!val
-        console.log('tableData.list',this.tableData.list,val,this.isChecked);
-        let checkedList=this.tableData.list
-        if (val==true) {
-          checkedList.forEach(item=>{
-            item.isChecked=false
+      allGoodsChecked(val) {
+        this.isChecked = !val
+        console.log('tableData.list', this.tableData.list, val, this.isChecked);
+        let checkedList = this.tableData.list
+        if (val == true) {
+          checkedList.forEach(item => {
+            item.isChecked = false
           })
-        } else{
-          checkedList.forEach(item=>{
-            item.isChecked=true
+        } else {
+          checkedList.forEach(item => {
+            item.isChecked = true
           })
         }
-        this.tableData.list=checkedList
-        console.log('tableData.list',this.tableData.list,checkedList);
+        this.tableData.list = checkedList
+        console.log('tableData.list', this.tableData.list, checkedList);
       },
       //单个勾选
-      changeGoodsChecked(row){
+      changeGoodsChecked(row) {
         console.log(row)
       },
       writeOff(row) {
@@ -584,7 +589,7 @@
       },
       backToList() {
         this.loadList()
-        this.isChecked=false
+        this.isChecked = false
         this.showList = true
       },
       deliverGoods(row) {
@@ -619,7 +624,8 @@
           exportParam.push(key + '=' + param[key])
         }
         //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
-        window.open(process.env.VUE_APP_BASE_API_NEW + '/order/export?token=' + getToken() + '&' + exportParam.join('&'))
+        window.open(process.env.VUE_APP_BASE_API_NEW + '/order/export?token=' + getToken() + '&' + exportParam.join(
+          '&'))
       },
       async getOrdDtl(row) {
         const {
@@ -707,8 +713,8 @@
       loadList() {
         const scope = this
         postMethod('/order/goods-order-list', this.searchParam).then(res => {
-          res.data.records.forEach(item=>{
-            item.isChecked=false
+          res.data.records.forEach(item => {
+            item.isChecked = false
           })
           scope.tableData.list = res.data.records
           scope.tableData.total = res.data.total
@@ -722,7 +728,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          getMethod('/order/print-invoice', { orderNo: data.orderNo }).then(res => {
+          getMethod('/order/print-invoice', {
+            orderNo: data.orderNo
+          }).then(res => {
             this.loadList()
             this.$message('操作成功')
           })
@@ -732,18 +740,18 @@
         let scope = this
         let selectedOrderList = []
         for (let j = 0; j < this.tableData.list.length; j++) {
-          if (this.tableData.list[j].isChecked==true) {
+          if (this.tableData.list[j].isChecked == true) {
             selectedOrderList.push(this.tableData.list[j].orderNo)
           }
         }
-        if (selectedOrderList.length<=0) {
+        if (selectedOrderList.length <= 0) {
           this.$message({
             message: '请选择要打印的订单',
             type: 'warning'
           })
           return false
         }
-        console.log(selectedOrderList,'selectedOrderList')
+        console.log(selectedOrderList, 'selectedOrderList')
         // return false
         let loading = this.$loading({
           lock: true,
