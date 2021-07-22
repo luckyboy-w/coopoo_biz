@@ -118,20 +118,20 @@
       </div>
     </div>
 
-    <el-dialog title="包裹" :visible.sync="sendOrder" v-if="sendOrder" @close="closeSendOrderDialog">
+    <el-dialog title="包裹" :visible.sync="sendOrder" width="80%" v-if="sendOrder" @close="closeSendOrderDialog">
       <div v-for="(item,index) in packageGoodsList" :key="index" style="margin-bottom: 20px;">
         <div style="font-size: 18px;line-height: 40px;">{{item.sort}}号包裹</div>
-        <div style="display: flex;">
-          <div style="display: flex;flex-wrap: nowrap;">
+        <div style="display: flex;flex-wrap: wrap;">
+          <div class="check_" style="display: flex;flex-wrap: wrap;">
             <el-checkbox @change="changeGoodsChecked(goodsItem,index,goodsIndex)"
               v-for="(goodsItem,goodsIndex) in item.goodsList" :key="goodsIndex"
               :checked="goodsItem.isChecked?goodsItem.isChecked:false"
               :disabled="goodsItem.isDisabled?goodsItem.isDisabled:false">
-              <div>
+              <div style="width: 150px;">
                 <div style="width: 150px;height: 150px;">
                   <el-image :src="goodsItem.goodsImage" fit="fill" style="width: 100%;height:100%"></el-image>
                 </div>
-                <div style="font-size: 15px;line-height: 30px;">
+                <div style="font-size: 15px;line-height: 25px;white-space: normal;">
                   {{ goodsItem.goodsName }}
                 </div>
               </div>
