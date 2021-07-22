@@ -114,7 +114,7 @@
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="showBillDetail(scope.row)">查看明细</el-button>
-              <el-button size="mini" type="primary" v-if="scope.row.isConfirm!=1" @click="confirmed(scope.row)">确认金额</el-button>
+              <el-button size="mini" type="primary" v-if="scope.row.isConfirm!=1" @click="confirmed(scope.row,scope.$index)">确认金额</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -456,7 +456,8 @@ export default {
       window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBillDtl?token=' + getToken() + '&' +
         exportParam.join('&'))
     },
-    confirmed(row) {
+    confirmed(row,index) {
+      console.log(row,index)
       let scope = this
       this.$confirm('是否进行确认金额操作?', '提示', {
         confirmButtonText: '确定',
@@ -464,11 +465,13 @@ export default {
         type: 'success'
       }).then(() => {
         postMethod('/settlement/confirm?id='+row.id).then(res => {
+         this.$set(this.settleFinshData.list[index], 'isConfirm', '1')
+         this.loadListOne()
           this.$message({
             message: '操作成功',
             type: 'success'
           })
-          scope.loadListOne()
+
         })
       })
     },
@@ -589,7 +592,8 @@ export default {
       })
     },
     loadListOne() {
-      let scope = this
+      console.log("111111")
+        let scope = this
         let param = this.searchParam
         param.settleStatus=1
         getMethod('/settlement/supplier-process-list', param).then(res => {
