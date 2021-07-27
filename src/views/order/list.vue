@@ -220,7 +220,7 @@
                               <el-button type="primary" size="mini" @click="dealCustomOrd(scope.row)">
                                 确认退货
                               </el-button> -->
-                              <el-button type="primary" v-if="scope.row.isInvoiced===0" size="mini"
+                              <el-button type="primary" v-if="scope.row.isInvoiced===0&&scope.row.orderStatus!==0" size="mini"
                                 @click="makeInvoice(scope.row)">
                                 开具发票
                               </el-button>
