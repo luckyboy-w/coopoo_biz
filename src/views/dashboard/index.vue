@@ -108,7 +108,7 @@
     </div>
 
     <div class="panel-group" style="margin-left: 15px;">
-      <div class="card-panel-col2">
+      <div @click="dataType('1')" class="card-panel-col2">
         <div class="card-panel">
           <div class="card-left">
             <div class="card-title">
@@ -118,14 +118,14 @@
               <count-to :start-val="0" :end-val="orderPayMoney" :decimals="2" :duration="2000" />
             </div>
           </div>
-          <el-radio class="card-right" @change="dataType" v-model="radio1" label="1">
+          <el-radio class="card-right" v-model="radio1" label="1">
             <div>
             </div>
           </el-radio>
         </div>
         <div v-if="radio1==1" class="flag"></div>
       </div>
-      <div class="card-panel-col2">
+      <div @click="dataType('2')" class="card-panel-col2">
         <div class="card-panel">
           <div class="card-left">
             <div class="card-title">
@@ -135,14 +135,14 @@
               <count-to :start-val="0" :end-val="orderPayNum" :duration="2000" />
             </div>
           </div>
-          <el-radio class="card-right" @change="dataType" v-model="radio1" label="2">
+          <el-radio class="card-right" v-model="radio1" label="2">
             <div>
             </div>
           </el-radio>
         </div>
         <div v-if="radio1==2" class="flag"></div>
       </div>
-      <div class="card-panel-col2">
+      <div @click="dataType('3')" class="card-panel-col2">
         <div class="card-panel">
           <div class="card-left">
             <div class="card-title">
@@ -152,14 +152,14 @@
               <count-to :start-val="0" :end-val="supplierSettleMoney" :decimals="2" :duration="2000" />
             </div>
           </div>
-          <el-radio class="card-right" @change="dataType" v-model="radio1" label="3">
+          <el-radio class="card-right" v-model="radio1" label="3">
             <div>
             </div>
           </el-radio>
         </div>
         <div v-if="radio1==3" class="flag"></div>
       </div>
-      <div class="card-panel-col2">
+      <div @click="dataType('4')" class="card-panel-col2">
         <div class="card-panel">
           <div class="card-left">
             <div class="card-title">
@@ -169,7 +169,7 @@
               <count-to :start-val="0" :end-val="storeSettleMoney" :decimals="2" :duration="2000" />
             </div>
           </div>
-          <el-radio class="card-right" @change="dataType" v-model="radio1" label="4">
+          <el-radio class="card-right" v-model="radio1" label="4">
             <div>
             </div>
           </el-radio>
@@ -277,6 +277,8 @@
       },
       changeDate(val) {
         console.log(val)
+        this.weekValue=''
+        this.monthValue=''
         this.dateType = val
         this.searchParam = {
           type: val,
@@ -285,6 +287,7 @@
         this.loadCharts()
       },
       changeWeek(val) {
+        this.monthValue=''
         this.weekValue = val
         let tempDate = new Date(val)
         let beforeDate = tempDate.setDate(tempDate.getDate() + 5)
@@ -297,6 +300,7 @@
       },
       changeMonth(val) {
         console.log(val)
+        this.weekValue=''
         this.monthValue = val
         let date = new Date(val)
         let year = date.getFullYear()
