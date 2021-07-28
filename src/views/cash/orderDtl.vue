@@ -244,7 +244,7 @@
       async initLoad() {
         const {
           data
-        } = await getMethod('/order/get-order-info', {
+        } = await getMethod('/order/goods-order-detail', {
           orderNo: this.orderNo
         })
         this.showOrdDtl = true
