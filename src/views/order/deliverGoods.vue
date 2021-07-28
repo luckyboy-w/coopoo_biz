@@ -562,6 +562,7 @@
       },
       loadLogisticsCompanyList() {
         getMethod('/delivery/get-company-list', {
+          status:'0',
           pageNum: 1,
           pageSize: 50
         }).then(res => {
@@ -598,8 +599,8 @@
           this.returnAddressList = res.data.records
           this.returnAddressList.map(i => {
             if (i.isDefault == 1) {
-              this.returnAddressId.sendAddressId=i.addrId
-              this.returnAddressId.sendAddressId=i.addrId
+              this.onlineSendOrderFrm.returnAddressId=i.addrId
+              this.sendOrderFrm.returnAddressId=i.addrId
             }
           })
         })

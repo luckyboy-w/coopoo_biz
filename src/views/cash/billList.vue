@@ -122,9 +122,9 @@
           :total="settleFinshData.total"
           background
           layout="prev, pager, next"
-          @current-change="currentPage"
-          @prev-click="currentPage"
-          @next-click="currentPage"
+          @current-change="currentPageOne"
+          @prev-click="currentPageOne"
+          @next-click="currentPageOne"
           :page-size="searchParam.pageSize"
           :current-page="searchParam.pageNum"
         />
@@ -180,9 +180,9 @@
           :total="settleEndData.total"
           background
           layout="prev, pager, next"
-          @current-change="currentPage"
-          @prev-click="currentPage"
-          @next-click="currentPage"
+          @current-change="currentPageTwo"
+          @prev-click="currentPageTwo"
+          @next-click="currentPageTwo"
           :page-size="searchParam.pageSize"
           :current-page="searchParam.pageNum"
         />
@@ -507,7 +507,8 @@ export default {
       let param = this.searchParam
       getMethod('/settlement/supplier-detail-list', param).then(res => {
         console.log(res, '数据')
-        this.billCashData.list = res.data.records
+        this.$set(this.billCashData, 'list', res.data.records)
+        // this.billCashData.list = res.data.records
         this.billCashData.total = res.data.total
         this.showPagination = this.billCashData.total == 0
       })
@@ -569,7 +570,15 @@ export default {
     currentPage(pageNum) {
       this.searchParam.pageNum = pageNum
       this.loadList()
+
+    },
+    currentPageOne(pageNum) {
+      this.searchParam.pageNum = pageNum
       this.loadListOne()
+
+    },
+    currentPageTwo(pageNum) {
+      this.searchParam.pageNum = pageNum
       this.loadListTwo()
 
     },
@@ -584,7 +593,8 @@ export default {
       param.settleStatus=1
       getMethod('/settlement/supplier-detail-list', param).then(res => {
         if (scope.tabIndex == 0) {
-          scope.noBillData.list = res.data.records
+          this.$set(this.noBillData, 'list', res.data.records)
+          // scope.noBillData.list = res.data.records
           scope.noBillData.total = res.data.total
           scope.showPagination = scope.noBillData.total == 0
         }
@@ -597,7 +607,8 @@ export default {
         let param = this.searchParam
         param.settleStatus=1
         getMethod('/settlement/supplier-process-list', param).then(res => {
-          scope.settleFinshData.list = res.data.records
+         this.$set(this.settleFinshData, 'list', res.data.records)
+          // scope.settleFinshData.list = res.data.records
           scope.settleFinshData.total = res.data.total
           scope.showPagination = scope.settleFinshData.total == 0
         })
@@ -607,7 +618,8 @@ export default {
       let param = this.searchParam
       param.settleStatus=2
       getMethod('/settlement/supplier-process-list', param).then(res => {
-          scope.settleEndData.list = res.data.records
+        this.$set(this.settleEndData, 'list', res.data.records)
+          // scope.settleEndData.list = res.data.records
           scope.settleEndData.total = res.data.total
           scope.showPagination = scope.settleEndData.total == 0
       })

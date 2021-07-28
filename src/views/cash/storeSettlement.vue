@@ -345,7 +345,8 @@ export default {
       let param = this.searchParam
       getMethod('/settlement/wait-detail-list', param).then(res => {
         console.log(res, '数据')
-        this.billCashData.list = res.data.records
+        this.$set(this.billCashData, 'list', res.data.records)
+        // this.billCashData.list = res.data.records
         this.billCashData.total = res.data.total
         this.showPagination = this.billCashData.total == 0
       })
@@ -499,10 +500,12 @@ export default {
       this.storeName=row.storeName
       this.activeName = 'dataDtl'
       this.searchParam.settleNo = row.settleNo
+      this.searchParam.storeId = row.storeId
       let param = this.searchParam
       getMethod('/settlement/wait-detail-list', param).then(res => {
         console.log(res, '数据')
-        this.billCashData.list = res.data.records
+        this.$set(this.billCashData, 'list', res.data.records)
+        // this.billCashData.list = res.data.records
         this.billCashData.total = res.data.total
         this.showPagination = this.billCashData.total == 0
       })
@@ -572,7 +575,8 @@ export default {
       let param = this.searchParam
       getMethod('/settlement/store-wait-list', param).then(res => {
         if (scope.tabIndex == 0) {
-          scope.noBillData.list = res.data.records
+          this.$set(this.noBillData, 'list', res.data.records)
+          // scope.noBillData.list = res.data.records
           scope.noBillData.total = res.data.total
           scope.showPagination = scope.noBillData.total == 0
         }
@@ -584,7 +588,8 @@ export default {
         let param = this.searchParam
         param.settleStatus=1
         getMethod('/settlement/store-process-list', param).then(res => {
-          scope.settleFinshData.list = res.data.records
+          this.$set(this.settleFinshData, 'list', res.data.records)
+          // scope.settleFinshData.list = res.data.records
           scope.settleFinshData.total = res.data.total
           scope.showPagination = scope.settleFinshData.total == 0
         })
@@ -594,7 +599,8 @@ export default {
       let param = this.searchParam
       param.settleStatus=2
       getMethod('/settlement/store-process-list', param).then(res => {
-          scope.settleEndData.list = res.data.records
+        this.$set(this.settleEndData, 'list', res.data.records)
+          // scope.settleEndData.list = res.data.records
           scope.settleEndData.total = res.data.total
           scope.showPagination = scope.settleEndData.total == 0
       })

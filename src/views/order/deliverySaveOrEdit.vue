@@ -94,6 +94,7 @@ export default {
   },
   created() {
     if (Object.keys(this.editData).length !== 0) {
+      console.log('88',this.editData);
       this.selectDeliveryCompany = this.editData.expressName
       this.selectDeliveryType = this.editData.deliveryTypeList
       this.selectPaymentMethod = this.paymentMethodList.filter((item) => item.id == this.editData.paymentMethod)[0].name
@@ -152,7 +153,7 @@ export default {
         }
       }
 
-      if (this.deliveryAttrList.length != 0 && Object.keys(this.dataForm.kdnArgs).length == 0) {
+      if (this.deliveryAttrList.length != 0 && Object.keys(this.dataForm.kdnArgs).length == 0&&this.dataForm.paymentMethod==3) {
         this.$message.warning('快递鸟参数不能为空')
         return false
       }

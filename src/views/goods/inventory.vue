@@ -20,7 +20,7 @@
       </div>
       <div class="ly-table-panel">
         <div class="ly-data-list">
-          <el-table ref="mainTable" :data="tableData.list" style="width: 100%; margin-bottom: 20px;" row-key="skuId"
+          <el-table ref="mainTable" :data="tableData.list" style="width: 100%; margin-bottom: 20px;"
             border @sort-change="onSortChange">
             <el-table-column prop="goodsName" label="商品名称"></el-table-column>
             <el-table-column prop="skuText" label="商品规格"></el-table-column>
