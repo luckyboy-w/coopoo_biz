@@ -136,11 +136,15 @@ export default {
       // 描述相符;1:满意;2:一般;3:不满意
       // 审核状态;10:待审核;20:已通过;30:被驳回
       if (verifyStatus == 1) {
-        return '满意'
+        return '不满意'
       } else if (verifyStatus == 2) {
         return '一般'
-      } else {
-        return '不满意'
+      } else if (verifyStatus == 3) {
+        return '一般'
+      } else if (verifyStatus == 4) {
+        return '满意'
+      } else if (verifyStatus == 5){
+        return '满意'
       }
     }
   },
