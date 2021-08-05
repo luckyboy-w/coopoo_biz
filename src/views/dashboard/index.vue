@@ -6,7 +6,7 @@
           <div class="card-panel">
             <div class="card-left">
               <div class="card-title">
-                库存123
+                库存
               </div>
               <div class="card-text">
                 当前库存小于10
