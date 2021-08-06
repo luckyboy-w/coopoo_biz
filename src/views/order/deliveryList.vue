@@ -51,8 +51,8 @@
             </el-table-column>
             <el-table-column label="付款方式">
               <template slot-scope="scope">
-                {{ scope.row.paymentMethod == 1 ? '到付' : '' }}
-                {{ scope.row.paymentMethod == 2 ? '现付' : '' }}
+                {{ scope.row.paymentMethod == 2 ? '到付' : '' }}
+                {{ scope.row.paymentMethod == 1 ? '现付' : '' }}
                 {{ scope.row.paymentMethod == 3 ? '月结' : '' }}
               </template>
             </el-table-column>

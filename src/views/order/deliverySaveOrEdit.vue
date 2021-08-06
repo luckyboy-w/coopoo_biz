@@ -76,8 +76,8 @@ export default {
       deliveryAttrList: [],
       // 付款方式 【1 到付】【2 现付】【3 月结】
       paymentMethodList: [
-        { id: 1, name: '到付' },
-        { id: 2, name: '现付' },
+        { id: 2, name: '到付' },
+        { id: 1, name: '现付' },
         { id: 3, name: '月结' }
       ],
       // attrvalue : userInput
