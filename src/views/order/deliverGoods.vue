@@ -454,7 +454,11 @@
             })
             postMethod('/express/batch-online-send-order', param).then(res => {
               if (res.data.length > 0) {
-                this.$message.error(res.data)
+                // this.$message.error(res.data)
+                this.$message({
+                  message: res.data,
+                  type: 'error'
+                })
                 loading.close()
                 return
               } else {
@@ -530,7 +534,11 @@
             })
             postMethod('/express/batch-offline-send-order', param).then(res => {
               if (res.data.length > 0) {
-                this.$message.error(res.data)
+                this.$message({
+                  message: res.data,
+                  type: 'error'
+                })
+                // this.$message.error(res.data)
                 loading.close()
                 return
               } else {
@@ -562,7 +570,7 @@
       },
       loadLogisticsCompanyList() {
         getMethod('/delivery/get-company-list', {
-          status:'0',
+          status: '0',
           pageNum: 1,
           pageSize: 50
         }).then(res => {
@@ -585,8 +593,8 @@
           this.sendAddressList = res.data.records
           this.sendAddressList.map(i => {
             if (i.isDefault == 1) {
-              this.onlineSendOrderFrm.sendAddressId=i.addrId
-              this.sendOrderFrm.sendAddressId=i.addrId
+              this.onlineSendOrderFrm.sendAddressId = i.addrId
+              this.sendOrderFrm.sendAddressId = i.addrId
             }
           })
         })
@@ -599,8 +607,8 @@
           this.returnAddressList = res.data.records
           this.returnAddressList.map(i => {
             if (i.isDefault == 1) {
-              this.onlineSendOrderFrm.returnAddressId=i.addrId
-              this.sendOrderFrm.returnAddressId=i.addrId
+              this.onlineSendOrderFrm.returnAddressId = i.addrId
+              this.sendOrderFrm.returnAddressId = i.addrId
             }
           })
         })
