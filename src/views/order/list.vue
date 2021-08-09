@@ -108,6 +108,7 @@
               批量打印
             </el-button>
             <el-button @click="downloadPrintSoftware" type="primary">下载打印软件</el-button>
+            <el-button type="primary" icon="el-icon-download" @click="exportData()">导出</el-button>
           </div>
         </div>
         <!-- <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
@@ -220,8 +221,8 @@
                               <el-button type="primary" size="mini" @click="dealCustomOrd(scope.row)">
                                 确认退货
                               </el-button> -->
-                              <el-button type="primary" v-if="scope.row.isInvoiced===0&&scope.row.orderStatus!==0" size="mini"
-                                @click="makeInvoice(scope.row)">
+                              <el-button type="primary" v-if="scope.row.isInvoiced===0&&scope.row.orderStatus!==0"
+                                size="mini" @click="makeInvoice(scope.row)">
                                 开具发票
                               </el-button>
                             </template>
@@ -385,7 +386,7 @@
               </el-col>
             </el-row>
             <div>
-                            {{ordDtl.remark?ordDtl.remark:'暂无备注'}}
+              {{ordDtl.remark?ordDtl.remark:'暂无备注'}}
             </div>
           </div>
         </div>
@@ -608,23 +609,23 @@
         }
         let param = {
           orderNo: this.searchParam.orderNo,
-          recUname: this.searchParam.recUname,
-          recMobile: this.searchParam.recMobile,
-          isBackend: this.searchParam.isBackend,
-          orderType: this.searchParam.orderType,
-          isRequireTaxBill: this.searchParam.isRequireTaxBill,
-          status: this.searchParam.status,
+          buyerName: this.searchParam.buyerName,
+          buyerMobile: this.searchParam.buyerMobile,
+          goodsName: this.searchParam.goodsName,
+          orderStatus:this.searchParam.orderStatus,
+          storeName: this.searchParam.storeName,
+          payType: this.searchParam.payType,
+          receiptStatus:this.searchParam.receiptStatus,
+          isPrint:this.searchParam.isPrint,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
-          riskOrder: this.searchParam.riskOrder,
-          dataType: this.searchParam.dataType
         }
         let exportParam = []
         for (let key in param) {
           exportParam.push(key + '=' + param[key])
         }
         //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
-        window.open(process.env.VUE_APP_BASE_API_NEW + '/order/export?token=' + getToken() + '&' + exportParam.join(
+        window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join(
           '&'))
       },
       async getOrdDtl(row) {

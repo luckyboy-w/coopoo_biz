@@ -574,6 +574,7 @@
         for (let key in param) {
           exportParam.push(key + '=' + param[key])
         }
+		// console.log('888',process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'));
         //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
         window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'))
       },
