@@ -677,7 +677,12 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
-
+	
+	.el-carousel__item {
+	    overflow-y: auto!important;
+	}
+	
+	
   .ly-container {
     font-size: 14px;
 

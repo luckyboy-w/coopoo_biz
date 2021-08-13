@@ -37,7 +37,7 @@
             <div>订单状态：</div>
             <div>
               <!-- 订单状态 0:已取消 1:已提交 2:待支付 3:退款中 4:退款完成 5:待取件 6:待发货 7:待收货 8:交易完成 9:拒收 10:拒收完成 11:退货中 12:退货完成 -->
-              <el-select v-model="searchParam.orderStatus" placeholder="请选择">
+              <el-select v-model="searchParam.orderStatusList" multiple  placeholder="请选择">
                 <el-option value="" label="全部" />
                 <el-option value="0" label="已取消" />
                 <el-option value="2" label="待支付" />
@@ -82,6 +82,16 @@
                 <el-option value="" label="全部"></el-option>
                 <el-option value="0" label="不可打印"></el-option>
                 <el-option value="1" label="可打印"></el-option>
+              </el-select>
+            </div>
+          </div>
+          <div class="tabTd">
+            <div>配送方式：</div>
+            <div>
+              <el-select v-model="searchParam.deliveryMethod" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="1" label="邮寄"></el-option>
+                <el-option value="2" label="自提"></el-option>
               </el-select>
             </div>
           </div>
@@ -523,6 +533,8 @@
         showPagination: false,
         editData: [],
         searchParam: {
+          deliveryMethod:'',
+          orderStatusList:[],
           isPrint: '',
           receiptStatus: '',
           buyerMobile: '',
@@ -619,6 +631,8 @@
           isPrint:this.searchParam.isPrint,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
+          orderStatusList:this.searchParam.orderStatusList,
+          deliveryMethod:this.searchParam.deliveryMethod,
         }
         let exportParam = []
         for (let key in param) {
@@ -810,6 +824,10 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
+  .el-carousel__item {
+      overflow-y: auto!important;
+  }
 
   .ly-container {
     font-size: 14px;
