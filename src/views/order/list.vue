@@ -727,6 +727,11 @@
       },
       loadList() {
         const scope = this
+        this.searchParam.orderStatusList.forEach((i,index)=>{
+          if (i==''||i==null) {
+            this.searchParam.orderStatusList=[]
+          }
+        })
         postMethod('/order/goods-order-list', this.searchParam).then(res => {
           res.data.records.forEach(item => {
             item.isChecked = false
