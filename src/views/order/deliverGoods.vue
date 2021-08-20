@@ -44,7 +44,8 @@
                     <el-input v-model="item.orderNo" disabled></el-input>
                   </el-form-item>
                   <el-form-item label="包裹数量" prop="quantity" style="width:460px">
-                    <el-input type="number" v-model.number="item.quantity" @blur="packageNum(item)"></el-input>
+                    <el-input type="number" v-model.number="item.quantity" @input="change($event)"
+                      @change="packageNum(item)"></el-input>
                   </el-form-item>
                 </div>
                 <div style="display: flex;flex-wrap: nowrap;">
@@ -267,6 +268,7 @@
       console.log(this.editData)
       this.onlineSendOrderFrm.onlineSendOrderParamList = this.editData
       this.sendOrderFrm.offlineSendOrderParamList = this.editData
+      this.quantityOne()
       // this.initLoad()
       this.initAddrList()
       this.loadLogisticsCompanyList()
@@ -274,7 +276,16 @@
     },
     created() {},
     methods: {
+      change() {
+        this.$forceUpdate();
+      },
+      quantityOne() {
+        this.onlineSendOrderFrm.onlineSendOrderParamList.map((item, index) => {
+          item.quantity = 1
+        })
+      },
       packageNum(val) {
+        console.log('val', val);
         this.packageGoodsList = []
         this.onlineSendOrderFrm.onlineSendOrderParamList.map((item, index) => {
           if (val.orderNo == item.orderNo) {
@@ -288,6 +299,8 @@
             type: 'warning'
           })
           val.quantity = 1
+          this.$forceUpdate();
+          console.log('31234564', val.quantity);
           return false
         }
         if (val.quantity > 1) {
