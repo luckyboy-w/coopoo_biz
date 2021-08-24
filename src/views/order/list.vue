@@ -80,8 +80,8 @@
             <div>
               <el-select v-model="searchParam.isPrint" placeholder="请选择">
                 <el-option value="" label="全部"></el-option>
-                <el-option value="0" label="不可打印"></el-option>
-                <el-option value="1" label="可打印"></el-option>
+                <el-option value="0" label="未打印"></el-option>
+                <el-option value="1" label="已打印"></el-option>
               </el-select>
             </div>
           </div>
