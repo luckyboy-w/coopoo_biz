@@ -580,6 +580,7 @@
       },
       logisticsCompanySelectChange(val) {
         this.logisticsCompanyTypeList = val.deliveryTypeList
+        this.logisticsCompanyTypeId=''
       },
       loadLogisticsCompanyList() {
         getMethod('/delivery/get-company-list', {
