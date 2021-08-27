@@ -569,12 +569,13 @@
           payType: this.searchParam.payType,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
+          orderStatus:this.searchParam.orderStatus,
         }
         let exportParam = []
         for (let key in param) {
           exportParam.push(key + '=' + param[key])
         }
-		// console.log('888',process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'));
+		console.log('888',process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'));
         //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
         window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'))
       },
@@ -677,12 +678,12 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
-	
+
 	.el-carousel__item {
 	    overflow-y: auto!important;
 	}
-	
-	
+
+
   .ly-container {
     font-size: 14px;
 
