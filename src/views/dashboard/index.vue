@@ -481,17 +481,28 @@
     flex-wrap: wrap;
 
     .card-panel-col {
+      width: auto!important;
+      min-width: 250px;
       margin: 15px;
-      width: 250px;
+      // width: 250px;
 
       .card-right {
-        width: 30%;
+        width: 100%;
+        padding: 0 10px;
+        text-align: center;
+        // width: 30%;
         font-size: 40px;
         font-weight: 600;
       }
 
       .card-text {
         font-size: 15px;
+      }
+      .card-left {
+        width: 70%;
+        padding-left: 25px;
+        line-height: 35px;
+        min-width: 150px;
       }
     }
 
@@ -508,14 +519,13 @@
       .card-text {
         font-size: 20px;
       }
-    }
 
     .card-left {
       width: 70%;
       padding-left: 25px;
       line-height: 35px;
     }
-
+    }
 
 
     .card-title {
