@@ -68,7 +68,7 @@
           </div>
           <div class="tabTd">
             <el-button type="primary" style="margin-left:20px" @click="searchOne()">搜索</el-button>
-            <!-- <el-button type="primary" @click="exportData()">导出Excel</el-button> -->
+            <el-button type="primary" @click="exportData()">导出Excel</el-button>
           </div>
         </div>
         <el-table ref="settleFinshData" :data="settleFinshData.list" style="width: 100%; margin: 20px 0;"
@@ -384,27 +384,19 @@ export default {
       window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportWaitingBillDtl?token=' + getToken() + '&' +
         exportParam.join('&'))
     },
-    //结算中导出
+    //待审核导出
     exportData() {
-      if (this.searchParam.startTime == null) {
-        this.searchParam.startTime = ''
-      }
-      if (this.searchParam.endTime == null) {
-        this.searchParam.endTime = ''
-      }
-      let param = {
-        billType: this.searchParam.billType,
-        startTime: this.searchParam.startTime,
-        endTime: this.searchParam.endTime,
-        orderNo: this.searchParam.orderNo
-      }
-      let exportParam = []
-      for (let key in param) {
-        exportParam.push(key + '=' + param[key])
-      }
-      console.log(exportParam, '传的参')
-      window.open(process.env.VUE_APP_BASE_API + '/bu/orderBill/exportBill?token=' + getToken() + '&' + exportParam.join(
-        '&'))
+     let exportParam = [];
+     
+     let param = JSON.parse(JSON.stringify(this.searchParam));
+     delete param.pageSize
+     delete param.pageNum
+     
+     for (let key in param) {
+       exportParam.push(key + "=" + param[key]);
+     }
+     exportParam.push("token=" + getToken())
+     window.open(process.env.VUE_APP_BASE_API + '/excel/store-settlement/export?' + exportParam.join("&"))
     },
     //已结算导出
     exportData_() {

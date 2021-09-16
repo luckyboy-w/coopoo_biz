@@ -18,9 +18,9 @@
           <el-button icon="el-icon-search" type="primary" @click="search()">
             搜索
           </el-button>
-          <!-- <el-button plain type="normal" icon="el-icon-download" @click="exportData()">
+          <el-button plain type="normal" icon="el-icon-download" @click="exportData()">
             导出
-          </el-button> -->
+          </el-button>
         </div>
       </div>
       <div class="ly-table-panel">
@@ -153,15 +153,10 @@
         editData: {},
         isGift: '1',
         isEditGood: true,
-        verifyForm: {
-          verifyResult: "0",
-          recContent: "",
-          verifyType: "GOOD",
-          modityStatus: "20",
-          dataId: ""
-        },
         searchParam: {
           status:'1',
+          goodsName:'',
+          goodsCode:'',
           pageSize: 10,
           pageNum: 1
         },
@@ -178,13 +173,16 @@
     methods: {
       exportData() {
         let exportParam = [];
-        for (let key in this.searchParam) {
-          if (this.searchParam[key] != undefined) {
-            exportParam.push(key + "=" + this.searchParam[key]);
-          }
+
+        let param = JSON.parse(JSON.stringify(this.searchParam));
+        delete param.pageSize
+        delete param.pageNum
+
+        for (let key in param) {
+          exportParam.push(key + "=" + param[key]);
         }
         exportParam.push("token=" + getToken())
-        window.open(process.env.VUE_APP_BASE_API + '/backend/good/export?' + exportParam.join("&"))
+        window.open(process.env.VUE_APP_BASE_API + '/excel/goods-sku/export?' + exportParam.join("&"))
       },
       editGood(row, disabled) {
         let scope = this
