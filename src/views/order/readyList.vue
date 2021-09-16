@@ -43,6 +43,12 @@
               </el-select>
             </div>
           </div>
+		  <div class="tabTd">
+		    <div>注册手机号：</div>
+		    <div>
+		      <el-input v-model="searchParam.registerPhoneNo" width="180px" placeholder="请输入" />
+		    </div>
+		  </div>
           <div class="tabTd">
             <div>下单时间：</div>
             <div>
@@ -90,6 +96,7 @@
                     </span>
                     <span style="margin-left:150px">订单总额：{{ scope.row.orderPayAmount }}</span>
                     <span style="margin-left:150px">下单时间：{{ scope.row.createTime }}</span>
+					<span style="margin-left:150px">注册手机号：{{ scope.row.registerPhoneNo }}</span>
                   </div>
                 </template>
               </el-table-column>
@@ -473,6 +480,7 @@
         showPagination: false,
         editData: [],
         searchParam: {
+			registerPhoneNo:'',
           receiptStatus:'',
           buyerMobile: '',
           buyerName: '',
