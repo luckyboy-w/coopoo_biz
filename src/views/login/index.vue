@@ -228,7 +228,7 @@ $cursor: #fff;
 		/* z-index: -100; */
 		zoom: 1;
 		background-color: #fff;
-		background: url(https://bucket.coopoo.cn/images/supplier.png) no-repeat;
+		background: url(https://bucket.coopoo.com/images/supplier.png) no-repeat;
 		background-size: cover;
 		-webkit-background-size: cover;
 		-o-background-size: cover;
