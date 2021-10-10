@@ -105,9 +105,9 @@
           :total="settleFinshData.total"
           background
           layout="prev, pager, next"
-          @current-change="currentPage"
-          @prev-click="currentPage"
-          @next-click="currentPage"
+          @current-change="currentPageOne"
+          @prev-click="currentPageOne"
+          @next-click="currentPageOne"
           :page-size="searchParam.pageSize"
           :current-page="searchParam.pageNum"
         />
@@ -162,9 +162,9 @@
           :total="settleEndData.total"
           background
           layout="prev, pager, next"
-          @current-change="currentPage"
-          @prev-click="currentPage"
-          @next-click="currentPage"
+          @current-change="currentPageTwo"
+          @prev-click="currentPageTwo"
+          @next-click="currentPageTwo"
           :page-size="searchParam.pageSize"
           :current-page="searchParam.pageNum"
         />
@@ -553,9 +553,14 @@ export default {
     currentPage(pageNum) {
       this.searchParam.pageNum = pageNum
       this.loadList()
+    },
+    currentPageOne(pageNum) {
+      this.searchParam.pageNum = pageNum
       this.loadListOne()
+    },
+    currentPageTwo(pageNum) {
+      this.searchParam.pageNum = pageNum
       this.loadListTwo()
-
     },
     currentPageDetail(pageNum) {
       this.searchParam.pageNum = pageNum
