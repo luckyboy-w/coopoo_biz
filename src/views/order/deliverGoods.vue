@@ -203,8 +203,64 @@
           offlineSendOrderParamList: []
         },
         expressList: [{
+            id: 'ZYE',
+            text: '众邮快递'
+          },
+          {
             id: 'SF',
             text: '顺丰速运'
+          },
+          {
+            id: 'HTKY',
+            text: '百世快递'
+          },
+          {
+            id: 'DBL',
+            text: '德邦快递'
+          },
+          {
+            id: 'STO',
+            text: '申通快递'
+          },
+          {
+            id: 'YTO',
+            text: '圆通速递'
+          },
+          {
+            id: 'YD',
+            text: '韵达速递'
+          },
+          {
+            id: 'EMS',
+            text: 'EMS'
+          },
+          {
+            id: 'HHTT',
+            text: '天天快递'
+          },
+          {
+            id: 'ZTO',
+            text: '中通快递'
+          },
+          {
+            id: 'UC',
+            text: '优速快递'
+          },
+          {
+            id: 'UAPEX',
+            text: '全一快递'
+          },
+          {
+            id: 'SURE',
+            text: '速尔快递'
+          },
+          {
+            id: 'KYSY',
+            text: '跨越速运'
+          },
+          {
+            id: 'TLWL',
+            text: '腾林物流'
           },
           {
             id: 'YZBK',
@@ -215,44 +271,92 @@
             text: '邮政快递包裹'
           },
           {
-            id: 'STO',
-            text: '申通快递'
+            id: 'ZJS',
+            text: '宅急送'
           },
           {
-            id: 'DBL',
-            text: '德邦快递'
+            id: 'XFEX',
+            text: '信丰物流'
           },
           {
-            id: 'JD',
-            text: '京东快递'
+            id: 'LHT',
+            text: '联昊通速递'
           },
           {
-            id: 'HHTT',
-            text: '天天快递'
+            id: 'YCWL',
+            text: '远成快运'
+          },
+          {
+            id: 'PJ',
+            text: '品骏快递'
+          },
+          {
+            id: 'JDKY',
+            text: '京东快运'
+          },
+          {
+            id: 'ANEKY',
+            text: '安能快运'
+          },
+          {
+            id: 'LB',
+            text: '龙邦快运'
+          },
+          {
+            id: 'DBLKY',
+            text: '德邦快运'
+          },
+          {
+            id: 'HTKYKY',
+            text: '百世快运'
+          },
+          {
+            id: 'CND',
+            text: '承诺达'
+          },
+          {
+            id: 'ZTOKY',
+            text: '中通快运'
+          },
+          {
+            id: 'HOAU',
+            text: '天地华宇'
+          },
+          {
+            id: 'CNEX',
+            text: '佳吉快运'
+          },
+          {
+            id: 'YDKY',
+            text: '韵达快运'
+          },
+          {
+            id: 'SX',
+            text: '顺心捷达'
           },
           {
             id: 'JTSD',
             text: '极兔速递'
           },
           {
+            id: 'DNWL',
+            text: '丹鸟物流'
+          },
+          {
             id: 'SNWL',
             text: '苏宁物流'
           },
           {
-            id: 'ZTO',
-            text: '中通快递'
+            id: 'EST365',
+            text: '东方汇'
           },
           {
-            id: 'YD',
-            text: '韵达速递'
+            id: 'YMDD',
+            text: '壹米滴答'
           },
           {
-            id: 'HTKY',
-            text: '百世快递'
-          },
-          {
-            id: 'YTO',
-            text: '圆通速递'
+            id: 'JD',
+            text: '京东快递'
           }
         ],
       }
