@@ -580,7 +580,7 @@
     computed: {},
     mounted() {
       if (this.$route.query.orderStatus != undefined) {
-        this.searchParam.orderStatus = this.$route.query.orderStatus
+        this.searchParam.orderStatusList[0] = this.$route.query.orderStatus
       }
       this.initLoad()
     },
