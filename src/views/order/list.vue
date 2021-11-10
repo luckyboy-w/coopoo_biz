@@ -636,11 +636,11 @@
         scope.showList = false
       },
       exportData() {
-        if (this.searchParam.startTime == null) {
-          this.searchParam.startTime = ''
+        if (this.searchParam.orderStartTime == null) {
+          this.searchParam.orderStartTime = ''
         }
-        if (this.searchParam.endTime == null) {
-          this.searchParam.endTime = ''
+        if (this.searchParam.orderEndTime == null) {
+          this.searchParam.orderEndTime = ''
         }
         let param = {
           orderNo: this.searchParam.orderNo,
@@ -652,8 +652,8 @@
           payType: this.searchParam.payType,
           receiptStatus:this.searchParam.receiptStatus,
           isPrint:this.searchParam.isPrint,
-          startTime: this.searchParam.startTime,
-          endTime: this.searchParam.endTime,
+          orderStartTime: this.searchParam.orderStartTime,
+          orderEndTime: this.searchParam.orderEndTime,
           orderStatusList:this.searchParam.orderStatusList,
           deliveryMethod:this.searchParam.deliveryMethod,
         }
@@ -661,7 +661,6 @@
         for (let key in param) {
           exportParam.push(key + '=' + param[key])
         }
-        //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
         window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join(
           '&'))
       },
