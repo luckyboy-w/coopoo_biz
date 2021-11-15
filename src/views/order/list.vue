@@ -116,6 +116,20 @@
             </div>
           </div>
           <div class="tabTd">
+            <div>交易关闭时间：</div>
+            <div>
+              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.orderCloseStartTime"
+                type="date" placeholder="开始时间">
+              </el-date-picker>
+            </div>
+            <div style="padding: 0 6px;">至</div>
+            <div>
+              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.orderCloseEndTime" type="date"
+                placeholder="结束时间">
+              </el-date-picker>
+            </div>
+          </div>
+          <div class="tabTd">
             <el-button icon="el-icon-search" type="primary" @click="search()">
               搜索
             </el-button>
@@ -564,6 +578,8 @@
           buyerName: '',
           goodsName: '',
           orderEndTime: '',
+          orderCloseStartTime:'',
+          orderCloseEndTime:'',
           orderNo: '',
           orderStartTime: '',
           orderStatus: '',
@@ -656,6 +672,8 @@
           orderEndTime: this.searchParam.orderEndTime,
           orderStatusList:this.searchParam.orderStatusList,
           deliveryMethod:this.searchParam.deliveryMethod,
+          orderCloseStartTime:this.searchParam.orderCloseStartTime,
+          orderCloseEndTime:this.searchParam.orderCloseEndTime,
         }
         let exportParam = []
         for (let key in param) {
