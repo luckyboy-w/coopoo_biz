@@ -34,6 +34,7 @@
        <div class="tabTd">
          <el-button type="primary" @click="search()" icon="el-icon-search">搜索</el-button>
          <el-button type="primary" icon="el-icon-download" style="margin-left:20px" @click="exportData()">导出Excel</el-button>
+         <el-button type="primary" icon="el-icon-download" style="margin-left:20px" @click="exportStoreData()">导出门店Excel</el-button>
        </div>
       </div>
       <div class="ly-table-panel">
@@ -135,6 +136,20 @@ export default {
       }
       exportParam.push("token=" + getToken())
       window.open(process.env.VUE_APP_BASE_API + "/excel/order-detail-settlement/export?" + exportParam.join("&"));
+    },
+    exportStoreData(){
+      let exportParam = [];
+
+      let param = JSON.parse(JSON.stringify(''));
+      delete param.pageSize
+      delete param.pageNum
+
+      for (let key in param) {
+        exportParam.push(key + "=" + param[key]);
+      }
+      exportParam.push("token=" + getToken())
+      console.log(process.env.VUE_APP_BASE_API + "/excel/supplier-goods-settlement/export?" + exportParam.join("&"))
+      window.open(process.env.VUE_APP_BASE_API + "/excel/supplier-goods-settlement/export?" + exportParam.join("&"));
     },
     loadList() {
       let scope = this
