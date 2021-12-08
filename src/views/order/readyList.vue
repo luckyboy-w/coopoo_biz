@@ -216,7 +216,14 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" header-align="center" prop="goodsName" label="商品名称"></el-table-column>
-              <el-table-column align="center" header-align="center" prop="skuText" label="规格"></el-table-column>
+              <el-table-column align="center" header-align="center" prop="skuText" label="规格">
+                <template slot-scope="scope">
+                  {{ scope.row.skuText }}
+                  <div v-if="ordDtl.orderStatus==5||ordDtl.orderStatus==6" style="text-align: center!important;width: 100%;">
+                    <el-button type="text" @click="modifySku(scope.row)">修改订单属性</el-button>
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column align="center" header-align="center" prop="goodsPrice" label="商品单价"></el-table-column>
               <el-table-column align="center" header-align="center" prop="goodsNum" label="商品数量" width="150px">
               </el-table-column>
@@ -244,7 +251,9 @@
 		  <div v-if="ordDtl.deliveryMethod==1" class="info-container">
           <!--        收货人信息-->
           <span  class="main-title">
-            <el-col :span="24">收货信息</el-col>
+            <el-col :span="24">收货信息
+            <el-button v-if="ordDtl.orderStatus==6" type="text" @click="addressDialog = true">&nbsp;&nbsp;&nbsp; 修改收货地址</el-button>
+            </el-col>
           </span>
           <el-row :gutter="20" class="main-content">
             <el-col :span="6">收货人：{{ ordDtl.receiverName }}</el-col>
@@ -266,7 +275,7 @@
 		    <el-col :span="6">核销时间：{{ ordDtl.exchangeDate }}</el-col>
 		  </el-row>
 		  			  </div>
-          
+
 			<div v-if="ordDtl.receiptTitle" class="info-container">
           <!--        发票信息-->
           <span class="main-title" >
@@ -355,6 +364,99 @@
         </div>
       </div>
     </div>
+    <!-- 修改收货地址弹框 -->
+    <el-dialog title="修改收货地址" v-if="addressDialog" :visible.sync="addressDialog" width="50%" destroy-on-close :before-close="adressClose">
+      <div style="width: 100%;line-height: 50px;">
+        <div style="display: flex;">
+          <div style="border-right: 1px solid #9E9E9E;min-width: 100px;text-align: center;">原地址：</div>
+          <div style="text-align: center;width: 100%;">
+            {{ordDtl.receiverAddress}}&nbsp;,&nbsp;&nbsp;{{ordDtl.receiverName}}&nbsp;,&nbsp;&nbsp;{{ordDtl.receiverPhone}}
+          </div>
+        </div>
+        <div style="display: flex;border-top: 1px solid #9E9E9E;">
+          <div style="border-right: 1px solid #9E9E9E;min-width: 100px;text-align: center;padding-top: 10px;">新地址：</div>
+          <div style="padding-top: 20px;width: 100%;">
+            <el-form ref="form" :rules="addressRules" :model="addressForm" label-width="100px">
+              <el-form-item label="选择所在地" prop="areaText">
+                <el-select v-model="selectProvince" size="small" value-key="provinceid" placeholder="请选择省份"
+                  @change="selectProvinceFun">
+                  <el-option v-for="(item) in city" :key="item.provinceid" :value="item" :label="item.province" />
+                </el-select>
+                <el-select v-model="selectCity" size="small" value-key="cityid" placeholder="请选择城市"
+                  @change="selectCityFun">
+                  <el-option v-for="(item) in cityList" :key="item.cityid" :value="item" :label="item.city" />
+                </el-select>
+                <el-select v-model="selectArea" size="small" value-key="areaid" placeholder="请选择区县"
+                  @change="selectAreaFun">
+                  <el-option v-for="(item) in areaList" :key="item.areaid" :value="item" :label="item.area" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="详细地址" prop="changeAddress">
+                <el-input v-model="addressForm.changeAddress"></el-input>
+              </el-form-item>
+              <el-form-item label="收货人姓名" prop="changeName">
+                <el-input v-model="addressForm.changeName"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号" prop="changePhone">
+                <el-input maxlength="11" v-model="addressForm.changePhone"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <div style="text-align: right;">
+                  <el-button @click="adressClose">取 消</el-button>
+                  <el-button type="primary" @click="enterAddress">确 定</el-button>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+    <!-- 修改属性规格弹框 -->
+    <el-dialog title="修改商品规格" :visible.sync="skuDialog" width="50%" destroy-on-close :before-close="skuClose">
+      <div style="width: 100%;">
+        <div style="display: flex;line-height: 40px;">
+          <div style="min-width: 200px;text-align: center;"><img style="height: 80px;" :src="goodDtlList.goodsImage" />
+          </div>
+          <div style="width: 100%;">
+            <div>{{goodDtlList.goodsName}}</div>
+            <div>{{goodDtlList.skuText}} &nbsp;&nbsp;&nbsp;&nbsp;单价：{{goodDtlList.goodsPrice}}
+              &nbsp;&nbsp;&nbsp;&nbsp;数量：{{goodDtlList.goodsNum}}</div>
+          </div>
+        </div>
+        <div style="display: flex;border-top: 1px solid #9E9E9E;">
+          <div style="min-width: 200px"></div>
+          <div style="padding-top: 20px;width: 100%;">
+            <el-form ref="form" :model="addressForm" label-width="100px">
+              <div>
+                <div class="wrap wrap-sku">
+                  <div class="product-box">
+                    <div class="product-content">
+                      <div class="product-delcom" v-for="(ProductItem,n) in simulatedDATA.specifications">
+                        <p>{{ProductItem.name}}</p>
+                        <ul class="product-footerlist clearfix">
+                          <li style="list-style:none" v-for="(oItem,index) in ProductItem.item"
+                            v-on:click="specificationBtn(oItem.name,n,$event,index,ProductItem.name)"
+                            v-bind:class="[oItem.isShow?'':'noneActive',subIndex[n] == index?'productActive':'']">
+                            {{oItem.name}}
+                          </li>
+                        </ul>
+                      </div>
+                      <p v-if="price" class="price">价格：<span style="color: red;"> {{price}}</span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <el-form-item>
+                <div style="text-align: right;margin-top: 10px;">
+                  <el-button @click="skuClose">取 消</el-button>
+                  <el-button type="primary" @click="enterSku">确 定</el-button>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
     <deliverGoods v-if="!showList" ref="deliverGoods" :editData="editData" @backToList="backToList" />
   </div>
 </template>
@@ -370,6 +472,7 @@
   import {
     getToken
   } from '@/utils/auth.js'
+  import addressData from "@/utils/address.json"
   import deliverGoods from './deliverGoods'
   export default {
     components: {
@@ -475,6 +578,37 @@
     },
     data() {
       return {
+        simulatedDATA: {
+          "difference": [],
+          "specifications": []
+        },
+        selectArr: [], //存放被选中的值
+        shopItemInfo: {}, //存放要和选中的值进行匹配的数据
+        subIndex: [], //是否选中 因为不确定是多规格还是单规格，所以这里定义数组来判断
+        price: '',
+        addressData: addressData,
+        goodDtlList: {},
+        skuDialog: false,
+        addressDialog: false,
+        city: [],
+        cityList: [],
+        areaList: [],
+        selectProvince: '',
+        selectCity: '',
+        selectArea: '',
+        //修改收货地址
+        addressForm: {
+          provinceid: '',
+          provincetext: '',
+          cityid: '',
+          citytext: '',
+          areaId: '',
+          areaText: '',
+          changeAddress: '',
+          changeName: '',
+          changePhone: ''
+        },
+
         isChecked: false,
         showList: true,
         showOrdDtl: false,
@@ -500,11 +634,34 @@
         tableData: {
           list: []
         },
+        addressRules: {
+          areaText: [{
+            required: true,
+            message: '请选择所在地',
+            trigger: 'change'
+          }],
+          changeAddress: [{
+            required: true,
+            message: '请输入详细地址',
+            trigger: 'blur'
+          }],
+          changeName: [{
+            required: true,
+            message: '请输入收货人姓名',
+            trigger: 'blur'
+          }],
+          changePhone: [{
+            required: true,
+            message: '请输入手机号',
+            trigger: 'blur'
+          }]
+        },
       }
     },
     computed: {},
     mounted() {
       this.initLoad()
+      this.loadProvinceList()
     },
     created() {},
     methods: {
@@ -694,6 +851,236 @@
           scope.tableData.list = res.data.records
           scope.tableData.total = res.data.total
           scope.showPagination = scope.tableData.total == 0
+        })
+      },
+      //修改SKU彈框
+      modifySku(row) {
+        this.skuDialog = true
+
+        console.log(row, 'sku信息')
+        this.goodDtlList = row
+        getMethod('/goods/detail', {
+          goodsId: row.goodsId //row.goodsId
+        }).then(res => {
+          let skuSelList = res.data.specificationList
+          let skuPriceList = res.data.skuList
+          skuSelList.forEach((e, i) => {
+            e.skuTextArr = e.specificationValueList
+            let arr = []
+            let txtarr = e.skuTextArr
+            txtarr.forEach((m, n) => {
+              let ndatas = {
+                name: m.specificationValue,
+                isShow: true
+              }
+              arr.push(ndatas)
+            })
+            e.name = e.specificationName
+            e.item = arr
+          })
+          skuPriceList.forEach((e, i) => {
+            e.price = e.salePrice
+            e.difference = e.skuText
+          })
+          this.simulatedDATA = {
+            'difference': skuPriceList,
+            'specifications': skuSelList
+          }
+
+        })
+      },
+      enterSku() {
+        let skuText = this.selectArr.join(";")
+        let arr = this.simulatedDATA.difference
+        let skuId = ''
+        for (let j = 0; j < arr.length; j++) {
+          if (arr[j].skuText == skuText) {
+            skuId = arr[j].skuId
+          }
+        }
+        if (skuId != '') {
+          let param = {
+            skuId: skuId,
+            orderItemId: this.goodDtlList.orderItemId,
+            orderNo:this.ordDtl.orderNo
+          }
+          postMethod('/order/modify-order-sku', param).then(res => {
+            if (res.errCode == 0) {
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              })
+              // let datas = {
+              //   operationObject: this.ordDtl.orderNo,
+              //   operationContent: '修改商品规格'
+              // }
+              // this.saveOperation(datas)
+              this.skuClose()
+              let obj = {
+                orderNo: this.ordDtl.orderNo
+              }
+              this.getOrdDtl(obj)
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
+            }
+          })
+        } else {
+          this.$message({
+            message: "请选择商品规格",
+            type: 'warning'
+          })
+        }
+      },
+      skuClose() {
+        this.skuDialog = false
+        this.selectArr = []
+        this.shopItemInfo = {}
+        this.subIndex = []
+        this.price = ''
+      },
+
+      specificationBtn: function(item, n, event, index, name) {
+        console.log(item, n, event, index, name, '88888')
+        let that = this;
+        if (that.selectArr[n] != item) {
+          let arr = name + ":" + item
+          console.log(arr, 'arr')
+          that.selectArr[n] = arr;
+          that.subIndex[n] = index;
+        } else {
+          that.selectArr[n] = "";
+          that.subIndex[n] = -1; //去掉选中的颜色
+        }
+        // that.$forceUpdate(); //重绘
+        that.checkItem();
+      },
+      checkItem: function() {
+        let skuText = this.selectArr.join(";")
+        let arr = this.simulatedDATA.difference
+        let skuId = ''
+        console.log(arr, skuText, 'arr');
+        for (let j = 0; j < arr.length; j++) {
+          if (arr[j].skuText == skuText) {
+            skuId = arr[j].skuId
+            this.price = arr[j].price
+          }
+        }
+        this.$forceUpdate(); //重绘
+        // var that = this;
+        // var option = that.simulatedDATA.specifications;
+        // var result = []; //定义数组储存被选中的值
+        // for (var i in option) {
+        //   result[i] = that.selectArr[i] ? that.selectArr[i] : '';
+        // }
+        // for (var i in option) {
+        //   var last = result[i]; //把选中的值存放到字符串last去
+        //   for (var k in option[i].item) {
+        //     result[i] = option[i].item[k].name; //赋值，存在直接覆盖，不存在往里面添加name值
+        //     option[i].item[k].isShow = that.isMay(result); //在数据里面添加字段isShow来判断是否可以选择
+        //   }
+        //   result[i] = last; //还原，目的是记录点下去那个值，避免下一次执行循环时被覆盖
+        // }
+        // console.log(this.shopItemInfo[result], 'this.shopItemInfo[result]')
+        // if (this.shopItemInfo[result]) {
+        //   this.price = this.shopItemInfo[result].price || ''
+        // }
+        // that.$forceUpdate(); //重绘
+      },
+      //修改地址彈框
+      adressClose() {
+        this.addressDialog = false
+        this.addressForm = {
+          provinceid: null,
+          provincetext: null,
+          cityid: null,
+          citytext: null,
+          areaId: null,
+          areaText: null,
+          changeAddress: null,
+          changeName: null,
+          changePhone: null
+        }
+        this.selectProvince = ''
+        this.selectCity = ''
+        this.selectArea = ''
+      },
+      //省市区
+      loadProvinceList() {
+        const scope = this
+        // getMethod('/backend/areas/getAllData').then(res => {
+        scope.city = addressData.data
+        // })
+      },
+      selectProvinceFun(event) {
+        this.selectCity = ''
+        this.selectArea = ''
+        this.addressForm.citytext = ''
+        this.addressForm.areaText = ''
+        if (event) {
+          this.cityList = event.cityList
+          this.areaList = []
+        } else {
+          this.cityList = []
+          this.areaList = []
+        }
+        this.addressForm.provinceid = event.provinceid
+        this.addressForm.provincetext = event.province
+      },
+      selectCityFun(event) {
+        this.selectArea = ''
+        this.addressForm.areaText = ''
+        if (event) {
+          this.areaList = event.areasList
+        } else {
+          this.areaList = []
+        }
+        this.addressForm.cityid = event.cityid
+        this.addressForm.citytext = event.city
+      },
+      selectAreaFun(event) {
+        this.addressForm.areaId = event.areaid
+        this.addressForm.areaText = event.area
+      },
+      // 提交新的收货地址
+      enterAddress() {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            let param = {
+              orderNo: this.ordDtl.orderNo,
+              receiverAddress: this.addressForm.changeAddress,
+              receiverProvince: this.addressForm.provincetext,
+              receiverCity: this.addressForm.citytext,
+              receiverRegion: this.addressForm.areaText,
+              receiverPhone: this.addressForm.changePhone,
+              receiverName: this.addressForm.changeName,
+            }
+            postMethod('/order/modify-order-address', param).then(res => {
+              if (res.errCode == 0) {
+                this.$message({
+                  message: '修改成功',
+                  type: 'success'
+                })
+                // let datas = {
+                //   operationObject: this.ordDtl.orderNo,
+                //   operationContent: '修改收货地址'
+                // }
+                // this.saveOperation(datas)
+                this.adressClose()
+                let obj = {
+                  orderNo: this.ordDtl.orderNo
+                }
+                this.getOrdDtl(obj)
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error'
+                })
+              }
+            })
+          }
         })
       },
     }
@@ -957,5 +1344,56 @@
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+</style>
+<style lang="scss" rel="stylesheet">
+  .wrap-sku {
+    .product-box {
+      // width: 1200px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .product-content {
+      // margin-bottom: 100px;
+    }
+
+    .product-delcom {
+      color: #323232;
+      border-bottom: 1px solid #EEEEEE;
+    }
+
+    .product-footerlist {
+      margin-top: 10px;
+    }
+
+    .product-footerlist li {
+      border: 1px solid #606060;
+      border-radius: 5px;
+      color: #606060;
+      text-align: center;
+      padding: 5px 10px;
+      float: left;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    .product-footerlist li.productActive {
+      background-color: #1A1A29;
+      color: #fff;
+      border: 1px solid #1A1A29;
+    }
+
+    .product-footerlist li.noneActive {
+      background-color: #ccc;
+      opacity: 0.4;
+      color: #000;
+      pointer-events: none;
+    }
+
+    .price {
+      height: 40px;
+      line-height: 40px;
+    }
   }
 </style>

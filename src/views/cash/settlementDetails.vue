@@ -33,8 +33,8 @@
        </div>
        <div class="tabTd">
          <el-button type="primary" @click="search()" icon="el-icon-search">搜索</el-button>
-         <el-button type="primary" icon="el-icon-download" style="margin-left:20px" @click="exportData()">导出Excel</el-button>
-         <el-button type="primary" icon="el-icon-download" style="margin-left:20px" @click="exportStoreData()">导出门店Excel</el-button>
+         <el-button type="primary" icon="el-icon-download" style="margin-left:20px" @click="exportData()">导出明细</el-button>
+         <el-button type="primary" icon="el-icon-download" style="margin-left:20px" @click="exportStoreData()">导出统计表</el-button>
        </div>
       </div>
       <div class="ly-table-panel">

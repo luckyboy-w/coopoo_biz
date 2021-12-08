@@ -55,8 +55,16 @@
           <el-input disabled v-model="replyFrm.goodsCode">
           </el-input>
         </el-form-item>
+        <el-form-item label="现有库存">
+          <el-input type="number" placeholder="请输入" disabled v-model="replyFrm.stock">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-radio v-model="replyFrm.opType" label="1">增加</el-radio>
+          <el-radio v-model="replyFrm.opType" label="2">减少</el-radio>
+        </el-form-item>
         <el-form-item label="库存">
-          <el-input type="number" placeholder="请输入库存数" v-model="replyFrm.stock">
+          <el-input type="number" style="width: 300px;" placeholder="请输入" v-model="replyFrm.changeStock">
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -132,20 +140,28 @@
       },
       sendReply() {
         let scope = this
-        console.log(this.replyFrm);
-        if (this.replyFrm.stock == '') {
-          this.replyFrm.stock = 0
+        console.log(scope.replyFrm);
+        if(!scope.replyFrm.opType){
+         this.$message({
+           message: "请选择类型",
+           type: "warning"
+         });
+         return false
+        }
+        if (scope.replyFrm.changeStock== ''||!scope.replyFrm.changeStock) {
+          scope.replyFrm.changeStock = 0
         }
         let param = {
-          skuId: this.replyFrm.skuId,
-          stock: this.replyFrm.stock
+          skuId: scope.replyFrm.skuId,
+          stock: scope.replyFrm.changeStock,
+          opType:scope.replyFrm.opType,
         }
         getMethod('/goods/modify-sku-stock', param).then(res => {
           this.$message({
             message: "保存成功",
             type: "success"
           });
-          this.loadList()
+          scope.loadList()
           scope.sendEval = false
         })
       },
