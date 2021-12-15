@@ -2,8 +2,8 @@
   <div class="bill-tab-list" >
     <div v-if="showList">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="未结算" name="readyBill">
-        <span slot="label" class="my-tab-label">未结算</span>
+      <el-tab-pane label="未分佣" name="readyBill">
+        <span slot="label" class="my-tab-label">未分佣</span>
         <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
           <div class="tabTd">
             <div>门店名称：</div>
@@ -28,7 +28,7 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="实付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额" >
+          <el-table-column prop="settleAmount" label="分佣金额" >
           </el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
@@ -47,8 +47,8 @@
           :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
-      <el-tab-pane label="待审核" name="settleFinsh">
-        <span slot="label" class="my-tab-label">待审核</span>
+      <el-tab-pane label="待分佣" name="settleFinsh">
+        <span slot="label" class="my-tab-label">待分佣</span>
         <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
           <div class="tabTd">
             <div>结算单号：</div>
@@ -56,7 +56,7 @@
              <el-input @keyup.enter.native="searchOne()" v-model="searchParam.settleNo" width="180px"/>
             </div>
           </div>
-          <div class="tabTd">
+          <!-- <div class="tabTd">
             <div>申请时间：</div>
             <div>
              <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期">
@@ -64,6 +64,17 @@
              至
                <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
                </el-date-picker>
+            </div>
+          </div> -->
+          <div class="tabTd">
+            <div>入账月份：</div>
+            <div>
+              <el-date-picker
+                    v-model="searchParam.accountDate"
+                    type="month"
+                    value-format="yyyy-MM"
+                    placeholder="选择月">
+                  </el-date-picker>
             </div>
           </div>
           <div class="tabTd">
@@ -78,16 +89,18 @@
           </el-table-column>
           <el-table-column prop="storeName" label="门店名称">
           </el-table-column>
-          <el-table-column prop="applySettleDate" label="申请时间">
+          <el-table-column prop="accountDate" label="入账月份">
+          </el-table-column>
+          <!-- <el-table-column prop="applySettleDate" label="申请时间">
             <template slot-scope="scope">
               {{ scope.row.applySettleDate | _formateDate }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="orderAmount" label="订单金额" >
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="实付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额">
+          <el-table-column prop="settleAmount" label="分佣金额">
           </el-table-column>
           <el-table-column prop="isConfirm" label="状态">
             <template slot-scope="scope">
@@ -112,8 +125,8 @@
           :current-page="searchParam.pageNum"
         />
       </el-tab-pane>
-      <el-tab-pane label="已结算" name="settleEnd">
-        <span slot="label" class="my-tab-label">已结算</span>
+      <el-tab-pane label="已分佣" name="settleEnd">
+        <span slot="label" class="my-tab-label">已分佣</span>
         <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
           <div class="tabTd">
             <div>结算单号：</div>
@@ -132,6 +145,17 @@
             </div>
           </div>
           <div class="tabTd">
+            <div>入账月份：</div>
+            <div>
+              <el-date-picker
+                    v-model="searchParam.accountDate"
+                    type="month"
+                    value-format="yyyy-MM"
+                    placeholder="选择月">
+                  </el-date-picker>
+            </div>
+          </div>
+          <div class="tabTd">
             <el-button type="primary" style="margin-left:20px" @click="searchTwo()">搜索</el-button>
             <!-- <el-button type="primary" @click="exportData_()">导出Excel</el-button> -->
           </div>
@@ -146,11 +170,13 @@
               {{ scope.row.settleDate | _formateDate }}
             </template>
           </el-table-column>
+          <el-table-column prop="accountDate" label="入账月份" >
+          </el-table-column>
           <el-table-column prop="orderAmount" label="订单金额" >
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="实付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额" >
+          <el-table-column prop="settleAmount" label="分佣金额" >
           </el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
@@ -179,15 +205,20 @@
             </div>
           <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
             <div class="tabTd">
-              <div v-if="only=='0'">入账时间：</div>
-              <div v-if="only=='1'">申请时间：</div>
-              <div v-if="only=='2'">结算时间：</div>
+              <div>订单编号：</div>
               <div>
-               <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期">
-                 </el-date-picker>
-               至
-                 <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
-                 </el-date-picker>
+                <el-input placeholder="请输入"  v-model="searchParam.orderNo" width="180px"/>
+              </div>
+            </div>
+            <div class="tabTd">
+              <div>入账月份：</div>
+              <div>
+                <el-date-picker
+                      v-model="searchParam.accountDate"
+                      type="month"
+                      value-format="yyyy-MM"
+                      placeholder="选择月">
+                    </el-date-picker>
               </div>
             </div>
             <div class="tabTd">
@@ -212,26 +243,26 @@
         <el-table :data="billCashData.list" style="width: 100%; margin: 20px 0;" border row-key="id">
           <el-table-column prop="orderNo" label="订单编号" width="200">
           </el-table-column>
-          <el-table-column v-if="only=='0'" prop="accountTime" label="入账时间">
+          <el-table-column prop="accountTime" label="入账月份">
             <template slot-scope="scope">
-              {{ scope.row.accountTime | _formateDate }}
+              {{ scope.row.accountTime  }}
             </template>
           </el-table-column>
-          <el-table-column v-if="only=='1'" prop="applySettleDate" label="申请时间" >
+         <!-- <el-table-column v-if="only=='1'" prop="applySettleDate" label="申请时间" >
             <template slot-scope="scope">
               {{ scope.row.applySettleDate | _formateDate }}
             </template>
-          </el-table-column>
-          <el-table-column v-if="only=='2'" prop="settleDate" label="结算时间" >
+          </el-table-column> -->
+          <!-- <el-table-column v-if="only=='2'" prop="settleDate" label="结算时间" >
             <template slot-scope="scope">
               {{ scope.row.settleDate | _formateDate }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="orderAmount" label="订单金额" >
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="实付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额" >
+          <el-table-column prop="settleAmount" label="分佣金额" >
           </el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
@@ -292,6 +323,7 @@ export default {
       searchParam: {
         orderNo: '',
         storeName:'',
+        accountDate:'',
         settleNo:'',
         startTime: '',
         endTime: '',
@@ -387,11 +419,11 @@ export default {
     //待审核导出
     exportData() {
      let exportParam = [];
-     
+
      let param = JSON.parse(JSON.stringify(this.searchParam));
      delete param.pageSize
      delete param.pageNum
-     
+
      for (let key in param) {
        exportParam.push(key + "=" + param[key]);
      }
@@ -477,15 +509,15 @@ export default {
       this.back = false
       if (this.activeName == 'readyBill') {
         this.only = '0'
-        this.billMem = '未结算'
+        this.billMem = '未分佣'
         this.searchParam.settleStatus=1
       } else if (this.activeName == 'settleFinsh') {
         this.only = '1'
-        this.billMem = '待审核'
+        this.billMem = '待分佣'
         this.searchParam.settleStatus=2
       } else if (this.activeName == 'settleEnd') {
         this.only = '2'
-        this.billMem = '已结算'
+        this.billMem = '已分佣'
         this.searchParam.settleStatus=3
       }
       this.settleNo=row.settleNo?row.settleNo:''

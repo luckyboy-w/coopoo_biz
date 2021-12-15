@@ -33,7 +33,9 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="支付金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额" min-width="24%">
+          <el-table-column prop="settleAmount" label="供应商结算金额" min-width="24%">
+          </el-table-column>
+          <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
           <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
           </el-table-column>
@@ -73,7 +75,7 @@
              </el-select>
             </div>
           </div>
-          <div class="tabTd">
+         <!-- <div class="tabTd">
             <div>申请时间：</div>
             <div>
              <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期">
@@ -81,6 +83,17 @@
              至
                <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
                </el-date-picker>
+            </div>
+          </div> -->
+          <div class="tabTd">
+            <div>入账月份：</div>
+            <div>
+              <el-date-picker
+                    v-model="searchParam.accountDate"
+                    type="month"
+                    value-format="yyyy-MM"
+                    placeholder="选择月">
+                  </el-date-picker>
             </div>
           </div>
           <div class="tabTd">
@@ -93,16 +106,20 @@
         >
           <el-table-column prop="settleNo" label="结算单号">
           </el-table-column>
-          <el-table-column prop="applySettleDate" label="申请时间">
+          <!-- <el-table-column prop="applySettleDate" label="申请时间">
             <template slot-scope="scope">
               {{ scope.row.applySettleDate | _formateDate }}
             </template>
+          </el-table-column> -->
+          <el-table-column prop="accountDate" label="入账月份" >
           </el-table-column>
           <el-table-column prop="orderAmount" label="订单金额" >
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="支付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额">
+          <el-table-column prop="settleAmount" label="供应商结算金额" min-width="24%">
+          </el-table-column>
+          <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
           <el-table-column prop="platformServiceAmount" label="服务金额" >
           </el-table-column>
@@ -149,6 +166,17 @@
             </div>
           </div>
           <div class="tabTd">
+            <div>入账月份：</div>
+            <div>
+              <el-date-picker
+                    v-model="searchParam.accountDate"
+                    type="month"
+                    value-format="yyyy-MM"
+                    placeholder="选择月">
+                  </el-date-picker>
+            </div>
+          </div>
+          <div class="tabTd">
             <el-button type="primary" style="margin-left:20px" @click="searchTwo()">搜索</el-button>
             <!-- <el-button type="primary" @click="exportData_()">导出Excel</el-button> -->
           </div>
@@ -161,11 +189,15 @@
               {{ scope.row.settleDate | _formateDate }}
             </template>
           </el-table-column>
+          <el-table-column prop="accountDate" label="入账月份" min-width="24%">
+          </el-table-column>
           <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="支付金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额" min-width="24%">
+          <el-table-column prop="settleAmount" label="供应商结算金额" min-width="24%">
+          </el-table-column>
+          <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
           <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
           </el-table-column>
@@ -196,7 +228,7 @@
             </el-button>
             </div>
           <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
-            <div class="tabTd">
+            <!-- <div class="tabTd">
               <div>结算时间：</div>
               <div>
                <el-date-picker v-model="searchParam.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始日期">
@@ -204,6 +236,17 @@
                至
                  <el-date-picker v-model="searchParam.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束日期">
                  </el-date-picker>
+              </div>
+            </div> -->
+            <div class="tabTd">
+              <div>入账月份：</div>
+              <div>
+                <el-date-picker
+                      v-model="searchParam.accountDate"
+                      type="month"
+                      value-format="yyyy-MM"
+                      placeholder="选择月">
+                    </el-date-picker>
               </div>
             </div>
             <div class="tabTd">
@@ -228,16 +271,20 @@
         <el-table :data="billCashData.list" style="width: 100%; margin: 20px 0;" border row-key="id">
           <el-table-column prop="orderNo" label="订单号" min-width="24%">
           </el-table-column>
-          <el-table-column prop="settleDate" label="结算时间" min-width="24%">
+          <!-- <el-table-column prop="settleDate" label="结算时间" min-width="24%">
             <template slot-scope="scope">
               {{ scope.row.settleDate | _formateDate }}
             </template>
+          </el-table-column> -->
+          <el-table-column prop="accountTime" label="入账月份" min-width="24%">
           </el-table-column>
           <el-table-column prop="orderAmount" label="订单金额" min-width="24%">
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="支付金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="settleAmount" label="结算金额" min-width="24%">
+          <el-table-column prop="settleAmount" label="供应商结算金额" min-width="24%">
+          </el-table-column>
+          <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
           <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
           </el-table-column>
@@ -295,6 +342,7 @@ export default {
       searchParam: {
         orderNo: '',
         settleNo:'',
+        accountDate:'',
         startTime: '',
         endTime: '',
         pageSize: 10,
