@@ -911,6 +911,7 @@
         }
 
         this.ordDtl = data
+        this.$forceUpdate()
       },
       search() {
         this.searchParam.pageSize = 10
@@ -1027,12 +1028,14 @@
       //修改SKU彈框
       modifySku(row) {
         this.skuDialog = true
-
+        let params = {
+           goodsId: row.goodsId, //row.goodsId
+           liveGoodsId:row.liveGoodsId?row.liveGoodsId:'',
+           marketingGoodsId:row.goodsMarketingId?row.goodsMarketingId:'',
+        }
         console.log(row, 'sku信息')
         this.goodDtlList = row
-        getMethod('/goods/detail', {
-          goodsId: row.goodsId //row.goodsId
-        }).then(res => {
+        getMethod('/goods/sku',params).then(res => {
           let skuSelList = res.data.specificationList
           let skuPriceList = res.data.skuList
           skuSelList.forEach((e, i) => {
@@ -1091,6 +1094,7 @@
                 orderNo: this.ordDtl.orderNo
               }
               this.getOrdDtl(obj)
+              this.$forceUpdate()
             } else {
               this.$message({
                 message: res.message,
@@ -1244,6 +1248,7 @@
                   orderNo: this.ordDtl.orderNo
                 }
                 this.getOrdDtl(obj)
+                this.$forceUpdate()
               } else {
                 this.$message({
                   message: res.message,

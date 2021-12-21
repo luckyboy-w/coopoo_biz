@@ -64,12 +64,12 @@
           <el-radio v-model="replyFrm.opType" label="2">减少</el-radio>
         </el-form-item>
         <el-form-item label="库存">
-          <el-input type="number" style="width: 300px;" placeholder="请输入" v-model="replyFrm.changeStock">
+          <el-input type="number" style="width: 300px;" oninput="value=value.replace(/[^0-9.]/g,'')" placeholder="请输入" v-model="replyFrm.changeStock">
           </el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="sendReply()">保存</el-button>
-          <el-button plain type="primary" @click="handleClose">取消</el-button>
+          <el-button plain type="primary" @click="handleClose()">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -136,6 +136,7 @@
       },
 
       handleClose(done) {
+        this.replyFrm= {}
         this.sendEval = false
       },
       sendReply() {
@@ -144,6 +145,13 @@
         if(!scope.replyFrm.opType){
          this.$message({
            message: "请选择类型",
+           type: "warning"
+         });
+         return false
+        }
+        if(scope.replyFrm.opType==2&&Number(scope.replyFrm.stock)<Number(scope.replyFrm.changeStock)){
+         this.$message({
+           message: "减少库存不能大于现有库存",
            type: "warning"
          });
          return false
