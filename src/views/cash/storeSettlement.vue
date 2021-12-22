@@ -110,7 +110,7 @@
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="showBillDetail(scope.row)">查看明细</el-button>
-              <el-button size="mini" type="primary" v-if="scope.row.isConfirm==1" @click="confirmed(scope.row)">结算</el-button>
+              <!-- <el-button size="mini" type="primary" v-if="scope.row.isConfirm==1" @click="confirmed(scope.row)">结算</el-button> -->
             </template>
           </el-table-column>
         </el-table>
