@@ -37,8 +37,8 @@
           </el-table-column>
           <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
-          </el-table-column>
+          <!-- <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
+          </el-table-column> -->
           <el-table-column label="操作" min-width="24%">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="orderDtl(scope.row)">订单详情</el-button>
@@ -121,8 +121,8 @@
           </el-table-column>
           <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="platformServiceAmount" label="服务金额" >
-          </el-table-column>
+          <!-- <el-table-column prop="platformServiceAmount" label="服务金额" >
+          </el-table-column> -->
           <el-table-column prop="isConfirm" label="状态" >
             <template slot-scope="scope">
               {{scope.row.isConfirm==1?'已确认':'未确认'}}
@@ -199,8 +199,8 @@
           </el-table-column>
           <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
-          </el-table-column>
+          <!-- <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
+          </el-table-column> -->
           <el-table-column label="操作" min-width="24%">
             <template slot-scope="scope">
               <!--              <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>-->
@@ -286,8 +286,8 @@
           </el-table-column>
           <el-table-column prop="storeSettleAmount" label="门店分佣金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
-          </el-table-column>
+          <!-- <el-table-column prop="platformServiceAmount" label="服务金额" min-width="24%">
+          </el-table-column> -->
         </el-table>
         <el-pagination
           v-show="billCashData.total != 0"
