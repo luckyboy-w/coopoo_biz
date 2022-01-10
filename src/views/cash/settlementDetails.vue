@@ -45,7 +45,7 @@
             style="width: 100%; margin-bottom: 20px;"
             row-key="id" border
           >
-            <el-table-column prop="settleNo" label="结算单号" ></el-table-column>
+            <!-- <el-table-column prop="settleNo" label="结算单号" ></el-table-column> -->
             <el-table-column prop="orderNo" label="订单编号"></el-table-column>
             <el-table-column prop="goodsName" label="商品名称" ></el-table-column>
             <el-table-column prop="deliveryMethod" label="配送方式" >
@@ -56,12 +56,17 @@
             </el-table-column>
             <el-table-column prop="goodsNum" label="商品数量"></el-table-column>
             <el-table-column prop="goodsPrice" label="商品单价" ></el-table-column>
-            <el-table-column prop="storeName" label="门店名称" ></el-table-column>
-            <el-table-column prop="accountTime" label="入账时间"></el-table-column>
-            <el-table-column prop="storeSettleRatio" label="门店结算比例" ></el-table-column>
             <el-table-column prop="orderAmount" label="订单金额" ></el-table-column>
-            <el-table-column prop="storeSettleAmount" label="门店结算金额"></el-table-column>
-            <el-table-column prop="platformServiceAmount" label="平台服务费" ></el-table-column>
+            <el-table-column prop="accountTime" label="入账时间"></el-table-column>
+            <el-table-column prop="storeName" label="门店名称" ></el-table-column>
+            <el-table-column prop="supplierPrice" label="供应金额" ></el-table-column>
+            <el-table-column prop="supplierPreSettlePrice" label="供应商预计结算金额"></el-table-column>
+            <el-table-column prop="supplierPlatformPrice" label="供应商平台服务费" ></el-table-column>
+            <el-table-column prop="supplierSettlePrice" label="供应商实际结算金额" ></el-table-column>
+            <el-table-column prop="storeProfitRatio" label="门店利润分佣比例"></el-table-column>
+            <el-table-column prop="storePreSettlePrice" label="门店预计分佣金额" ></el-table-column>
+            <el-table-column prop="storePlatformPrice" label="门店平台服务费" ></el-table-column>
+            <el-table-column prop="storeSettlePrice" label="门店实际分佣金额"></el-table-column>
           </el-table>
         </div>
         <div class="ly-data-pagination">
