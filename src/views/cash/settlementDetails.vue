@@ -37,6 +37,9 @@
          <el-button type="primary" icon="el-icon-download" style="margin-left:20px" @click="exportStoreData()">导出统计表</el-button>
        </div>
       </div>
+      <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;color: red;">
+        &nbsp;&nbsp;&nbsp; * 2021年结算数据由供应商结算给门店，故供应商结算金额与门店结算金额大于订单金额。
+        </div>
       <div class="ly-table-panel">
         <div class="ly-data-list">
           <el-table
