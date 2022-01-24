@@ -130,6 +130,20 @@
             </div>
           </div>
           <div class="tabTd">
+            <div>预约时间：</div>
+            <div>
+              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.appointmentStartTime"
+                type="date" placeholder="开始时间">
+              </el-date-picker>
+            </div>
+            <div style="padding: 0 6px;">至</div>
+            <div>
+              <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.appointmentEndTime"
+                type="date" placeholder="结束时间">
+              </el-date-picker>
+            </div>
+          </div>
+          <div class="tabTd">
             <el-button icon="el-icon-search" type="primary" @click="search()">
               搜索
             </el-button>
@@ -716,6 +730,8 @@
           orderEndTime: '',
           orderCloseStartTime: '',
           orderCloseEndTime: '',
+          appointmentStartTime:'',
+          appointmentEndTime:'',
           orderNo: '',
           orderStartTime: '',
           orderStatus: '',

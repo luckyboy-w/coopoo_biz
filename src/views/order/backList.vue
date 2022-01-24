@@ -82,6 +82,13 @@
             </el-button>
           </div>
          </div> -->
+         <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
+           <div class="tabTd">
+             <el-button icon="el-icon-s-promotion" type="primary" @click="returnGoods()">
+               退货通知设置
+             </el-button>
+           </div>
+           </div>
         <div class="ly-table-panel">
           <div class="content1">
             <el-table :data="tableData.list" border row-key="orderId" style="width: 100%">
@@ -267,7 +274,7 @@
 		    <el-col :span="6">核销时间：{{ ordDtl.exchangeDate }}</el-col>
 		  </el-row>
 		  			  </div>
-          
+
 			<div v-if="ordDtl.receiptTitle" class="info-container">
           <!--        发票信息-->
           <span class="main-title">
@@ -356,6 +363,18 @@
         </div>
       </div>
     </div>
+    <el-dialog title="退货" :visible="sendEval" v-if="sendEval" :before-close="handleClose">
+      <el-form ref="form" label-width="80px">
+        <el-form-item label="商品规格">
+          <el-input  v-model="phoneNo"  maxlength="11" type="number" oninput="if(value.length>11) value=value.slice(0,11)">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="sendReply()">保存</el-button>
+          <el-button plain type="primary" @click="handleClose()">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -475,10 +494,12 @@
       return {
         showList: true,
         showOrdDtl: false,
+        sendEval:false,
         //物流轨迹信息数组
         logisticsList: [],
         showPagination: false,
         editData: [],
+        phoneNo:'',
         searchParam: {
 			registerPhoneNo:'',
           receiptStatus: '',
@@ -566,6 +587,44 @@
 			this.loadList()
           })
         });
+        })
+      },
+
+      returnGoods(){
+        getMethod('/order/get-notice-phone').then(res => {
+          console.log(res)
+          this.phoneNo=res.data
+        this.sendEval = true
+        })
+      },
+      handleClose(done) {
+        this.phoneNo=''
+        this.sendEval = false
+      },
+      sendReply() {
+        let scope = this
+        console.log();
+        if(scope.phoneNo==''){
+         this.$message({
+           message: "请输入手机号",
+           type: "warning"
+         });
+         return false
+        }
+        if(scope.phoneNo.length<11){
+         this.$message({
+           message: "请输入正确手机号",
+           type: "warning"
+         });
+         return false
+        }
+        getMethod('/order/set-notice-phone?phoneNo='+scope.phoneNo).then(res => {
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+          this.phoneNo=''
+          scope.sendEval = false
         })
       },
       handlerReturnPOrderList() {
@@ -698,11 +757,11 @@
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
-	
+
 	.el-carousel__item {
 	    overflow-y: auto!important;
 	}
-	
+
   .ly-container {
     font-size: 14px;
 
