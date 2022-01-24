@@ -84,7 +84,7 @@
          </div> -->
          <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
            <div class="tabTd">
-             <el-button icon="el-icon-s-promotion" type="primary" @click="returnGoods()">
+             <el-button type="primary" @click="returnGoods()">
                退货通知设置
              </el-button>
            </div>
@@ -363,9 +363,9 @@
         </div>
       </div>
     </div>
-    <el-dialog title="退货" :visible="sendEval" v-if="sendEval" :before-close="handleClose">
-      <el-form ref="form" label-width="80px">
-        <el-form-item label="商品规格">
+    <el-dialog title=""  :visible="sendEval" width="30%" v-if="sendEval" :before-close="handleClose" :close-on-click-modal='false'>
+      <el-form ref="form" label-width="120px">
+        <el-form-item label="退货通知手机号:">
           <el-input  v-model="phoneNo"  maxlength="11" type="number" oninput="if(value.length>11) value=value.slice(0,11)">
           </el-input>
         </el-form-item>
