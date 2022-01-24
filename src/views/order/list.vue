@@ -849,6 +849,8 @@
           deliveryMethod: this.searchParam.deliveryMethod,
           orderCloseStartTime: this.searchParam.orderCloseStartTime,
           orderCloseEndTime: this.searchParam.orderCloseEndTime,
+          appointmentStartTime:this.searchParam.appointmentStartTime,
+          appointmentEndTime:this.searchParam.appointmentEndTime,
         }
         let exportParam = []
         for (let key in param) {
