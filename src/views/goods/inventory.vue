@@ -22,7 +22,14 @@
         <div class="ly-data-list">
           <el-table ref="mainTable" :data="tableData.list" style="width: 100%; margin-bottom: 20px;"
             border @sort-change="onSortChange">
-            <el-table-column prop="goodsName" label="商品名称"></el-table-column>
+            <el-table-column prop="goodsName" label="商品名称">
+              <template slot-scope="scope">
+                <span>{{scope.row.goodsName}}</span>
+                <el-tag effect="light" size="mini" v-if="scope.row.goodsType==2">
+                  专属
+                </el-tag>
+              </template>
+            </el-table-column>
             <el-table-column prop="skuText" label="商品规格"></el-table-column>
             <el-table-column prop="goodsCode" label="物料编码"></el-table-column>
             <el-table-column prop="stock" label="可用库存" sortable="custom"></el-table-column>
