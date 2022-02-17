@@ -43,12 +43,22 @@
               </el-select>
             </div>
           </div>
-		  <div class="tabTd">
-		    <div>注册手机号：</div>
-		    <div>
-		      <el-input v-model="searchParam.registerPhoneNo" width="180px" placeholder="请输入" />
-		    </div>
-		  </div>
+          <div class="tabTd">
+            <div>商品种类：</div>
+            <div>
+              <el-select v-model="searchParam.isVipOrder" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="0" label="普通商品"></el-option>
+                <el-option value="1" label="专属商品"></el-option>
+              </el-select>
+            </div>
+          </div>
+          <div class="tabTd">
+            <div>注册手机号：</div>
+            <div>
+              <el-input v-model="searchParam.registerPhoneNo" width="180px" placeholder="请输入" />
+            </div>
+          </div>
           <div class="tabTd">
             <div>下单时间：</div>
             <div>
@@ -81,7 +91,7 @@
               批量发货
             </el-button>
           </div>
-         </div>
+        </div>
         <div class="ly-table-panel">
           <div class="content1">
             <el-table :data="tableData.list" border row-key="orderId" style="width: 100%">
@@ -89,14 +99,16 @@
                 <template slot-scope="scope">
                   <div class="item">
                     <span style="margin-left:150px">
-                        <el-checkbox v-model="scope.row.isChecked" :checked="scope.row.isChecked?scope.row.isChecked:false" @change="changeGoodsChecked(scope.row)">
+                      <el-checkbox v-model="scope.row.isChecked"
+                        :checked="scope.row.isChecked?scope.row.isChecked:false"
+                        @change="changeGoodsChecked(scope.row)">
 
-                      订单编号：{{ scope.row.orderNo }}
-                        </el-checkbox>
+                        订单编号：{{ scope.row.orderNo }}
+                      </el-checkbox>
                     </span>
                     <span style="margin-left:150px">订单总额：{{ scope.row.orderPayAmount }}</span>
                     <span style="margin-left:150px">下单时间：{{ scope.row.createTime }}</span>
-					<span style="margin-left:150px">注册手机号：{{ scope.row.registerPhoneNo }}</span>
+                    <span style="margin-left:150px">注册手机号：{{ scope.row.registerPhoneNo }}</span>
                   </div>
                 </template>
               </el-table-column>
@@ -104,8 +116,9 @@
                 <template slot-scope="scope">
                   <div v-for="(item, index) in scope.row.orderItemList" :key="index" class="mesSty">
                     <div style="position: relative;">
-                      <img class="imgSty"  :src="item.goodsImage" alt="">
-                      <div v-if="scope.row.isVipOrder==1" style="width: 50px;background-color: #409EFF;position: absolute;top: 0;right: 0;color:white;border-radius: 5px;">
+                      <img class="imgSty" :src="item.goodsImage" alt="">
+                      <div v-if="scope.row.isVipOrder==1"
+                        style="width: 50px;background-color: #409EFF;position: absolute;top: 0;right: 0;color:white;border-radius: 5px;">
                         专属
                       </div>
                     </div>
@@ -222,7 +235,8 @@
               <el-table-column align="center" header-align="center" prop="skuText" label="规格">
                 <template slot-scope="scope">
                   {{ scope.row.skuText }}
-                  <div v-if="ordDtl.orderStatus==5||ordDtl.orderStatus==6" style="text-align: center!important;width: 100%;">
+                  <div v-if="ordDtl.orderStatus==5||ordDtl.orderStatus==6"
+                    style="text-align: center!important;width: 100%;">
                     <el-button type="text" @click="modifySku(scope.row)">修改订单属性</el-button>
                   </div>
                 </template>
@@ -250,21 +264,24 @@
             <el-col :span="6">应付金额：{{ ordDtl.orderAmount }}</el-col>
             <el-col :span="6">实付金额：{{ ordDtl.orderPayAmount }}</el-col>
           </el-row>
-		  </div>
-		  <div v-if="ordDtl.deliveryMethod==1" class="info-container">
+        </div>
+        <div v-if="ordDtl.deliveryMethod==1" class="info-container">
           <!--        收货人信息-->
-          <span  class="main-title">
+          <span class="main-title">
             <el-col :span="24">收货信息
-            <el-button v-if="ordDtl.orderStatus==6" type="text" @click="addressDialog = true">&nbsp;&nbsp;&nbsp; 修改收货地址</el-button>
+              <el-button v-if="ordDtl.orderStatus==6" type="text" @click="addressDialog = true">&nbsp;&nbsp;&nbsp;
+                修改收货地址</el-button>
             </el-col>
           </span>
           <el-row :gutter="20" class="main-content">
             <el-col :span="6">收货人：{{ ordDtl.receiverName }}</el-col>
             <el-col :span="6">收货人电话：{{ ordDtl.receiverPhone }}</el-col>
-            <el-col :span="12">收货地址：{{ordDtl.receiverProvince}}{{ordDtl.receiverCity}}{{ordDtl.receiverRegion}}{{ordDtl.receiverAddress}}</el-col>
+            <el-col :span="12">
+              收货地址：{{ordDtl.receiverProvince}}{{ordDtl.receiverCity}}{{ordDtl.receiverRegion}}{{ordDtl.receiverAddress}}
+            </el-col>
           </el-row>
-			  </div>
-		  <div v-if="ordDtl.deliveryMethod==2" class="info-container">
+        </div>
+        <div v-if="ordDtl.deliveryMethod==2" class="info-container">
           <!--        提货信息-->
           <span class="main-title">
             <el-col :span="24">提货信息</el-col>
@@ -274,14 +291,14 @@
             <el-col :span="6">预留手机号：{{ ordDtl.appointmentMobile }}</el-col>
             <el-col :span="12">提货门店：{{ordDtl.memberStoreName}}</el-col>
           </el-row>
-		  <el-row :gutter="20" class="main-content">
-		    <el-col :span="6">核销时间：{{ ordDtl.exchangeDate }}</el-col>
-		  </el-row>
-		  			  </div>
+          <el-row :gutter="20" class="main-content">
+            <el-col :span="6">核销时间：{{ ordDtl.exchangeDate }}</el-col>
+          </el-row>
+        </div>
 
-			<div v-if="ordDtl.receiptTitle" class="info-container">
+        <div v-if="ordDtl.receiptTitle" class="info-container">
           <!--        发票信息-->
-          <span class="main-title" >
+          <span class="main-title">
             <el-col :span="24">发票信息</el-col>
           </span>
           <el-row :gutter="20" class="main-content">
@@ -291,13 +308,13 @@
             <el-col :span="6">邮箱：{{ ordDtl.receiptEmail }}</el-col>
             <el-col :span="6">发票内容：{{ordDtl.receiptContent}}</el-col>
           </el-row>
-          <el-row :gutter="20" class="main-content" >
+          <el-row :gutter="20" class="main-content">
             <el-col :span="6" v-if="ordDtl.receiptTitle == '1'">公司名称：{{ ordDtl.receiptCompanyName }}</el-col>
             <el-col :span="6" v-if="ordDtl.receiptTitle == '2'">开票人名称：{{ ordDtl.receiptPersonName }}</el-col>
             <el-col :span="6" v-if="ordDtl.receiptTitle == '1'">公司税号：{{ ordDtl.receiptCompanyTaxNo }}</el-col>
             <el-col :span="6"></el-col>
           </el-row>
-						  </div>
+        </div>
         <!--        物流信息-->
         <div style="width: 100%;display: flex;">
           <div style="width: 60%; box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
@@ -361,14 +378,15 @@
               </el-col>
             </el-row>
             <div>
-                            {{ordDtl.remark?ordDtl.remark:'暂无备注'}}
+              {{ordDtl.remark?ordDtl.remark:'暂无备注'}}
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- 修改收货地址弹框 -->
-    <el-dialog title="修改收货地址" v-if="addressDialog" :visible.sync="addressDialog" width="50%" destroy-on-close :before-close="adressClose">
+    <el-dialog title="修改收货地址" v-if="addressDialog" :visible.sync="addressDialog" width="50%" destroy-on-close
+      :before-close="adressClose">
       <div style="width: 100%;line-height: 50px;">
         <div style="display: flex;">
           <div style="border-right: 1px solid #9E9E9E;min-width: 100px;text-align: center;">原地址：</div>
@@ -620,8 +638,9 @@
         showPagination: false,
         editData: [],
         searchParam: {
-			registerPhoneNo:'',
-          receiptStatus:'',
+          isVipOrder: '',
+          registerPhoneNo: '',
+          receiptStatus: '',
           buyerMobile: '',
           buyerName: '',
           goodsName: '',
@@ -669,44 +688,44 @@
     created() {},
     methods: {
       //全选
-      allGoodsChecked(val){
-        this.isChecked=!val
-        console.log('tableData.list',this.tableData.list,val,this.isChecked);
-        let checkedList=this.tableData.list
-        if (val==true) {
-          checkedList.forEach(item=>{
-            item.isChecked=false
+      allGoodsChecked(val) {
+        this.isChecked = !val
+        console.log('tableData.list', this.tableData.list, val, this.isChecked);
+        let checkedList = this.tableData.list
+        if (val == true) {
+          checkedList.forEach(item => {
+            item.isChecked = false
           })
-        } else{
-          checkedList.forEach(item=>{
-            item.isChecked=true
+        } else {
+          checkedList.forEach(item => {
+            item.isChecked = true
           })
         }
-        this.tableData.list=checkedList
-        console.log('tableData.list',this.tableData.list,checkedList);
+        this.tableData.list = checkedList
+        console.log('tableData.list', this.tableData.list, checkedList);
       },
       //单个勾选
-      changeGoodsChecked(row){
+      changeGoodsChecked(row) {
         console.log(row)
       },
-      bulkDelivery(){
+      bulkDelivery() {
         let scope = this
         scope.editData = []
         for (let j = 0; j < this.tableData.list.length; j++) {
-          if (this.tableData.list[j].isChecked==true) {
+          if (this.tableData.list[j].isChecked == true) {
             scope.editData.push(this.tableData.list[j])
           }
         }
-        if (scope.editData.length<=0) {
+        if (scope.editData.length <= 0) {
           this.$message({
             message: '请选择要发货的订单',
             type: 'warning'
           })
           return false
-        }else{
+        } else {
           scope.showList = false
         }
-        console.log(scope.editData,'scope.editData')
+        console.log(scope.editData, 'scope.editData')
       },
       writeOff(row) {
         console.log(row)
@@ -726,7 +745,7 @@
       },
       backToList() {
         this.loadList()
-        this.isChecked=false
+        this.isChecked = false
         this.showList = true
       },
       deliverGoods(row) {
@@ -752,15 +771,17 @@
           payType: this.searchParam.payType,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
-          orderStatus:this.searchParam.orderStatus,
+          orderStatus: this.searchParam.orderStatus,
         }
         let exportParam = []
         for (let key in param) {
           exportParam.push(key + '=' + param[key])
         }
-		console.log('888',process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'));
+        console.log('888', process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam
+          .join('&'));
         //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
-        window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join('&'))
+        window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join(
+          '&'))
       },
       async getOrdDtl(row) {
         const {
@@ -849,8 +870,8 @@
       loadList() {
         const scope = this
         postMethod('/order/goods-order-list', this.searchParam).then(res => {
-          res.data.records.forEach(item=>{
-            item.isChecked=false
+          res.data.records.forEach(item => {
+            item.isChecked = false
           })
           scope.tableData.list = res.data.records
           scope.tableData.total = res.data.total
@@ -861,13 +882,13 @@
       modifySku(row) {
         this.skuDialog = true
         let params = {
-           goodsId: row.goodsId, //row.goodsId
-           liveGoodsId:row.liveGoodsId?row.liveGoodsId:'',
-           marketingGoodsId:row.goodsMarketingId?row.goodsMarketingId:'',
+          goodsId: row.goodsId, //row.goodsId
+          liveGoodsId: row.liveGoodsId ? row.liveGoodsId : '',
+          marketingGoodsId: row.goodsMarketingId ? row.goodsMarketingId : '',
         }
         console.log(row, 'sku信息')
         this.goodDtlList = row
-        getMethod('/goods/sku',params).then(res => {
+        getMethod('/goods/sku', params).then(res => {
           let skuSelList = res.data.specificationList
           let skuPriceList = res.data.skuList
           skuSelList.forEach((e, i) => {
@@ -908,7 +929,7 @@
           let param = {
             skuId: skuId,
             orderItemId: this.goodDtlList.orderItemId,
-            orderNo:this.ordDtl.orderNo
+            orderNo: this.ordDtl.orderNo
           }
           postMethod('/order/modify-order-sku', param).then(res => {
             if (res.errCode == 0) {
@@ -1095,9 +1116,9 @@
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
 
-	.el-carousel__item {
-	    overflow-y: auto!important;
-	}
+  .el-carousel__item {
+    overflow-y: auto !important;
+  }
 
 
   .ly-container {

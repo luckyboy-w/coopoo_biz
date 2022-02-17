@@ -102,6 +102,16 @@
             </div>
           </div>
           <div class="tabTd">
+            <div>商品种类：</div>
+            <div>
+              <el-select v-model="searchParam.isVipOrder" placeholder="请选择">
+                <el-option value="" label="全部"></el-option>
+                <el-option value="0" label="普通商品"></el-option>
+                <el-option value="1" label="专属商品"></el-option>
+              </el-select>
+            </div>
+          </div>
+          <div class="tabTd">
             <div>下单时间：</div>
             <div>
               <el-date-picker style="width:200px" value-format="yyyy-MM-dd" v-model="searchParam.orderStartTime"
@@ -722,6 +732,7 @@
         showPagination: false,
         editData: [],
         searchParam: {
+          isVipOrder:'',
           registerPhoneNo: '',
           deliveryMethod: '',
           orderStatusList: [],
