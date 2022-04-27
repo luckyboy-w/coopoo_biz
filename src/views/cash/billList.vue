@@ -23,6 +23,12 @@
           row-key="id" border
         >
           <el-table-column prop="orderNo" label="订单编号" min-width="24%">
+            <template slot-scope="scope">
+              {{scope.row.orderNo}}
+              <el-tag effect="light" style="color: white;background-color: #409EFF;" size="mini" v-if="scope.row.isVipOrder==1">
+                专属
+              </el-tag>
+            </template>
           </el-table-column>
           <el-table-column prop="accountTime" label="入账时间" min-width="24%">
             <template slot-scope="scope">
@@ -105,6 +111,12 @@
                   row-key="id" border
         >
           <el-table-column prop="settleNo" label="结算单号">
+            <template slot-scope="scope">
+              {{scope.row.settleNo}}
+              <el-tag effect="light" style="color: white;background-color: #409EFF;" size="mini" v-if="scope.row.isVipOrder==1">
+                专属
+              </el-tag>
+            </template>
           </el-table-column>
           <!-- <el-table-column prop="applySettleDate" label="申请时间">
             <template slot-scope="scope">
@@ -183,6 +195,12 @@
         </div>
         <el-table ref="settleEndData" :data="settleEndData.list" style="width: 100%; margin: 20px 0;" border row-key="id">
           <el-table-column prop="settleNo" label="结算单号" min-width="24%">
+            <template slot-scope="scope">
+              {{scope.row.settleNo}}
+              <el-tag effect="light" style="color: white;background-color: #409EFF;" size="mini" v-if="scope.row.isVipOrder==1">
+                专属
+              </el-tag>
+            </template>
           </el-table-column>
           <el-table-column prop="settleDate" label="结算时间" min-width="24%">
             <template slot-scope="scope">
@@ -270,6 +288,12 @@
           </div>
         <el-table :data="billCashData.list" style="width: 100%; margin: 20px 0;" border row-key="id">
           <el-table-column prop="orderNo" label="订单号" min-width="24%">
+            <template slot-scope="scope">
+              {{scope.row.orderNo}}
+              <el-tag effect="light" style="color: white;background-color: #409EFF;" size="mini" v-if="scope.row.isVipOrder==1">
+                专属
+              </el-tag>
+            </template>
           </el-table-column>
           <!-- <el-table-column prop="settleDate" label="结算时间" min-width="24%">
             <template slot-scope="scope">

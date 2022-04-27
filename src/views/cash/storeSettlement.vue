@@ -242,6 +242,12 @@
           </div>
         <el-table :data="billCashData.list" style="width: 100%; margin: 20px 0;" border row-key="id">
           <el-table-column prop="orderNo" label="订单编号" width="200">
+            <template slot-scope="scope">
+              {{scope.row.orderNo}}
+              <el-tag effect="light" style="color: white;background-color: #409EFF;" size="mini" v-if="scope.row.isVipOrder==1">
+                专属
+              </el-tag>
+            </template>
           </el-table-column>
           <el-table-column prop="accountTime" label="入账月份">
             <template slot-scope="scope">
