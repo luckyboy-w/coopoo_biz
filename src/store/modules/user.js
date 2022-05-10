@@ -16,7 +16,8 @@ const state = {
   introduction: '',
   roles: [],
   supplierName: '',
-  supplierAvatar: ''
+  supplierAvatar: '',
+  supplierId:''
 }
 
 const mutations = {
@@ -43,6 +44,9 @@ const mutations = {
   },
   SET_SUPPLIER_AVATAR: (state, payload) => {
     state.supplierAvatar = payload
+  },
+  SET_SUPPLIER_ID: (state, supplierId) => {
+    state.supplierId = supplierId
   }
 }
 
@@ -172,6 +176,8 @@ const actions = {
     // const { data } = await getUserInfo()
     getUserInfo().then(response => {
       const { data } = response
+      
+    commit('SET_SUPPLIER_ID',data.supplierId)
     commit('SET_SUPPLIER_NAME',data.supplierName)
     console.log(data)
     }).catch(error => {

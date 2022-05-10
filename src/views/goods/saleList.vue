@@ -117,6 +117,7 @@
     postMethod,
     formatDate
   } from "@/api/request";
+  import store from '@/store'
   import saveOrEdit from "./editGood";
   import {
     getToken
@@ -158,6 +159,7 @@
         isGift: '1',
         isEditGood: true,
         searchParam: {
+          supplierId:store.getters.supplierId,
           status:'1',
           goodsName:'',
           goodsCode:'',

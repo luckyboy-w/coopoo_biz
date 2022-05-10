@@ -101,6 +101,7 @@
     postMethod,
     formatDate
   } from "@/api/request";
+  import store from '@/store'
   import saveOrEdit from "./editGood";
   import {
     getToken
@@ -149,6 +150,7 @@
           dataId: ""
         },
         searchParam: {
+          supplierId:store.getters.supplierId,
           status:'0',
           pageSize: 10,
           pageNum: 1

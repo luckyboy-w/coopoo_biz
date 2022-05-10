@@ -88,7 +88,7 @@
     getMethod,
     postMethod
   } from '@/api/request'
-
+import store from '@/store'
   export default {
     computed: {},
     props: {
@@ -108,6 +108,7 @@
 
         },
         searchParam: {
+          supplierId:store.getters.supplierId,
           goodsCode: '',
           goodsName: '',
           pageSize: 10,
@@ -120,6 +121,7 @@
     },
     mounted() {
       this.initLoad()
+       // console.log(store.getters.supplierId,store.getters.supplierName)
     },
     methods: {
       onSortChange({
