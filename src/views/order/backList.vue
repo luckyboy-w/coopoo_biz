@@ -140,7 +140,7 @@
                   <div v-for="(item, index) in scope.row.orderItemList" :key="index" class="mesSty2">
                     <div>
                     <span style="line-height: 50px;">{{ item.orderItemStatus| goodsText }}</span>
-                    <div v-if="item.orderItemStatus==10">
+                    <div v-if="item.orderItemStatus==10&&scope.row.isVipOrder!=1">
                       <el-button type="primary" size="mini" @click="confirmReturn(item)">
                         确认退货
                       </el-button>
