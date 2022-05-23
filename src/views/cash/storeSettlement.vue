@@ -531,6 +531,7 @@ export default {
       this.activeName = 'dataDtl'
       this.searchParam.settleNo = row.settleNo
       this.searchParam.storeId = row.storeId
+      this.searchParam.pageNum=1
       let param = this.searchParam
       getMethod('/settlement/wait-detail-list', param).then(res => {
         console.log(res, '数据')
