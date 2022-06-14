@@ -61,6 +61,7 @@
                 <el-option value="" label="全部"></el-option>
                 <el-option value="2" label="微信"></el-option>
                 <el-option value="1" label="支付宝"></el-option>
+				<el-option value="3" label="余额"></el-option>
               </el-select>
             </div>
           </div>
@@ -361,6 +362,9 @@
 		    <el-col :span="6">
 		      优惠券金额：{{ ordDtl.couponFaceValue }}
 		    </el-col>
+			<el-col :span="6">
+			  余额：{{ ordDtl.balance }}
+			</el-col>
 		  </el-row>
         </div>
         <div v-if="ordDtl.deliveryMethod==1" class="info-container">
@@ -871,6 +875,12 @@
           appointmentStartTime:this.searchParam.appointmentStartTime,
           appointmentEndTime:this.searchParam.appointmentEndTime,
         }
+		if (param.payType==3) {
+		  param.isBalanceOrder=1
+		  param.payType=''
+		}else{
+		  param.isBalanceOrder=''
+		}
         let exportParam = []
         for (let key in param) {
           exportParam.push(key + '=' + param[key])
@@ -969,7 +979,14 @@
             this.searchParam.orderStatusList = []
           }
         })
-        postMethod('/order/goods-order-list', this.searchParam).then(res => {
+		let params =Object.assign({}, scope.searchParam)
+		if (params.payType==3) {
+		  params.isBalanceOrder=1
+		  params.payType=''
+		}else{
+		  params.isBalanceOrder=''
+		}
+        postMethod('/order/goods-order-list', params).then(res => {
           res.data.records.forEach(item => {
             item.isChecked = false
           })
