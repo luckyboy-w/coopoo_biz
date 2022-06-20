@@ -100,7 +100,13 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="实付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="分佣金额">
+          <el-table-column prop="test" label="预计分佣金额">
+          </el-table-column>
+          <el-table-column prop="test" label="平台服务金额">
+          </el-table-column>
+          <el-table-column prop="test" label="分销佣金">
+          </el-table-column>
+          <el-table-column prop="test" label="实际分佣金额">
           </el-table-column>
           <el-table-column prop="isConfirm" label="状态">
             <template slot-scope="scope">
@@ -176,7 +182,13 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="实付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="分佣金额" >
+          <el-table-column prop="test" label="预计分佣金额">
+          </el-table-column>
+          <el-table-column prop="test" label="平台服务金额">
+          </el-table-column>
+          <el-table-column prop="test" label="分销佣金">
+          </el-table-column>
+          <el-table-column prop="test" label="实际分佣金额">
           </el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
@@ -268,7 +280,13 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="实付金额" >
           </el-table-column>
-          <el-table-column prop="settleAmount" label="分佣金额" >
+          <el-table-column prop="test" label="预计分佣金额">
+          </el-table-column>
+          <el-table-column prop="test" label="平台服务金额">
+          </el-table-column>
+          <el-table-column prop="test" label="分销佣金">
+          </el-table-column>
+          <el-table-column prop="test" label="实际分佣金额">
           </el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
