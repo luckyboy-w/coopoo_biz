@@ -129,12 +129,9 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="支付金额" >
           </el-table-column>
-          <el-table-column prop="test" label="预计结算金额" min-width="24%">
-          </el-table-column>
-          <el-table-column prop="test" label="平台服务金额" >
-          </el-table-column>
-          <el-table-column prop="test" label="实际结算金额" min-width="24%">
-          </el-table-column>
+          <el-table-column prop="preSettleAmount" label="预计结算金额"></el-table-column>
+          <el-table-column prop="platformServiceAmount" label="平台服务费"></el-table-column>
+          <el-table-column prop="actualSettleAmount" label="实际结算金额"></el-table-column>
           <el-table-column prop="isConfirm" label="状态" >
             <template slot-scope="scope">
               {{scope.row.isConfirm==1?'已确认':'未确认'}}
@@ -213,12 +210,9 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="支付金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="test" label="预计结算金额" min-width="24%">
-          </el-table-column>
-          <el-table-column prop="test" label="平台服务金额" >
-          </el-table-column>
-          <el-table-column prop="test" label="实际结算金额" min-width="24%">
-          </el-table-column>
+          <el-table-column prop="preSettleAmount" label="预计结算金额"></el-table-column>
+          <el-table-column prop="platformServiceAmount" label="平台服务费"></el-table-column>
+          <el-table-column prop="actualSettleAmount" label="实际结算金额"></el-table-column>
           <el-table-column label="操作" min-width="24%">
             <template slot-scope="scope">
               <!--              <el-link type="primary" @click="showBillDetail(scope.row)">查看明细</el-link>-->
@@ -306,12 +300,9 @@
           </el-table-column>
           <el-table-column prop="orderPayAmount" label="支付金额" min-width="24%">
           </el-table-column>
-          <el-table-column prop="test" label="预计结算金额" min-width="24%">
-          </el-table-column>
-          <el-table-column prop="test" label="平台服务金额" >
-          </el-table-column>
-          <el-table-column prop="test" label="实际结算金额" min-width="24%">
-          </el-table-column>
+          <el-table-column prop="preSettleAmount" label="预计结算金额"></el-table-column>
+          <el-table-column prop="platformServiceAmount" label="平台服务费"></el-table-column>
+          <el-table-column prop="actualSettleAmount" label="实际结算金额"></el-table-column>
         </el-table>
         <el-pagination
           v-show="billCashData.total != 0"
