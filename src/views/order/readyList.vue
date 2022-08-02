@@ -79,6 +79,7 @@
               搜索
             </el-button>
             <el-button type="primary" icon="el-icon-download" @click="exportData()">导出</el-button>
+            <el-button type="primary" @click="deliveryNoticePhone()">发货通知设置</el-button>
           </div>
         </div>
         <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
@@ -488,6 +489,16 @@
       </div>
     </el-dialog>
     <deliverGoods v-if="!showList" ref="deliverGoods" :editData="editData" @backToList="backToList" />
+
+    <el-dialog title="" :visible="sendEval" width="20%" :before-close="handleClose" :close-on-click-modal="false">
+      <el-form ref="form" label-width="120px">
+        <el-form-item label="发货通知手机号:"><el-input v-model="phoneNo" maxlength="11" clearable type="text" @blur="phoneNo = $event.target.value" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input></el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="sendReply()">保存</el-button>
+          <el-button plain type="primary" @click="handleClose()">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -687,6 +698,8 @@
             trigger: 'blur'
           }]
         },
+        phoneNo:'',
+        sendEval: false,
       }
     },
     computed: {},
@@ -797,6 +810,44 @@
         //window.open( process.env.VUE_APP_BASE_API+'/backend/lyProvider/exportData?'+exportParam.join("&"))
         window.open(process.env.VUE_APP_BASE_API + '/excel/order/export?token=' + getToken() + '&' + exportParam.join(
           '&'))
+      },
+
+      deliveryNoticePhone(){
+        getMethod('/order/get-delivery-notice-phone').then(res => {
+          this.phoneNo = res.data;
+          this.sendEval = true;
+        });
+      },
+      handleClose(done) {
+        this.phoneNo = '';
+        this.sendEval = false;
+      },
+      sendReply(){
+        let scope = this;
+        console.log(scope.phoneNo);
+        // return false
+        if (scope.phoneNo == '') {
+          this.$message({
+            message: '请输入手机号',
+            type: 'warning'
+          });
+          return false;
+        }
+        if (scope.phoneNo.length < 11) {
+          this.$message({
+            message: '请输入正确手机号',
+            type: 'warning'
+          });
+          return false;
+        }
+        getMethod('/order/update-supplier-info?phoneNo='+scope.phoneNo+'').then(res => {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          });
+          this.phoneNo = '';
+          scope.sendEval = false;
+        })
       },
       async getOrdDtl(row) {
         const {
