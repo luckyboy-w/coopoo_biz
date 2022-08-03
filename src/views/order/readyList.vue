@@ -490,7 +490,7 @@
     </el-dialog>
     <deliverGoods v-if="!showList" ref="deliverGoods" :editData="editData" @backToList="backToList" />
 
-    <el-dialog title="" :visible="sendEval" width="20%" :before-close="handleClose" :close-on-click-modal="false">
+    <el-dialog title="" :visible="sendEval" width="400px" :before-close="handleClose" :close-on-click-modal="false">
       <el-form ref="form" label-width="120px">
         <el-form-item label="发货通知手机号:"><el-input v-model="phoneNo" maxlength="11" clearable type="text" @blur="phoneNo = $event.target.value" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input></el-form-item>
         <el-form-item>
@@ -840,7 +840,7 @@
           });
           return false;
         }
-        getMethod('/order/update-supplier-info?phoneNo='+scope.phoneNo+'').then(res => {
+        getMethod('/order/update-supplier-info?phoneNo='+scope.phoneNo).then(res => {
           this.$message({
             message: '保存成功',
             type: 'success'

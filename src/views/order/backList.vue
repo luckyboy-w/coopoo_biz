@@ -313,7 +313,7 @@
         </div>
       </div>
     </div>
-    <el-dialog title="" :visible="sendEval" width="30%" :before-close="handleClose" :close-on-click-modal="false">
+    <el-dialog title="" :visible="sendEval" width="400px" :before-close="handleClose" :close-on-click-modal="false">
       <el-form ref="form" label-width="120px">
         <el-form-item label="退货通知手机号:"><el-input v-model="phoneNo" maxlength="11" clearable type="text" @blur="phoneNo = $event.target.value" onkeyup="value=value.replace(/[^\d]/g,'')"></el-input></el-form-item>
         <el-form-item>
