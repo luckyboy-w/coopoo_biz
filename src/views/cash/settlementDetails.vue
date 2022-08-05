@@ -3,15 +3,12 @@
     <div class="ly-container">
      <div class="ly-tool-panel" style="display: flex;flex-wrap: wrap;">
        <div class="tabTd">
-         <div>结算单号：</div>
-         <div>
-           <el-input v-model="searchParam.settleNo" width="180px" placeholder="请输入" />
-         </div>
-       </div>
-       <div class="tabTd">
          <div>门店名称：</div>
          <div>
-           <el-input v-model="searchParam.storeName" width="180px" placeholder="请输入" />
+           <!-- <el-input v-model="searchParam.storeName" width="180px" placeholder="请输入" /> -->
+           <el-select v-model="searchParam.storeId" style="width:180px" filterable  placeholder="请选择">
+             <el-option v-for="item in storeList" :key="item.id" :label="item.storeName" :value="item.id"></el-option>
+           </el-select>
          </div>
        </div>
        <div class="tabTd">
@@ -115,18 +112,19 @@ export default {
       searchParam: {
         accountTime:'',
         goodsName:'',
-        settleNo:'',
-        storeName:'',
+        storeId:'',
         pageSize: 10,
         pageNum: 1
       },
       tableData: {
         list: []
       },
+      storeList:[]
     }
   },
   mounted() {
     this.initLoad()
+    this.initStoreList()
   },
   methods: {
     search() {
@@ -169,14 +167,24 @@ export default {
     },
     loadList() {
       let scope = this
-      getMethod('/settlement/order-detail-settlement-list', this.searchParam).then(
+      postMethod('/settlement/goods-settlement-detail', this.searchParam).then(
         res => {
           scope.tableData.list = res.data.records
           scope.tableData.total = res.data.total
           scope.showPagination = scope.tableData.total == 0
         }
       )
-    }
+    },
+    initStoreList() {
+      getMethod("/store/search-store-list", {
+        pageSize: 500,
+        pageNum: 1
+      }).then(
+        res => {
+          this.storeList = res.data.records
+        }
+      );
+    },
   }
 }
 </script>
