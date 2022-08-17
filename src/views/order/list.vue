@@ -192,6 +192,10 @@
                         <el-tag effect="light" size="mini" v-if="scope.row.isPrinted==1">
                           已打印
                         </el-tag>
+                        <el-tag effect="light" size="mini" v-if="scope.row.isInvoiced==1">
+                          已开票
+                        </el-tag>
+
                       </el-checkbox>
 
                     </span>
@@ -1006,7 +1010,10 @@
             orderNo: data.orderNo
           }).then(res => {
             this.loadList()
-            this.$message('操作成功')
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            })
           })
         })
       },
