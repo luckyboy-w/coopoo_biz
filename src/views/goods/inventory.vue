@@ -15,7 +15,18 @@
           </div>
         </div>
         <div class="tabTd">
+          <div>商品状态：</div>
+          <div>
+            <el-select v-model="searchParam.status" placeholder="请选择">
+              <el-option value="" label="全部" />
+              <el-option value="1" label="已上架" />
+              <el-option value="0" label="未上架" />
+            </el-select>
+          </div>
+        </div>
+        <div class="tabTd">
           <el-button type="primary" @click="search()" icon="el-icon-search">搜索</el-button>
+          <el-button @click="exportData()" icon="el-icon-download">导出</el-button>
         </div>
       </div>
       <div class="ly-table-panel">
@@ -109,6 +120,7 @@ import store from '@/store'
         },
         searchParam: {
           supplierId:store.getters.supplierId,
+          status:"1",
           goodsCode: '',
           goodsName: '',
           pageSize: 10,
@@ -143,7 +155,19 @@ import store from '@/store'
           this.loadList()
         }
       },
+      exportData(){
+        let exportParam = [];
 
+        let param = JSON.parse(JSON.stringify(this.searchParam));
+        delete param.pageSize
+        delete param.pageNum
+
+        for (let key in param) {
+          exportParam.push(key + "=" + param[key]);
+        }
+        exportParam.push("token=" + getToken())
+        window.open(process.env.VUE_APP_BASE_API + '/excel/goods-stock/export?' + exportParam.join("&"))
+      },
       handleClose(done) {
         this.replyFrm= {}
         this.sendEval = false
