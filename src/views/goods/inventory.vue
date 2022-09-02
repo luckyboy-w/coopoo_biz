@@ -17,7 +17,7 @@
         <div class="tabTd">
           <div>商品状态：</div>
           <div>
-            <el-select v-model="searchParam.status" placeholder="请选择">
+            <el-select v-model="searchParam.isSale" placeholder="请选择">
               <el-option value="" label="全部" />
               <el-option value="1" label="已上架" />
               <el-option value="0" label="未上架" />
@@ -99,6 +99,9 @@
     getMethod,
     postMethod
   } from '@/api/request'
+  import {
+    getToken
+  } from '@/utils/auth'
 import store from '@/store'
   export default {
     computed: {},
@@ -120,7 +123,7 @@ import store from '@/store'
         },
         searchParam: {
           supplierId:store.getters.supplierId,
-          status:"1",
+          isSale:"1",
           goodsCode: '',
           goodsName: '',
           pageSize: 10,
@@ -166,7 +169,8 @@ import store from '@/store'
           exportParam.push(key + "=" + param[key]);
         }
         exportParam.push("token=" + getToken())
-        window.open(process.env.VUE_APP_BASE_API + '/excel/goods-stock/export?' + exportParam.join("&"))
+        console.log(process.env.VUE_APP_BASE_API + '/excel/stock-management/export?' + exportParam.join("&"))
+        window.open(process.env.VUE_APP_BASE_API + '/excel/stock-management/export?' + exportParam.join("&"))
       },
       handleClose(done) {
         this.replyFrm= {}
