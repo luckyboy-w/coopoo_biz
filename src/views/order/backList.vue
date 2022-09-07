@@ -224,6 +224,9 @@
           <el-row :gutter="20" class="main-text">
             <el-col :span="6">优惠券金额：{{ ordDtl.couponFaceValue }}</el-col>
             <el-col :span="6">余额：{{ ordDtl.balance }}</el-col>
+			<el-col :span="6">
+			  专属折扣：{{ ordDtl.discountAmount?ordDtl.discountAmount:'0' }}
+			</el-col>
           </el-row>
         </div>
         <div v-if="ordDtl.deliveryMethod == 1" class="info-container">
