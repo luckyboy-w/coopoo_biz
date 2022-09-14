@@ -344,9 +344,9 @@
               <el-table-column align="center" header-align="center" prop="skuText" label="规格">
                 <template slot-scope="scope">
                   {{ scope.row.skuText }}
-                  <div  v-if="ordDtl.orderStatus==5||ordDtl.orderStatus==6" style="text-align: center!important;width: 100%;">
+                  <!-- <div  v-if="ordDtl.orderStatus==5||ordDtl.orderStatus==6" style="text-align: center!important;width: 100%;">
                     <el-button type="text" @click="modifySku(scope.row)">修改订单属性</el-button>
-                  </div>
+                  </div> -->
                 </template>
               </el-table-column>
               <el-table-column align="center" header-align="center" prop="goodsPrice" label="商品单价"></el-table-column>
@@ -388,7 +388,7 @@
           <!--        收货人信息-->
           <span class="main-title">
             <el-col :span="24">收货信息
-              <el-button  v-if="ordDtl.orderStatus==6"  type="text" @click="addressDialog = true">&nbsp;&nbsp;&nbsp; 修改收货地址</el-button>
+              <!-- <el-button  v-if="ordDtl.orderStatus==6"  type="text" @click="addressDialog = true">&nbsp;&nbsp;&nbsp; 修改收货地址</el-button> -->
             </el-col>
           </span>
           <el-row :gutter="20" class="main-content">
