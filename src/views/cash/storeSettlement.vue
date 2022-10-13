@@ -103,6 +103,7 @@
           <el-table-column prop="preSettleAmount" label="预计分佣金额"></el-table-column>
           <el-table-column prop="platformServiceAmount" label="平台服务费"></el-table-column>
           <el-table-column prop="commissionPrice" label="分销佣金"></el-table-column>
+          <el-table-column prop="partnerSettleAmount" label="合伙人佣金" />
           <el-table-column prop="actualSettleAmount" label="实际分佣金额"></el-table-column>
           <el-table-column prop="isConfirm" label="状态">
             <template slot-scope="scope">
@@ -181,6 +182,7 @@
           <el-table-column prop="preSettleAmount" label="预计分佣金额"></el-table-column>
           <el-table-column prop="platformServiceAmount" label="平台服务费"></el-table-column>
           <el-table-column prop="commissionPrice" label="分销佣金"></el-table-column>
+          <el-table-column prop="partnerSettleAmount" label="合伙人佣金" />
           <el-table-column prop="actualSettleAmount" label="实际分佣金额"></el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
@@ -275,6 +277,7 @@
           <el-table-column prop="preSettleAmount" label="预计分佣金额"></el-table-column>
           <el-table-column prop="platformServiceAmount" label="平台服务费"></el-table-column>
           <el-table-column prop="commissionPrice" label="分销佣金"></el-table-column>
+          <el-table-column prop="partnerSettleAmount" label="合伙人佣金" />
           <el-table-column prop="actualSettleAmount" label="实际分佣金额"></el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">

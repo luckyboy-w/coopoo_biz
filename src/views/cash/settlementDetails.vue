@@ -74,6 +74,7 @@
             <el-table-column prop="storePreSettlePrice" label="门店预计分佣金额" ></el-table-column>
             <el-table-column prop="storePlatformPrice" label="门店平台服务费" ></el-table-column>
             <el-table-column prop="commissionPrice" label="分销佣金" ></el-table-column>
+            <el-table-column prop="partnerSettleAmount" label="合伙人佣金" />
             <el-table-column prop="storeSettlePrice" label="门店实际分佣金额"></el-table-column>
           </el-table>
         </div>
