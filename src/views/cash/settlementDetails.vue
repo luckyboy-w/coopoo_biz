@@ -64,6 +64,7 @@
             <el-table-column prop="goodsNum" label="商品数量"></el-table-column>
             <el-table-column prop="goodsPrice" label="商品单价" ></el-table-column>
             <el-table-column prop="orderAmount" label="订单金额" ></el-table-column>
+            <el-table-column prop="orderPayAmount" label="实付金额" />
             <el-table-column prop="accountTime" label="入账时间"></el-table-column>
             <el-table-column prop="storeName" label="门店名称" ></el-table-column>
             <el-table-column prop="supplierPrice" label="供应金额" ></el-table-column>
